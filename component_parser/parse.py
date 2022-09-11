@@ -133,4 +133,4 @@ if __name__ == "__main__":
 
     with open(components_location, "r") as component_file:
         components = list(iter_components(component_file))
-        print(json.dumps([c.to_json() for c in components], indent=4), file=output)
+        output.write(json.dumps([c.to_json() for c in components], indent=4))
