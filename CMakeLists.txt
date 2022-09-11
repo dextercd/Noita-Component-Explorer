@@ -42,6 +42,7 @@ function(render_jinja_template)
         OUTPUT "${RJINJA_OUTPUT}"
 
         DEPENDS install_modders_delight_python_packages
+            "${CMAKE_CURRENT_SOURCE_DIR}/codegen/gen.py"
             ${RJINJA_JSON} ${RJINJA_TEMPLATE}
 
         VERBATIM
@@ -89,3 +90,12 @@ render_jinja_template(OUTPUT init.lua
     JSON ${CMAKE_CURRENT_BINARY_DIR}/component_documentation.json
 )
 add_custom_target(init_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/init.lua)
+
+
+# Installing
+
+install(DIRECTORY modders-delight DESTINATION "." COMPONENT ModdersDelight)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/init.lua
+    DESTINATION "modders-delight"
+    COMPONENT ModdersDelight
+)
