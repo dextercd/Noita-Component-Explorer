@@ -76,6 +76,20 @@ class Field:
         return obj
 
 
+# Some types are larger than the space allocated to them, which causes them to
+# be fused with the field name. Use this hard coded list as a workaround.
+LONG_TYPES = [
+    "MSG_QUEUE_PATH_FINDING_RESULT",
+    "NINJA_ROPE_SEGMENT_VECTOR",
+    "InvenentoryUpdateListener*",
+    "ParticleEmitter_Animation*",
+    "PathFindingComponentState::Enum",
+    "TeleportComponentState::Enum",
+    "EXPLOSION_TRIGGER_TYPE::Enum",
+    "PARTICLE_EMITTER_CUSTOM_STYLE::Enum",
+]
+
+
 def read_entry(file):
     name_line = file.readline()
     if name_line == "":
@@ -97,7 +111,16 @@ def read_entry(file):
             current_intro = item
             continue
 
-        data_type, _, rest = item.lstrip().partition(" ")
+        long_types = [long_type for long_type in LONG_TYPES if long_type in item]
+        if long_types:
+            assert len(long_types) == 1
+            data_type = long_types[0]
+            rest = item[4 + len(data_type):]
+        else:
+            data_type_portion = item[4:28]
+            rest = item[28:]
+            data_type = data_type_portion.replace(" ", "")
+
         name, _, rest = rest.lstrip().partition(" ")
         example, _, rest = rest.lstrip().partition('"')
         example = example.rstrip()

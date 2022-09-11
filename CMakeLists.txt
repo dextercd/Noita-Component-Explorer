@@ -75,6 +75,7 @@ if (MODDERS_DELIGHT_DEV)
     )
 
     add_custom_target(update_repo_components_file
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/component_documentation.json
         COMMAND ${CMAKE_COMMAND} -E copy
             component_documentation.json
             ${CMAKE_CURRENT_SOURCE_DIR}/data/component_documentation.json

@@ -3576,33 +3576,28 @@
                 "description": "how many of the cells are liquid"
             },
             {
-                "type": "std::vector<",
-                "name": "int",
-                "example": ">      mDamageMaterials                                                -",
+                "type": "std::vector<int>",
+                "name": "mDamageMaterials",
                 "description": "NOTE! Sorted! a list of materials that do damage (materials_that_damage)"
             },
             {
-                "type": "std::vector<",
-                "name": "float",
-                "example": ">    mDamageMaterialsHowMuch                                         -",
+                "type": "std::vector<float>",
+                "name": "mDamageMaterialsHowMuch",
                 "description": "NOTE! Sorted! a list of materials that do damage (materials_that_damage)"
             },
             {
-                "type": "std::vector<",
-                "name": "int",
-                "example": ">      mCollisionMessageMaterials                                      -",
+                "type": "std::vector<int>",
+                "name": "mCollisionMessageMaterials",
                 "description": "NOTE! Sorted! a list of materials that create messages (materials_that_create_messages)"
             },
             {
-                "type": "std::vector<",
-                "name": "int",
-                "example": ">      mCollisionMessageMaterialCountsThisFrame                        -",
+                "type": "std::vector<int>",
+                "name": "mCollisionMessageMaterialCountsThisFrame",
                 "description": "Number of cells per collided with this frame. Order matches mCollisionMessageMaterials"
             },
             {
-                "type": "std::vector<",
-                "name": "float",
-                "example": ">    mMaterialDamageThisFrame                                        -",
+                "type": "std::vector<float>",
+                "name": "mMaterialDamageThisFrame",
                 "description": "A list of damage per material that damages us. In same order as materials"
             },
             {
@@ -3794,9 +3789,9 @@
                 "example": "0 [0, 1]"
             },
             {
-                "type": "unsigned",
-                "name": "int",
-                "example": "color                                                           4294967295 [0, 1]"
+                "type": "unsignedint",
+                "name": "color",
+                "example": "4294967295 [0, 1]"
             }
         ]
     },
@@ -4188,9 +4183,8 @@
         ],
         "custom_data_types": [
             {
-                "type": "EXPLOSION_TRIGGER_TYPE::Enumtrigger",
-                "name": "-",
-                "example": "",
+                "type": "EXPLOSION_TRIGGER_TYPE::Enum",
+                "name": "trigger",
                 "description": "what triggers the explosion"
             }
         ]
@@ -5376,9 +5370,8 @@
         ],
         "privates": [
             {
-                "type": "InvenentoryUpdateListener*update_listener",
-                "name": "-",
-                "example": "",
+                "type": "InvenentoryUpdateListener*",
+                "name": "update_listener",
                 "description": "listener to keep ui up with ability changes"
             },
             {
@@ -5638,9 +5631,9 @@
                 "description": "file names of other entities we should spawn from this chest, comma separated"
             },
             {
-                "type": "unsigned",
-                "name": "int",
-                "example": "mSeed                                                           0 [0, 1]",
+                "type": "unsignedint",
+                "name": "mSeed",
+                "example": "0 [0, 1]",
                 "description": "this is used to figure out what we spawn from this chest"
             }
         ]
@@ -6142,21 +6135,21 @@
                 "description": "The radius of the light in world pixels."
             },
             {
-                "type": "unsigned",
-                "name": "int",
-                "example": "r                                                               255 [0, 255]",
+                "type": "unsignedint",
+                "name": "r",
+                "example": "255 [0, 255]",
                 "description": "Color red 0-255"
             },
             {
-                "type": "unsigned",
-                "name": "int",
-                "example": "g                                                               178 [0, 255]",
+                "type": "unsignedint",
+                "name": "g",
+                "example": "178 [0, 255]",
                 "description": "Color green 0-255"
             },
             {
-                "type": "unsigned",
-                "name": "int",
-                "example": "b                                                               118 [0, 255]",
+                "type": "unsignedint",
+                "name": "b",
+                "example": "118 [0, 255]",
                 "description": "Color blue 0-255"
             },
             {
@@ -7117,9 +7110,8 @@
         ],
         "custom_data_types": [
             {
-                "type": "MOVETOSURFACE_TYPE::Enumtype",
-                "name": "-",
-                "example": ""
+                "type": "MOVETOSURFACE_TYPE::Enum",
+                "name": "type"
             }
         ]
     },
@@ -7178,9 +7170,8 @@
         ],
         "privates": [
             {
-                "type": "NINJA_ROPE_SEGMENT_VECTORmSegments",
-                "name": "-",
-                "example": ""
+                "type": "NINJA_ROPE_SEGMENT_VECTOR",
+                "name": "mSegments"
             }
         ]
     },
@@ -7519,9 +7510,8 @@
                 "name": "m_last_emit_position"
             },
             {
-                "type": "ParticleEmitter_Animation*m_cached_image_animation",
-                "name": "-",
-                "example": ""
+                "type": "ParticleEmitter_Animation*",
+                "name": "m_cached_image_animation"
             },
             {
                 "type": "float",
@@ -7566,9 +7556,8 @@
                 "name": "count_max"
             },
             {
-                "type": "PARTICLE_EMITTER_CUSTOM_STYLE::Enumcustom_style",
-                "name": "-",
-                "example": "",
+                "type": "PARTICLE_EMITTER_CUSTOM_STYLE::Enum",
+                "name": "custom_style",
                 "description": "NONE or FIRE"
             }
         ]
@@ -7716,9 +7705,8 @@
                 "description": "TODO: Comment"
             },
             {
-                "type": "MSG_QUEUE_PATH_FINDING_RESULTjob_result_receiver",
-                "name": "-",
-                "example": "",
+                "type": "MSG_QUEUE_PATH_FINDING_RESULT",
+                "name": "job_result_receiver",
                 "description": "TODO: Comment"
             },
             {
@@ -7799,9 +7787,8 @@
                 "description": "TODO: Comment"
             },
             {
-                "type": "PathFindingComponentState::EnummState",
-                "name": "-",
-                "example": "",
+                "type": "PathFindingComponentState::Enum",
+                "name": "mState",
                 "description": "TODO: Comment"
             },
             {
@@ -9344,19 +9331,19 @@
                 "example": "0 [0, 60000]"
             },
             {
-                "type": "unsigned",
-                "name": "int",
-                "example": "shoot_light_flash_r                                             255 [0, 255]"
+                "type": "unsignedint",
+                "name": "shoot_light_flash_r",
+                "example": "255 [0, 255]"
             },
             {
-                "type": "unsigned",
-                "name": "int",
-                "example": "shoot_light_flash_g                                             180 [0, 255]"
+                "type": "unsignedint",
+                "name": "shoot_light_flash_g",
+                "example": "180 [0, 255]"
             },
             {
-                "type": "unsigned",
-                "name": "int",
-                "example": "shoot_light_flash_b                                             150 [0, 255]"
+                "type": "unsignedint",
+                "name": "shoot_light_flash_b",
+                "example": "150 [0, 255]"
             },
             {
                 "type": "bool",
@@ -10575,9 +10562,8 @@
                 "description": "used to keep track that we're not stuck in waiting for a pixel scene to load, that is not going to be loaded"
             },
             {
-                "type": "TeleportComponentState::Enumstate",
-                "name": "-",
-                "example": ""
+                "type": "TeleportComponentState::Enum",
+                "name": "state"
             },
             {
                 "type": "ENTITY_VEC",
