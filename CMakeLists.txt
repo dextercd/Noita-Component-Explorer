@@ -83,3 +83,9 @@ else()
         COPYONLY
     )
 endif()
+
+render_jinja_template(OUTPUT init.lua
+    TEMPLATE init.lua
+    JSON ${CMAKE_CURRENT_BINARY_DIR}/component_documentation.json
+)
+add_custom_target(init_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/init.lua)
