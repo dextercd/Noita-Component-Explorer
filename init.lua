@@ -5,7 +5,7 @@ if not load_imgui then
     error(msg)
 end
 
-local imgui = load_imgui({version="1.0", mod="Modder's Delight"})
+local imgui = load_imgui({version="1.0", mod="Component Explorer"})
 
 
 function help_marker(desc)

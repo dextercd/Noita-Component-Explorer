@@ -1,26 +1,26 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(modders-delight
+project(NoitaComponentExplorer
     VERSION 0.0.1
     LANGUAGES
 )
 
-set(MODDERS_DELIGHT_DEV OFF CACHE BOOL "Extra build functionality")
+set(COMPONENT_EXPLORER_DEV OFF CACHE BOOL "Extra build functionality")
 
 find_package(Python REQUIRED Interpreter)
 
 add_custom_command(
-    OUTPUT modders_delight_python_packages
+    OUTPUT component_explorer_python_packages
 
     DEPENDS ${CMAKE_SOURCE_DIR}/requirements.txt
 
     VERBATIM
     COMMAND Python::Interpreter -m pip install -r ${CMAKE_SOURCE_DIR}/requirements.txt
-    COMMAND ${CMAKE_COMMAND} -E touch modders_delight_python_packages
+    COMMAND ${CMAKE_COMMAND} -E touch component_explorer_python_packages
 )
 
-add_custom_target(install_modders_delight_python_packages
-    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/modders_delight_python_packages
+add_custom_target(install_component_explorer_python_packages
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/component_explorer_python_packages
 )
 
 function(render_jinja_template)
@@ -41,7 +41,7 @@ function(render_jinja_template)
     add_custom_command(
         OUTPUT "${RJINJA_OUTPUT}"
 
-        DEPENDS install_modders_delight_python_packages
+        DEPENDS install_component_explorer_python_packages
             "${CMAKE_CURRENT_SOURCE_DIR}/codegen/gen.py"
             ${RJINJA_JSON} ${RJINJA_TEMPLATE}
 
@@ -52,7 +52,7 @@ function(render_jinja_template)
 endfunction()
 
 
-if (MODDERS_DELIGHT_DEV)
+if (COMPONENT_EXPLORER_DEV)
     find_path(NOITA_INSTALL_DIR
         NAMES noita.exe
         PATHS
@@ -95,8 +95,8 @@ add_custom_target(init_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/init.lua)
 
 # Installing
 
-install(DIRECTORY modders-delight DESTINATION "." COMPONENT ModdersDelight)
+install(DIRECTORY component-explorer DESTINATION "." COMPONENT ComponentExplorer)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/init.lua
-    DESTINATION "modders-delight"
-    COMPONENT ModdersDelight
+    DESTINATION "component-explorer"
+    COMPONENT ComponentExplorer
 )
