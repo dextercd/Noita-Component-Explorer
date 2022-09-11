@@ -12,17 +12,44 @@ find_package(Python REQUIRED Interpreter)
 add_custom_command(
     OUTPUT modders_delight_python_packages
 
-    APPDEND
     DEPENDS ${CMAKE_SOURCE_DIR}/requirements.txt
 
     VERBATIM
-    COMMAND Python::Interpreter -m pip install -r
+    COMMAND Python::Interpreter -m pip install -r ${CMAKE_SOURCE_DIR}/requirements.txt
     COMMAND ${CMAKE_COMMAND} -E touch modders_delight_python_packages
 )
 
 add_custom_target(install_modders_delight_python_packages
-    DEPENDS modders_delight_python_packages
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/modders_delight_python_packages
 )
+
+function(render_jinja_template)
+    set(options)
+    set(one_value_args OUTPUT TEMPLATE)
+    set(multi_value_args JSON)
+    cmake_parse_arguments(RJINJA "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
+
+    set(COMMAND_LIST
+        Python::Interpreter "${CMAKE_CURRENT_SOURCE_DIR}/codegen/gen.py" --output ${RJINJA_OUTPUT}
+    )
+
+    foreach(JSON IN LISTS RJINJA_JSON)
+        list(APPEND COMMAND_LIST --json ${JSON})
+    endforeach()
+
+    cmake_path(ABSOLUTE_PATH RJINJA_TEMPLATE BASE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+    add_custom_command(
+        OUTPUT "${RJINJA_OUTPUT}"
+
+        DEPENDS install_modders_delight_python_packages
+            ${RJINJA_JSON} ${RJINJA_TEMPLATE}
+
+        VERBATIM
+        COMMAND ${COMMAND_LIST} ${RJINJA_TEMPLATE}
+    )
+    message(STATUS ${COMMAND_LIST} ${RJINJA_TEMPLATE})
+endfunction()
+
 
 if (MODDERS_DELIGHT_DEV)
     find_path(NOITA_INSTALL_DIR
