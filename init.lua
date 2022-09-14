@@ -148,7 +148,7 @@ function show_{{ component.name }}(component_id)
     if imgui.CollapsingHeader("{{ section_name }}") then
         {% for field in fields -%}
 
-        {%- set field_type = field.type|replace("::", "_") -%}
+        {%- set field_type = field.type|replace("::", "_")|replace("<", "_")|replace(">", "") -%}
         {%- set description = '"' ~ field.description ~ '"' if field.description else "nil" -%}
 
         {%- if field_type == "uint32" and "color" in field.name %}
