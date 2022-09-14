@@ -128,13 +128,19 @@ function show_field_abgr(name, description, component_id)
     end
 end
 
+function toggle_component_button(entity_id, component_id)
+    local enabled = ComponentGetIsEnabled(component_id)
+    imgui.Text("Enabled: " .. tostring(enabled))
+    imgui.SameLine()
+    imgui.SetCursorPosX(imgui.GetFontSize() * 8)
+    if imgui.Button("Toggle") then
+        EntitySetComponentIsEnabled(entity_id, component_id, not enabled)
+    end
+end
+
 
 {% for component in component_documentation %}
-function show_{{ component.name }}(component_id)
-    if not imgui.Begin("{{ component.name }}: " .. component_id) then
-        return
-    end
-
+function show_{{ component.name }}_fields(component_id)
     {%- set sections = {
         "Members": component.members,
         "Privates": component.privates,
@@ -162,18 +168,38 @@ function show_{{ component.name }}(component_id)
         {% endfor %}
     end
 
-    {%- endif %}
+    {% endif %}
     {%- endfor %}
+end
+
+function show_{{ component.name }}_window(entity_id, component_id)
+    if not imgui.Begin("{{ component.name }}: " .. component_id) then
+        return
+    end
+
+    toggle_component_button(entity_id, component_id)
+
+    show_{{ component.name }}_fields(component_id)
 
     imgui.End()
 end
 
 {% endfor %}
 
+local components_watching = {}
+
 function OnPlayerSpawned(player_entity)
     player = player_entity
     damage_model = EntityGetFirstComponentIncludingDisabled(player, "DamageModelComponent")
     controls_component = EntityGetFirstComponentIncludingDisabled(player, "ControlsComponent")
+
+    if damage_model then
+        table.insert(components_watching, {player, damage_model, show_DamageModelComponent_window})
+    end
+
+    if controls_component then
+        table.insert(components_watching, {player, controls_component, show_ControlsComponent_window})
+    end
 
     for i, v in ipairs(EntityGetAllChildren(player) or {}) do
         if EntityGetName(v) == "cape" then
@@ -183,28 +209,43 @@ function OnPlayerSpawned(player_entity)
 
     if cape then
         verlet = EntityGetFirstComponentIncludingDisabled(cape, "VerletPhysicsComponent")
+        table.insert(components_watching, {cape, verlet, show_VerletPhysicsComponent_window})
     end
 end
 
+
 function OnWorldPreUpdate()
 
-    if damage_model then
-        -- show_DamageModelComponent(damage_model)
+    local known_components = {}
+
+    for _, entry in ipairs(components_watching) do
+        local entity, component, show = unpack(entry)
+
+        if known_components[entity] == nil then
+            if not EntityGetIsAlive(entity) then
+                known_components[entity] = false
+            else
+                known_components[entity] = {}
+                local entity_components = known_components[entity]
+                local all_comps = EntityGetAllComponents(entity)
+                for _, comp in ipairs(all_comps) do
+                    entity_components[comp] = true
+                end
+            end
+        end
+
+        if known_components[entity] and known_components[entity][component] then
+            show(entity, component)
+        end
     end
 
-    if controls_component then
-        -- show_ControlsComponent(controls_component)
-    end
 
     world_state_entity = GameGetWorldStateEntity()
     world_state = EntityGetFirstComponentIncludingDisabled(world_state_entity, "WorldStateComponent")
 
     if world_state then
-        show_WorldStateComponent(world_state)
+        show_WorldStateComponent_window(world_state_entity, world_state)
     end
 
-    if verlet then
-        show_VerletPhysicsComponent(verlet)
-    end
 
 end
