@@ -23,7 +23,7 @@ end
 function show_field_int(name, description, component_id)
     local value = ComponentGetValue2(component_id, name)
 
-    imgui.SetNextItemWidth(300)
+    imgui.SetNextItemWidth(200)
     local changed, value = imgui.InputInt(name, value)
     if changed then
         ComponentSetValue2(component_id, name, value)
@@ -40,8 +40,8 @@ local show_field_uint32 = show_field_int
 function show_field_float(name, description, component_id)
     local value = ComponentGetValue2(component_id, name)
 
-    imgui.SetNextItemWidth(300)
-    local changed, value = imgui.InputFloat(name, value, 1.0)
+    imgui.SetNextItemWidth(200)
+    local changed, value = imgui.InputFloat(name, value, 0.1)
     if changed then
         ComponentSetValue2(component_id, name, value)
     end
@@ -71,7 +71,7 @@ end
 function show_field_std_string(name, description, component_id)
     local value = ComponentGetValue2(component_id, name)
 
-    imgui.SetNextItemWidth(400)
+    imgui.SetNextItemWidth(300)
     local changed, value = imgui.InputText(name, value)
     if changed then
         ComponentSetValue2(component_id, name, value)
