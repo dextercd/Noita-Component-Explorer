@@ -58,13 +58,28 @@ function console_contents_draw(console)
         console_run_command(console, console.last_command)
     end
 
-    -- imgui.SameLine()
-    -- if imgui.SmallButton("Commands to clipboard") then
-    -- end
+    imgui.SameLine()
+    if imgui.SmallButton("Commands to clipboard") then
+        local all_commands = ""
+        for _, item in ipairs(console.history) do
+            all_commands = all_commands .. item[1] .. "\n"
+        end
 
-    -- imgui.SameLine()
-    -- if imgui.SmallButton("History to clipboard") then
-    -- end
+        imgui.SetClipboardText(all_commands)
+    end
+
+    imgui.SameLine()
+    if imgui.SmallButton("History to clipboard") then
+        local all_history = ""
+        for _, item in ipairs(console.history) do
+            all_history = (all_history ..
+                "> " .. item[1] .. "\n" ..
+                item[2] .. "\n"
+            )
+        end
+
+        imgui.SetClipboardText(all_history)
+    end
 
     imgui.Separator()
 
