@@ -5,16 +5,7 @@ function new_console(name)
     name = name or "Console"
     return {
         name = name,
-        history = {
-            {
-                'print("Hello, world!")',
-                '"Hello, world"',
-            },
-            {
-                'print(9 * 9)',
-                '81',
-            },
-        },
+        history = {},
         input = "",
         last_command = "",
         scroll_to_bottom = false,
