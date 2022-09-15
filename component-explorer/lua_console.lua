@@ -32,10 +32,38 @@ function console_focus_input(console)
 end
 
 function console_run_command(console, command)
-    local status, value = eval(command)
-    console.last_command = command
-    table.insert(console.history, {command, stringify(value)})
+    -- Change print so we can capture all values that are printed while
+    -- evaluating the command
+    local real_print = print
+    local printed = ""
+    print = function(...)
+        -- Keep forwarding to the real Noita print function
+        pcall(real_print, ...)
 
+        local items = {...}
+        for i, item in ipairs(items) do
+            if i ~= 1 then
+                printed = printed .. "\t"
+            end
+            printed = printed .. tostring(item)
+        end
+
+        printed = printed .. "\n"
+    end
+
+    local status, value = eval(command)
+
+    print = real_print
+
+    local output
+    if printed ~= "" and value == nil then
+        output = printed
+    else
+        output = printed .. stringify(value)
+    end
+
+    table.insert(console.history, {command, output})
+    console.last_command = command
     console_scroll_to_bottom(console)
 end
 
