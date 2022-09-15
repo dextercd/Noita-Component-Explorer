@@ -62,7 +62,7 @@ function console_run_command(console, command)
         output = printed .. stringify(value)
     end
 
-    table.insert(console.history, {command, output})
+    table.insert(console.history, {command, output, status})
     console.last_command = command
     console_scroll_to_bottom(console)
 end
@@ -114,13 +114,23 @@ function console_contents_draw(console)
     then
         imgui.PushStyleVar(imgui.StyleVar.ItemSpacing, 4, 0.5)
 
-        for i, command in ipairs(console.history) do
+        for i, item in ipairs(console.history) do
             if i ~= 0 then
                 imgui.Dummy(0, 3)
             end
 
-            imgui.Text("> " .. command[1])
-            imgui.Text(command[2])
+            local command, output, status = unpack(item)
+
+            if not status then
+                imgui.PushStyleColor(imgui.Col.Text, 1.0, 0.4, 0.4)
+            end
+
+            imgui.Text("> " .. command)
+            imgui.Text(output)
+
+            if not status then
+                imgui.PopStyleColor()
+            end
         end
 
         if console.scroll_to_bottom then
