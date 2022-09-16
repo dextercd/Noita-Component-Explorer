@@ -10,6 +10,7 @@ function new_console(name)
         last_command = "",
         scroll_to_bottom = false,
         focus_input = false,
+        remove_items = 0,
     }
 end
 
@@ -29,6 +30,10 @@ end
 
 function console_focus_input(console)
     console.focus_input = true
+end
+
+function console_remove_history(console, count)
+    console.remove_items = count
 end
 
 function console_run_command(console, command)
@@ -65,6 +70,37 @@ function console_run_command(console, command)
     table.insert(console.history, {command, output, status})
     console.last_command = command
     console_scroll_to_bottom(console)
+end
+
+local function console_item_context_menu(str_id, console, index)
+    if not imgui.BeginPopupContextItem(str_id) then
+        return
+    end
+
+    local command, output = unpack(console.history[index])
+
+
+    if imgui.MenuItem("Copy command") then
+        imgui.SetClipboardText(command)
+    end
+
+    if imgui.MenuItem("Set input to command") then
+        console.input = command
+    end
+
+    if imgui.MenuItem("Redo") then
+        console_run_command(console, command)
+    end
+
+    if imgui.MenuItem("Copy output") then
+        imgui.SetClipboardText(output)
+    end
+
+    if imgui.MenuItem("Remove this history") then
+        console_remove_history(console, index)
+    end
+
+    imgui.EndPopup()
 end
 
 function console_contents_draw(console)
@@ -126,7 +162,9 @@ function console_contents_draw(console)
             end
 
             imgui.Text("> " .. command)
+            console_item_context_menu("command_ctx" .. i, console, i)
             imgui.Text(output)
+            console_item_context_menu("output_ctx" .. i, console, i)
 
             if not status then
                 imgui.PopStyleColor()
@@ -158,5 +196,14 @@ function console_contents_draw(console)
     if console.focus_input then
         console.focus_input = false
         imgui.SetKeyboardFocusHere(-1)
+    end
+
+    if console.remove_items ~= 0 then
+        local new_history = {}
+        for i = console.remove_items + 1, #console.history do
+            table.insert(new_history, console.history[i])
+        end
+        console.history = new_history
+        console.remove_items = 0
     end
 end
