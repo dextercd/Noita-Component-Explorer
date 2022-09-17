@@ -1,3 +1,4 @@
+dofile_once("mods/component-explorer/lua_console.lua")
 dofile_once("mods/component-explorer/component_fields.lua")
 
 if not load_imgui then
@@ -157,9 +158,12 @@ function OnPlayerSpawned(player_entity)
     end
 end
 
+local console = new_console()
 
 function OnWorldPreUpdate()
     show_component_windows()
+
+    console_draw(console)
 
 
     world_state_entity = GameGetWorldStateEntity()
@@ -168,6 +172,4 @@ function OnWorldPreUpdate()
     if world_state then
         show_WorldStateComponent_window(world_state_entity, world_state)
     end
-
-
 end
