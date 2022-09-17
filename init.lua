@@ -54,8 +54,8 @@ function show_{{ component.name }}_fields(component_id)
         {% if field_type == "uint32" and "color" in field.name %}
         show_field_abgr("{{ field.name }}", {{ description }}, component_id)
         {% elif field_type in ["bool", "int", "float", "double", "vec2",
-            "std_string", "unsignedint", "int16", "uint16", "int32", "uint32",
-            "int64", "uint64"] %}
+            "ivec2", "std_string", "unsignedint", "int16", "uint16", "int32",
+            "uint32", "int64", "uint64"] %}
         show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)
         {% else %}
         -- show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)

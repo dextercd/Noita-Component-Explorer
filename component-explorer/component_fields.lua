@@ -82,6 +82,21 @@ function show_field_vec2(name, description, component_id)
     end
 end
 
+function show_field_ivec2(name, description, component_id)
+    local x, y = ComponentGetValue2(component_id, name)
+
+    imgui.SetNextItemWidth(300)
+    local changed, nx, ny = imgui.InputInt2(name, x, y)
+    if changed then
+        ComponentSetValue2(component_id, name, nx, ny)
+    end
+
+    if description then
+        imgui.SameLine()
+        help_marker(description)
+    end
+end
+
 function show_field_abgr(name, description, component_id)
     local value = ComponentGetValue2(component_id, name)
 
