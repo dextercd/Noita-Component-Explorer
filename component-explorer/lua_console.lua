@@ -84,7 +84,7 @@ local function console_item_context_menu(str_id, console, index)
         imgui.SetClipboardText(command)
     end
 
-    if imgui.MenuItem("Set input to command") then
+    if imgui.MenuItem("Command to input") then
         console.input = command
     end
 
