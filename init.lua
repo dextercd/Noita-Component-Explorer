@@ -69,7 +69,13 @@ function show_{{ component.name }}_fields(component_id)
 end
 
 function show_{{ component.name }}_window(entity_id, component_id)
-    if not imgui.Begin("{{ component.name }}: " .. component_id) then
+    local should_show, open = imgui.Begin("{{ component.name }}: " .. component_id, true)
+
+    if not open then
+        unwatch_component(component_id)
+    end
+
+    if not should_show then
         return
     end
 
@@ -83,6 +89,48 @@ end
 {% endfor %}
 
 local components_watching = {}
+local components_to_unwatch = {}
+
+function unwatch_component(component_id)
+    components_to_unwatch[component_id] = true
+end
+
+function show_component_windows()
+    local known_components = {}
+    for _, entry in ipairs(components_watching) do
+        local entity, component, show = unpack(entry)
+
+        if known_components[entity] == nil then
+            if not EntityGetIsAlive(entity) then
+                known_components[entity] = false
+            else
+                known_components[entity] = {}
+                local entity_components = known_components[entity]
+                local all_comps = EntityGetAllComponents(entity)
+                for _, comp in ipairs(all_comps) do
+                    entity_components[comp] = true
+                end
+            end
+        end
+
+        if known_components[entity] and known_components[entity][component] then
+            show(entity, component)
+        else
+            components_to_unwatch[component] = true
+        end
+    end
+
+    local new_components_watching = {}
+    for _, entry in ipairs(components_watching) do
+        local entity, component, show = unpack(entry)
+        if not components_to_unwatch[component] then
+            table.insert(new_components_watching, entry)
+        end
+    end
+    components_watching = new_components_watching
+    components_to_unwatch = {}
+end
+
 
 function OnPlayerSpawned(player_entity)
     player = player_entity
@@ -111,29 +159,7 @@ end
 
 
 function OnWorldPreUpdate()
-
-    local known_components = {}
-
-    for _, entry in ipairs(components_watching) do
-        local entity, component, show = unpack(entry)
-
-        if known_components[entity] == nil then
-            if not EntityGetIsAlive(entity) then
-                known_components[entity] = false
-            else
-                known_components[entity] = {}
-                local entity_components = known_components[entity]
-                local all_comps = EntityGetAllComponents(entity)
-                for _, comp in ipairs(all_comps) do
-                    entity_components[comp] = true
-                end
-            end
-        end
-
-        if known_components[entity] and known_components[entity][component] then
-            show(entity, component)
-        end
-    end
+    show_component_windows()
 
 
     world_state_entity = GameGetWorldStateEntity()
