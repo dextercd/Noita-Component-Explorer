@@ -35,7 +35,12 @@ function show_field_int(name, description, component_id)
     end
 end
 local show_field_unsignedint = show_field_int
+local show_field_int16 = show_field_int
+local show_field_uint16 = show_field_int
+local show_field_int32 = show_field_int
 local show_field_uint32 = show_field_int
+local show_field_int64 = show_field_int
+local show_field_uint64 = show_field_int
 
 function show_field_float(name, description, component_id)
     local value = ComponentGetValue2(component_id, name)
@@ -159,7 +164,9 @@ function show_{{ component.name }}_fields(component_id)
 
         {% if field_type == "uint32" and "color" in field.name %}
         show_field_abgr("{{ field.name }}", {{ description }}, component_id)
-        {% elif field_type in ["bool", "int", "float", "double", "vec2", "std_string", "unsignedint", "uint32"] %}
+        {% elif field_type in ["bool", "int", "float", "double", "vec2",
+            "std_string", "unsignedint", "int16", "uint16", "int32", "uint32",
+            "int64", "uint64"] %}
         show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)
         {% else %}
         -- show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)
