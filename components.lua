@@ -14,7 +14,7 @@ end
 function open_component_small_button(entity_id, component_id)
     if components_watching[component_id] then
         if imgui.SmallButton("Close###open_component_small_button" .. component_id) then
-            unwatch_component(entity_id)
+            unwatch_component(component_id)
         end
     else
         if imgui.SmallButton("Open###open_component_small_button" .. component_id) then
