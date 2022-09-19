@@ -73,6 +73,7 @@ function show_entity_sub_children(children)
             imgui.SameLine() imgui.SmallButton("Open")
         else
             if imgui.TreeNode(get_entity_label(child_id) .. "##" .. tostring(child_id)) then
+                imgui.SameLine() imgui.SmallButton("Open")
                 show_entity_children(child_id)
                 imgui.TreePop()
             else
