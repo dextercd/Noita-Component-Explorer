@@ -1,3 +1,5 @@
+dofile_once("mods/component-explorer/entity.lua")
+
 local all_entities = {}
 local entity_search = ""
 
