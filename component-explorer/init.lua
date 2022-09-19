@@ -60,6 +60,18 @@ function watch_entity(entity_id)
     }
 end
 
+function open_entity_small_button(entity_id)
+    if entities_watching[entity_id] then
+        if imgui.SmallButton("Close###open_entity_small_button" .. entity_id) then
+            unwatch_entity(entity_id)
+        end
+    else
+        if imgui.SmallButton("Open###open_entity_small_button" .. entity_id) then
+            watch_entity(entity_id)
+        end
+    end
+end
+
 new_tag_input = ""
 
 function get_entity_label(entity_id)
@@ -75,14 +87,14 @@ function show_entity_sub_children(children)
         if not sub_children then
             imgui.Bullet()
             imgui.Text(get_entity_label(child_id))
-            imgui.SameLine() imgui.SmallButton("Open")
+            imgui.SameLine() open_entity_small_button(child_id)
         else
             if imgui.TreeNode(get_entity_label(child_id) .. "##" .. tostring(child_id)) then
-                imgui.SameLine() imgui.SmallButton("Open")
+                imgui.SameLine() open_entity_small_button(child_id)
                 show_entity_children(child_id)
                 imgui.TreePop()
             else
-                imgui.SameLine() imgui.SmallButton("Open")
+                imgui.SameLine() open_entity_small_button(child_id)
             end
         end
     end
@@ -335,7 +347,7 @@ function show_entity_list_window()
                     imgui.TableNextColumn()
                     imgui.Text(file)
                     imgui.TableNextColumn()
-                    imgui.SmallButton("Open")
+                    open_entity_small_button(entity)
                 end
             end
 
