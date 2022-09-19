@@ -90,6 +90,8 @@ function show_entity_children(entity_id)
 end
 
 function show_entity(entity_id)
+    local kill_entity = false
+
     local name = EntityGetName(entity_id)
     if name == "unknown" then name = "" end
 
@@ -111,6 +113,11 @@ function show_entity(entity_id)
             EntitySetName(entity_id, name)
         end
 
+        imgui.PushStyleColor(imgui.Col.Button, 1, 0.4, 0.4)
+        imgui.PushStyleColor(imgui.Col.ButtonHovered, 1, 0.6, 0.6)
+        imgui.PushStyleColor(imgui.Col.ButtonActive, 0.8, 0.4, 0.4)
+        if imgui.Button("Kill") then kill_entity = true end
+        imgui.PopStyleColor(3)
         -- TODO: Show transform
         -- ]]
     end
@@ -187,6 +194,10 @@ function show_entity(entity_id)
     end
 
     imgui.End()
+
+    if kill_entity then
+        EntityKill(entity_id)
+    end
 end
 
 
