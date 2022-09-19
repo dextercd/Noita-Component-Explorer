@@ -49,10 +49,15 @@ function help_marker(desc)
 end
 
 local entities_watching = {}
-local entities_to_unwatch = {}
 
 function unwatch_entity(entity_id)
-    entities_to_unwatch[entity_id] = true
+    entities_watching[entity_id] = nil
+end
+
+function watch_entity(entity_id)
+    entities_watching[entity_id] = {
+        component_search = "",
+    }
 end
 
 new_tag_input = ""
@@ -90,7 +95,7 @@ function show_entity_children(entity_id)
     show_entity_sub_children(children)
 end
 
-function show_entity(entity_id)
+function show_entity(entity_id, data)
     if not EntityGetIsAlive(entity_id) then
         unwatch_entity(entity_id)
         return
@@ -211,6 +216,8 @@ function show_entity(entity_id)
     end
 
     if imgui.CollapsingHeader("Components") then
+        _, data.component_search = imgui.InputText("Type Search", data.component_search)
+
         local table_flags = imgui.TableFlags.Resizable
         if imgui.BeginTable("EntityComponents", 3, table_flags) then
             imgui.TableSetupColumn("Type", imgui.TableColumnFlags.WidthStretch, 6)
@@ -220,24 +227,27 @@ function show_entity(entity_id)
 
             local components = EntityGetAllComponents(entity_id)
             for _, component_id in ipairs(components) do
-                imgui.PushID(component_id)
-
                 local type = ComponentGetTypeName(component_id)
-                local enabled = ComponentGetIsEnabled(component_id)
 
-                imgui.TableNextColumn()
-                imgui.Text(type)
+                if string.find(type, data.component_search, 1, true) then
+                    imgui.PushID(component_id)
 
-                imgui.TableNextColumn()
-                local enabled_changed, enabled = imgui.Checkbox("###enabled" .. tostring(component_id), enabled)
-                if enabled_changed then
-                    EntitySetComponentIsEnabled(entity_id, component_id, enabled)
+                    imgui.TableNextColumn()
+                    imgui.Text(type)
+
+                    imgui.TableNextColumn()
+
+                    local enabled = ComponentGetIsEnabled(component_id)
+                    local enabled_changed, enabled = imgui.Checkbox("###enabled" .. tostring(component_id), enabled)
+                    if enabled_changed then
+                        EntitySetComponentIsEnabled(entity_id, component_id, enabled)
+                    end
+
+                    imgui.TableNextColumn()
+                    open_component_small_button(entity_id, component_id)
+
+                    imgui.PopID()
                 end
-
-                imgui.TableNextColumn()
-                open_component_small_button(entity_id, component_id)
-
-                imgui.PopID()
             end
 
             imgui.EndTable()
@@ -251,9 +261,15 @@ function show_entity(entity_id)
     end
 end
 
+function show_entity_windows()
+    for entity_id, data in pairs(entities_watching) do
+        show_entity(entity_id, data)
+    end
+end
 
 function OnPlayerSpawned(player_entity)
     player = player_entity
+    watch_entity(player)
     if true then return end
     damage_model = EntityGetFirstComponentIncludingDisabled(player, "DamageModelComponent")
     controls_component = EntityGetFirstComponentIncludingDisabled(player, "ControlsComponent")
@@ -333,11 +349,8 @@ end
 
 function OnWorldPreUpdate()
     show_component_windows()
-    -- show_entity_windows()
+    show_entity_windows()
     show_entity_list_window()
 
     console_draw(console)
-
-    show_entity(player)
-
 end
