@@ -205,6 +205,37 @@ function show_entity(entity_id)
     end
 
     if imgui.CollapsingHeader("Components") then
+        local table_flags = imgui.TableFlags.Resizable
+        if imgui.BeginTable("EntityComponents", 3, table_flags) then
+            imgui.TableSetupColumn("Type", imgui.TableColumnFlags.WidthStretch, 6)
+            imgui.TableSetupColumn("Enabled")
+            imgui.TableSetupColumn("Open")
+            imgui.TableHeadersRow()
+
+            local components = EntityGetAllComponents(entity_id)
+            for _, component_id in ipairs(components) do
+                imgui.PushID(component_id)
+
+                local type = ComponentGetTypeName(component_id)
+                local enabled = ComponentGetIsEnabled(component_id)
+
+                imgui.TableNextColumn()
+                imgui.Text(type)
+
+                imgui.TableNextColumn()
+                local enabled_changed, enabled = imgui.Checkbox("###enabled" .. tostring(component_id), enabled)
+                if enabled_changed then
+                    EntitySetComponentIsEnabled(entity_id, component_id, enabled)
+                end
+
+                imgui.TableNextColumn()
+                open_component_small_button(entity_id, component_id)
+
+                imgui.PopID()
+            end
+
+            imgui.EndTable()
+        end
     end
 
     imgui.End()
