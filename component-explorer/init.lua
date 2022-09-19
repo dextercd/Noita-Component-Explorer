@@ -58,6 +58,7 @@ end
 function watch_entity(entity_id)
     entities_watching[entity_id] = {
         component_search = "",
+        new_tag_input = "",
     }
 end
 
@@ -73,7 +74,6 @@ function open_entity_small_button(entity_id)
     end
 end
 
-new_tag_input = ""
 
 function get_entity_label(entity_id)
     local name = EntityGetName(entity_id)
@@ -167,15 +167,15 @@ function show_entity(entity_id, data)
     end
 
     if imgui.CollapsingHeader("Tags") then
-        local submit
         imgui.SetNextItemWidth(200)
-        submit, new_tag_input = imgui.InputText(
-            "Add tag", new_tag_input,
+        local submit
+        submit, data.new_tag_input = imgui.InputText(
+            "Add tag", data.new_tag_input,
             imgui.InputTextFlags.EnterReturnsTrue
         )
         if submit then
-            EntityAddTag(entity_id, new_tag_input)
-            new_tag_input = ""
+            EntityAddTag(entity_id, data.new_tag_input)
+            data.new_tag_input = ""
         end
 
         local tag_string = EntityGetTags(entity_id)
