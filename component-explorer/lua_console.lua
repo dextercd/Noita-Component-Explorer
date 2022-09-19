@@ -5,6 +5,7 @@ function new_console(name)
     name = name or "Console"
     return {
         name = name,
+        open = true,
         history = {},
         input = "",
         last_command = "",
@@ -15,7 +16,9 @@ function new_console(name)
 end
 
 function console_draw(console)
-    if not imgui.Begin(console.name) then
+    local should_show
+    should_show, console.open = imgui.Begin(console.name, console.open)
+    if not should_show then
         return
     end
 
