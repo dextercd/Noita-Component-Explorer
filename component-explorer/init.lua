@@ -114,8 +114,6 @@ function show_entity(entity_id, data)
         return
     end
 
-    local kill_entity = false
-
     local name = EntityGetName(entity_id)
     if name == "unknown" then name = "" end
 
@@ -126,9 +124,17 @@ function show_entity(entity_id, data)
         title = title .. name .. " (" .. tostring(entity_id) .. ")"
     end
 
-    if not imgui.Begin(title .. "###show_entity" .. tostring(entity_id)) then
+    local should_show, open = imgui.Begin(title .. "###show_entity" .. tostring(entity_id), true)
+
+    if not open then
+        unwatch_entity(entity_id)
+    end
+
+    if not should_show then
         return
     end
+
+    local kill_entity = false
 
     if imgui.CollapsingHeader("Attributes") then
         local name_change
