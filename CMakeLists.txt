@@ -108,3 +108,5 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/components.lua ${CMAKE_CURRENT_BINARY_
     DESTINATION "component-explorer"
     COMPONENT ComponentExplorer
 )
+
+include(packaging/CMakeLists.txt)
