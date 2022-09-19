@@ -1,6 +1,32 @@
 dofile_once("mods/component-explorer/lua_console.lua")
 dofile_once("mods/component-explorer/components.lua")
 
+local common_entity_tags = {
+    "enabled_in_world",
+    "enabled_in_hand",
+    "enabled_in_inventory",
+    "projectile_player",
+    "hittable",
+    "teleportable_NOT",
+    "polymorphable_NOT",
+    "glue_NOT",
+    "mortal",
+    "prop",
+    "prop_physics",
+    "item_physics",
+    "item_pickup",
+    "pixelsprite",
+    "homing_target",
+    "enemy",
+    "prey",
+    "ui_use_raw_name",
+    "card_action",
+    "effect_protection",
+    "vegetation",
+    "wand",
+    "projectile",
+}
+
 if not load_imgui then
     local msg = "ImGui is not installed or enabled, the mod won't work."
     GamePrint(msg)
@@ -22,119 +48,151 @@ function help_marker(desc)
     end
 end
 
+local entities_watching = {}
+local entities_to_unwatch = {}
 
-function toggle_component_button(entity_id, component_id)
-    local enabled = ComponentGetIsEnabled(component_id)
-    imgui.Text("Enabled: " .. tostring(enabled))
-    imgui.SameLine()
-    imgui.SetCursorPosX(imgui.GetFontSize() * 8)
-    if imgui.Button("Toggle") then
-        EntitySetComponentIsEnabled(entity_id, component_id, not enabled)
+function unwatch_entity(entity_id)
+    entities_to_unwatch[entity_id] = true
+end
+
+new_tag_input = ""
+
+function get_entity_label(entity_id)
+    local name = EntityGetName(entity_id)
+    if name == "unknown" then name = "" end
+    local tags = EntityGetTags(entity_id)
+    return name .. " [" .. tags .. "]"
+end
+
+function show_entity_sub_children(children)
+    for _, child_id in ipairs(children) do
+        local sub_children = EntityGetAllChildren(child_id)
+        if not sub_children then
+            imgui.Bullet()
+            imgui.Text(get_entity_label(child_id))
+            imgui.SameLine() imgui.SmallButton("Open")
+        else
+            if imgui.TreeNode(get_entity_label(child_id) .. "##" .. tostring(child_id)) then
+                show_entity_children(child_id)
+                imgui.TreePop()
+            else
+                imgui.SameLine() imgui.SmallButton("Open")
+            end
+        end
     end
 end
 
+function show_entity_children(entity_id)
+    local children = EntityGetAllChildren(entity_id)
+    if not children then return end
 
-{% for component in component_documentation %}
-function show_{{ component.name }}_fields(component_id)
-    {%- set sections = {
-        "Members": component.members,
-        "Privates": component.privates,
-        "Objects": component.objects,
-        "Custom data types": component.custom_data_types,
-    } -%}
-
-    {%- for section_name, fields in sections.items() -%}
-    {%- if fields %}
-
-    if imgui.CollapsingHeader("{{ section_name }}") then
-        {% for field in fields -%}
-
-        {%- set field_type = field.type|replace("::", "_")|replace("<", "_")|replace(">", "") -%}
-        {%- set description = '"' ~ field.description ~ '"' if field.description else "nil" -%}
-
-        {% if field_type == "uint32" and "color" in field.name %}
-        show_field_abgr("{{ field.name }}", {{ description }}, component_id)
-        {% elif field_type in ["bool", "int", "float", "double", "vec2",
-            "ivec2", "std_string", "unsignedint", "int16", "uint16", "int32",
-            "uint32", "int64", "uint64"] %}
-        show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)
-        {% else %}
-        -- show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)
-        {% endif -%}
-
-        {% endfor %}
-    end
-
-    {% endif %}
-    {%- endfor %}
+    show_entity_sub_children(children)
 end
 
-function show_{{ component.name }}_window(entity_id, component_id)
-    local should_show, open = imgui.Begin("{{ component.name }}: " .. component_id, true)
+function show_entity(entity_id)
+    local name = EntityGetName(entity_id)
+    if name == "unknown" then name = "" end
 
-    if not open then
-        unwatch_component(component_id)
+    local title = "Entity: "
+    if name == "" then
+        title = title .. tostring(entity_id)
+    else
+        title = title .. name .. " (" .. tostring(entity_id) .. ")"
     end
 
-    if not should_show then
+    if not imgui.Begin(title .. "###show_entity" .. tostring(entity_id)) then
         return
     end
 
-    toggle_component_button(entity_id, component_id)
+    if imgui.CollapsingHeader("Attributes") then
+        local name_change
+        name_change, name = imgui.InputText("Name", name)
+        if name_change then
+            EntitySetName(entity_id, name)
+        end
 
-    show_{{ component.name }}_fields(component_id)
+        -- TODO: Show transform
+        -- ]]
+    end
 
-    imgui.End()
-end
+    if imgui.CollapsingHeader("Tags") then
+        local submit
+        imgui.SetNextItemWidth(200)
+        submit, new_tag_input = imgui.InputText(
+            "Add tag", new_tag_input,
+            imgui.InputTextFlags.EnterReturnsTrue
+        )
+        if submit then
+            EntityAddTag(entity_id, new_tag_input)
+            new_tag_input = ""
+        end
 
-{% endfor %}
+        local tag_string = EntityGetTags(entity_id)
+        local tags = {}
+        local tag_set = {}
+        for tag in string.gmatch(tag_string, "[^,]+") do
+            table.insert(tags, tag)
+            tag_set[tag] = true
+        end
 
-local components_watching = {}
-local components_to_unwatch = {}
+        imgui.SameLine()
+        if imgui.Button("Common..") then
+            imgui.OpenPopup("common_tags_popup")
+        end
 
-function unwatch_component(component_id)
-    components_to_unwatch[component_id] = true
-end
-
-function show_component_windows()
-    local known_components = {}
-    for _, entry in ipairs(components_watching) do
-        local entity, component, show = unpack(entry)
-
-        if known_components[entity] == nil then
-            if not EntityGetIsAlive(entity) then
-                known_components[entity] = false
-            else
-                known_components[entity] = {}
-                local entity_components = known_components[entity]
-                local all_comps = EntityGetAllComponents(entity)
-                for _, comp in ipairs(all_comps) do
-                    entity_components[comp] = true
+        if imgui.BeginPopup("common_tags_popup") then
+            for _, tag in ipairs(common_entity_tags) do
+                if imgui.MenuItem(tag, "", tag_set[tag] ~= nil) then
+                    if tag_set[tag] then
+                        EntityRemoveTag(entity_id, tag)
+                    else
+                        EntityAddTag(entity_id, tag)
+                    end
                 end
             end
+            imgui.EndPopup()
         end
 
-        if known_components[entity] and known_components[entity][component] then
-            show(entity, component)
-        else
-            components_to_unwatch[component] = true
+        local table_flags = imgui.TableFlags.Resizable
+        if imgui.BeginTable("tags", 2, table_flags) then
+
+            imgui.TableSetupColumn("Tag")
+            imgui.TableSetupColumn("Remove", imgui.TableColumnFlags.WidthFixed)
+            imgui.TableHeadersRow()
+
+            for _, tag in ipairs(tags) do
+                imgui.PushID(tag)
+
+                imgui.TableNextColumn()
+                imgui.Text(tag)
+
+                imgui.TableNextColumn()
+                if imgui.SmallButton("-") then
+                    EntityRemoveTag(entity_id, tag)
+                end
+
+                imgui.PopID()
+            end
+
+            imgui.EndTable()
         end
+
     end
 
-    local new_components_watching = {}
-    for _, entry in ipairs(components_watching) do
-        local entity, component, show = unpack(entry)
-        if not components_to_unwatch[component] then
-            table.insert(new_components_watching, entry)
-        end
+    if imgui.CollapsingHeader("Child Entities") then
+        show_entity_children(entity_id)
     end
-    components_watching = new_components_watching
-    components_to_unwatch = {}
+
+    if imgui.CollapsingHeader("Components") then
+    end
+
+    imgui.End()
 end
 
 
 function OnPlayerSpawned(player_entity)
     player = player_entity
+    if true then return end
     damage_model = EntityGetFirstComponentIncludingDisabled(player, "DamageModelComponent")
     controls_component = EntityGetFirstComponentIncludingDisabled(player, "ControlsComponent")
 
@@ -166,23 +224,24 @@ entity_search = ""
 
 function OnWorldPreUpdate()
     show_component_windows()
+    -- show_entity_windows()
 
     console_draw(console)
+
+    show_entity(player)
 
     all_entities = EntityGetInRadius(0, 0, math.huge)
 
     if imgui.Begin("Entities list") then
         _, entity_search = imgui.InputText("Search", entity_search)
 
-        local table_flags = bit.bor(
-            imgui.TableFlags.Resizable,
-            imgui.TableFlags.Reorderable
-        )
-
-        if imgui.BeginTable("entity_table", 3, table_flags) then
+        local table_flags = imgui.TableFlags.Resizable
+        if imgui.BeginTable("entity_table", 4, table_flags) then
+            local fontsz = imgui.GetFontSize()
             imgui.TableSetupColumn("Name", imgui.TableColumnFlags.WidthFixed)
-            imgui.TableSetupColumn("Tags", imgui.TableColumnFlags.WidthFixed)
-            imgui.TableSetupColumn("File", imgui.TableColumnFlags.WidthStretch)
+            imgui.TableSetupColumn("Tags", imgui.TableColumnFlags.WidthStretch, 6)
+            imgui.TableSetupColumn("File", imgui.TableColumnFlags.WidthStretch, 12)
+            imgui.TableSetupColumn("Open", imgui.TableColumnFlags.WidthFixed)
             imgui.TableHeadersRow()
 
             for _, entity in ipairs(all_entities) do
@@ -205,6 +264,8 @@ function OnWorldPreUpdate()
                     imgui.Text(tags)
                     imgui.TableNextColumn()
                     imgui.Text(file)
+                    imgui.TableNextColumn()
+                    imgui.SmallButton("Open")
                 end
             end
 
