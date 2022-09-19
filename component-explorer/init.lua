@@ -25,33 +25,6 @@ function help_marker(desc)
     end
 end
 
-function OnPlayerSpawned(player_entity)
-    player = player_entity
-    watch_entity(player)
-    if true then return end
-    damage_model = EntityGetFirstComponentIncludingDisabled(player, "DamageModelComponent")
-    controls_component = EntityGetFirstComponentIncludingDisabled(player, "ControlsComponent")
-
-    if damage_model then
-        table.insert(components_watching, {player, damage_model, show_DamageModelComponent_window})
-    end
-
-    if controls_component then
-        table.insert(components_watching, {player, controls_component, show_ControlsComponent_window})
-    end
-
-    for i, v in ipairs(EntityGetAllChildren(player) or {}) do
-        if EntityGetName(v) == "cape" then
-            cape = v
-        end
-    end
-
-    if cape then
-        verlet = EntityGetFirstComponentIncludingDisabled(cape, "VerletPhysicsComponent")
-        table.insert(components_watching, {cape, verlet, show_VerletPhysicsComponent_window})
-    end
-end
-
 local console = new_console()
 console.open = false
 
