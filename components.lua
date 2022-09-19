@@ -42,7 +42,6 @@ function show_component_windows()
         if known_components[entity] and known_components[entity][component] then
             show(entity, component)
         else
-            print("Not known")
             unwatch_component(component)
         end
     end
@@ -98,7 +97,6 @@ function show_{{ component.name }}_window(entity_id, component_id)
 
     if not open then
         unwatch_component(component_id)
-        print("Closed")
     end
 
     if not should_show then

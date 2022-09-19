@@ -214,8 +214,8 @@ function show_entity(entity_id)
         local table_flags = imgui.TableFlags.Resizable
         if imgui.BeginTable("EntityComponents", 3, table_flags) then
             imgui.TableSetupColumn("Type", imgui.TableColumnFlags.WidthStretch, 6)
-            imgui.TableSetupColumn("Enabled")
-            imgui.TableSetupColumn("Open")
+            imgui.TableSetupColumn("Enabled", imgui.TableColumnFlags.WidthFixed)
+            imgui.TableSetupColumn("Open", imgui.TableColumnFlags.WidthFixed)
             imgui.TableHeadersRow()
 
             local components = EntityGetAllComponents(entity_id)
