@@ -51,9 +51,10 @@ end
 
 local function get_entity_label(entity_id)
     local name = EntityGetName(entity_id)
+
     if name == "unknown" then name = "" end
     local tags = EntityGetTags(entity_id)
-    return name .. " [" .. tags .. "]"
+    return entity_id .. " " .. name .. " [" .. tags .. "]"
 end
 
 function show_entity_sub_children(children)
@@ -217,7 +218,8 @@ local function show_entity(entity_id, data)
         _, data.component_search = imgui.InputText("Type Search", data.component_search)
 
         local table_flags = imgui.TableFlags.Resizable
-        if imgui.BeginTable("EntityComponents", 3, table_flags) then
+        if imgui.BeginTable("EntityComponents", 4, table_flags) then
+            imgui.TableSetupColumn("ID", imgui.TableColumnFlags.WidthFixed)
             imgui.TableSetupColumn("Type", imgui.TableColumnFlags.WidthStretch, 6)
             imgui.TableSetupColumn("Enabled", imgui.TableColumnFlags.WidthFixed)
             imgui.TableSetupColumn("Open", imgui.TableColumnFlags.WidthFixed)
@@ -229,6 +231,9 @@ local function show_entity(entity_id, data)
 
                 if string.find(type, data.component_search, 1, true) then
                     imgui.PushID(component_id)
+
+                    imgui.TableNextColumn()
+                    imgui.Text(tostring(component_id))
 
                     imgui.TableNextColumn()
                     imgui.Text(type)
