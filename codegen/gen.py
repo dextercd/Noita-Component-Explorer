@@ -3,6 +3,7 @@ import pathlib
 import json
 import sys
 import itertools
+import os
 
 from jinja2 import Environment, Template
 
@@ -35,5 +36,6 @@ with open(args.file) as f:
 
 context = {name: value for name, value in load_json_files(args.json)}
 context["itertools"] = itertools
+context["env"] = os.environ
 
 output.write(template.render(context))

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(NoitaComponentExplorer
     VERSION 0.0.1
+    HOMEPAGE_URL "https://github.com/dextercd/Noita-Component-Explorer"
     LANGUAGES
 )
 
@@ -30,7 +31,8 @@ function(render_jinja_template)
     cmake_parse_arguments(RJINJA "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
 
     set(COMMAND_LIST
-        Python::Interpreter "${CMAKE_CURRENT_SOURCE_DIR}/codegen/gen.py" --output ${RJINJA_OUTPUT}
+        ${CMAKE_COMMAND} -E env "VERSION=${PROJECT_VERSION}" "HOMEPAGE=${PROJECT_HOMEPAGE_URL}" --
+        ${Python_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/codegen/gen.py" --output ${RJINJA_OUTPUT}
     )
 
     foreach(JSON IN LISTS RJINJA_JSON)
@@ -92,11 +94,17 @@ render_jinja_template(OUTPUT components.lua
 )
 add_custom_target(components_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/components.lua)
 
+render_jinja_template(OUTPUT version.lua
+    TEMPLATE version.lua
+    JSON ${CMAKE_CURRENT_BINARY_DIR}/component_documentation.json
+)
+add_custom_target(version_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/version.lua)
+
 
 # Installing
 
 install(DIRECTORY component-explorer DESTINATION "." COMPONENT ComponentExplorer)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/components.lua
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/components.lua ${CMAKE_CURRENT_BINARY_DIR}/version.lua
     DESTINATION "component-explorer"
     COMPONENT ComponentExplorer
 )
