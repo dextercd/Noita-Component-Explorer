@@ -28,7 +28,7 @@ local common_entity_tags = {
 }
 
 if not load_imgui then
-    local msg = "ImGui is not installed or enabled, the mod won't work."
+    local msg = "Could not find Dear ImGui, Component Explorer won't work."
     GamePrint(msg)
     print(msg)
     error(msg)
