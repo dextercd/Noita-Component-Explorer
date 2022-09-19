@@ -118,8 +118,22 @@ function show_entity(entity_id)
         imgui.PushStyleColor(imgui.Col.ButtonActive, 0.8, 0.4, 0.4)
         if imgui.Button("Kill") then kill_entity = true end
         imgui.PopStyleColor(3)
-        -- TODO: Show transform
-        -- ]]
+
+
+        local x, y, rotation, scale_x, scale_y = EntityGetTransform(entity_id)
+
+        local pos_changed
+        pos_changed, x, y = imgui.InputFloat2("Position", x, y)
+
+        local rot_changed
+        rot_changed, rotation = imgui.InputFloat("Rotation", rotation)
+
+        local scale_changed
+        scale_changed, scale_x, scale_y = imgui.InputFloat2("Scale", scale_x, scale_y)
+
+        if pos_changed or rot_changed or scale_changed then
+            EntitySetTransform(entity_id, x, y, rotation, scale_x, scale_y)
+        end
     end
 
     if imgui.CollapsingHeader("Tags") then
