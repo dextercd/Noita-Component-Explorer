@@ -91,6 +91,11 @@ function show_entity_children(entity_id)
 end
 
 function show_entity(entity_id)
+    if not EntityGetIsAlive(entity_id) then
+        unwatch_entity(entity_id)
+        return
+    end
+
     local kill_entity = false
 
     local name = EntityGetName(entity_id)
