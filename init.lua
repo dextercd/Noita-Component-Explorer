@@ -1,5 +1,5 @@
 dofile_once("mods/component-explorer/lua_console.lua")
-dofile_once("mods/component-explorer/component_fields.lua")
+dofile_once("mods/component-explorer/components.lua")
 
 if not load_imgui then
     local msg = "ImGui is not installed or enabled, the mod won't work."

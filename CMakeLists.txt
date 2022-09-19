@@ -92,11 +92,17 @@ render_jinja_template(OUTPUT init.lua
 )
 add_custom_target(init_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/init.lua)
 
+render_jinja_template(OUTPUT components.lua
+    TEMPLATE components.lua
+    JSON ${CMAKE_CURRENT_BINARY_DIR}/component_documentation.json
+)
+add_custom_target(components_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/components.lua)
+
 
 # Installing
 
 install(DIRECTORY component-explorer DESTINATION "." COMPONENT ComponentExplorer)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/init.lua
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/init.lua ${CMAKE_CURRENT_BINARY_DIR}/components.lua
     DESTINATION "component-explorer"
     COMPONENT ComponentExplorer
 )
