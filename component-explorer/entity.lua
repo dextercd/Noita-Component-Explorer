@@ -56,7 +56,7 @@ local function get_entity_label(entity_id)
     return name .. " [" .. tags .. "]"
 end
 
-local function show_entity_sub_children(children)
+function show_entity_sub_children(children)
     for _, child_id in ipairs(children) do
         local sub_children = EntityGetAllChildren(child_id)
         if not sub_children then
@@ -75,7 +75,7 @@ local function show_entity_sub_children(children)
     end
 end
 
-local function show_entity_children(entity_id)
+function show_entity_children(entity_id)
     local children = EntityGetAllChildren(entity_id)
     if not children then return end
 
