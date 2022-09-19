@@ -1,16 +1,30 @@
 dofile_once("mods/component-explorer/component_fields.lua")
 
 local components_watching = {}
-local components_to_unwatch = {}
 
 function unwatch_component(component_id)
-    components_to_unwatch[component_id] = true
+    components_watching[component_id] = nil
+end
+
+function watch_component(entity_id, component_id)
+    local type = ComponentGetTypeName(component_id)
+    components_watching[component_id] = {entity_id, component_type_functions[type].show_window}
+end
+
+function open_component_small_button(entity_id, component_id)
+    if components_watching[component_id] ~= nil then
+        return
+    end
+
+    if imgui.SmallButton("Open") then
+        watch_component(entity_id, component_id)
+    end
 end
 
 function show_component_windows()
     local known_components = {}
-    for _, entry in ipairs(components_watching) do
-        local entity, component, show = unpack(entry)
+    for component, entry in pairs(components_watching) do
+        local entity, show = unpack(entry)
 
         if known_components[entity] == nil then
             if not EntityGetIsAlive(entity) then
@@ -28,19 +42,10 @@ function show_component_windows()
         if known_components[entity] and known_components[entity][component] then
             show(entity, component)
         else
-            components_to_unwatch[component] = true
+            print("Not known")
+            unwatch_component(component)
         end
     end
-
-    local new_components_watching = {}
-    for _, entry in ipairs(components_watching) do
-        local entity, component, show = unpack(entry)
-        if not components_to_unwatch[component] then
-            table.insert(new_components_watching, entry)
-        end
-    end
-    components_watching = new_components_watching
-    components_to_unwatch = {}
 end
 
 function toggle_component_button(entity_id, component_id)
@@ -93,6 +98,7 @@ function show_{{ component.name }}_window(entity_id, component_id)
 
     if not open then
         unwatch_component(component_id)
+        print("Closed")
     end
 
     if not should_show then
@@ -107,3 +113,12 @@ function show_{{ component.name }}_window(entity_id, component_id)
 end
 
 {% endfor %}
+
+component_type_functions = {
+{% for component in component_documentation %}
+    {{ component.name }} = {
+        show_fields = show_{{ component.name }}_fields,
+        show_window = show_{{ component.name }}_window,
+    },
+{% endfor %}
+}
