@@ -278,15 +278,7 @@ local console = new_console()
 all_entities = {}
 entity_search = ""
 
-
-function OnWorldPreUpdate()
-    show_component_windows()
-    -- show_entity_windows()
-
-    console_draw(console)
-
-    show_entity(player)
-
+function show_entity_list_window()
     all_entities = EntityGetInRadius(0, 0, math.huge)
 
     if imgui.Begin("Entities list") then
@@ -331,4 +323,16 @@ function OnWorldPreUpdate()
 
         imgui.End()
     end
+end
+
+
+function OnWorldPreUpdate()
+    show_component_windows()
+    -- show_entity_windows()
+    show_entity_list_window()
+
+    console_draw(console)
+
+    show_entity(player)
+
 end
