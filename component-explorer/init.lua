@@ -11,7 +11,7 @@ if not load_imgui then
     error(msg)
 end
 
-imgui = load_imgui({version="1.0", mod="Component Explorer"})
+imgui = load_imgui({version="1.2", mod="Component Explorer"})
 
 
 function help_marker(desc)
