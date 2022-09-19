@@ -2,12 +2,14 @@ dofile_once("mods/component-explorer/entity.lua")
 
 local all_entities = {}
 local entity_search = ""
+local include_child_entities = false
 
 function show_entity_list_window()
     all_entities = EntityGetInRadius(0, 0, math.huge)
 
     if imgui.Begin("Entities list") then
         _, entity_search = imgui.InputText("Search", entity_search)
+        _, include_child_entities = imgui.Checkbox("Include child entities", include_child_entities)
 
         local table_flags = imgui.TableFlags.Resizable
         if imgui.BeginTable("entity_table", 4, table_flags) then
@@ -24,9 +26,10 @@ function show_entity_list_window()
                 local tags = EntityGetTags(entity)
                 local file = EntityGetFilename(entity)
 
-                if string.find(name, entity_search, 1, true) or
-                   string.find(tags, entity_search, 1, true) or
-                   string.find(file, entity_search, 1, true)
+                if (string.find(name, entity_search, 1, true) or
+                    string.find(tags, entity_search, 1, true) or
+                    string.find(file, entity_search, 1, true)) and
+                   (include_child_entities or EntityGetParent(entity) == 0)
                 then
                     if name == "" then name = "<no name>" end
                     if tags == "" then tags = "<no tags>" end
