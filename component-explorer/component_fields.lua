@@ -129,6 +129,20 @@ function show_field_abgr(name, description, component_id)
     end
 end
 
+function show_field_LensValue_bool(name, description, component_id)
+    local value = ComponentGetValue2(component_id, name) ~= 0
+
+    local changed, value = imgui.Checkbox(name, value)
+    if changed then
+        ComponentSetValue2(component_id, name, value)
+    end
+
+    if description then
+        imgui.SameLine()
+        help_marker(description)
+    end
+end
+
 
 local type_stored_in_vector = {"int", "float", "string"}
 
