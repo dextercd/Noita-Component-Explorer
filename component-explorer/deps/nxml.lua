@@ -539,8 +539,10 @@ function nxml.tostring(elem, packed, indent_char, cur_indent)
 
     local s = "<" .. elem.name
 
+    local attr_count = 0
     for k, v in pairs(elem.attr) do
         s = s .. "\n" .. deeper_indent .. k .. "=\"" .. attr_value_to_str(v) .. "\""
+        attr_count = attr_count + 1
     end
 
     local self_closing = #elem.children == 0 and (not elem.content or #elem.content == 0)
@@ -549,7 +551,12 @@ function nxml.tostring(elem, packed, indent_char, cur_indent)
         return s
     end
 
-    s = s .. ">"
+    if attr_count == 0 then
+        s = s .. ">"
+    else
+        s = s .. " >"
+    end
+
 
     if elem.content and #elem.content ~= 0 then
         if not packed then s = s .. "\n" .. deeper_indent end
