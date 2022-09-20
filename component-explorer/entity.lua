@@ -1,3 +1,5 @@
+dofile_once("mods/component-explorer/serialise_entity.lua")
+
 local common_entity_tags = {
     "enabled_in_world",
     "enabled_in_hand",
@@ -122,6 +124,12 @@ local function show_entity(entity_id, data)
         if filename ~= "" then
             imgui.Text("File: " .. filename)
         end
+
+        if imgui.Button("Copy XML (Beta)") then
+            imgui.SetClipboardText(tostring(serialise_entity(entity_id)))
+        end
+
+        imgui.SameLine()
 
         imgui.PushStyleColor(imgui.Col.Button, 1, 0.4, 0.4)
         imgui.PushStyleColor(imgui.Col.ButtonHovered, 1, 0.6, 0.6)

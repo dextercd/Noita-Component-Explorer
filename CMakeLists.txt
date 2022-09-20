@@ -94,6 +94,12 @@ render_jinja_template(OUTPUT components.lua
 )
 add_custom_target(components_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/components.lua)
 
+render_jinja_template(OUTPUT serialise_component.lua
+    TEMPLATE serialise_component.lua
+    JSON ${CMAKE_CURRENT_BINARY_DIR}/component_documentation.json
+)
+add_custom_target(serialise_component_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/serialise_component.lua)
+
 render_jinja_template(OUTPUT version.lua
     TEMPLATE version.lua
     JSON ${CMAKE_CURRENT_BINARY_DIR}/component_documentation.json
@@ -104,7 +110,11 @@ add_custom_target(version_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/version.lu
 # Installing
 
 install(DIRECTORY component-explorer DESTINATION "." COMPONENT ComponentExplorer)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/components.lua ${CMAKE_CURRENT_BINARY_DIR}/version.lua
+install(
+    FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/components.lua
+        ${CMAKE_CURRENT_BINARY_DIR}/serialise_component.lua
+        ${CMAKE_CURRENT_BINARY_DIR}/version.lua
     DESTINATION "component-explorer"
     COMPONENT ComponentExplorer
 )

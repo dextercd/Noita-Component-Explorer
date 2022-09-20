@@ -1,0 +1,61 @@
+local nxml = dofile_once("mods/component-explorer/deps/nxml.lua")
+
+local function as_set(tbl)
+    local set = {}
+    for _, value in ipairs(tbl) do
+        set[value] = true
+    end
+    return set
+end
+
+local simple_field_types = as_set({
+    "int", "unsignedint", "int16", "uint16", "int32", "uint32", "int64",
+    "uint64", "float", "double", "bool", "std::string", "std_string",
+})
+
+local skip_field_types = as_set({
+    "EntityID", "LuaManager*", "b2Body*", "b2ObjectID",
+})
+
+local simple_object_types = as_set({
+    "ConfigDamagesByType",
+    "ConfigGunActionInfo",
+    "ConfigGun",
+    "ConfigExplosion",
+    "ConfigLaser",
+})
+
+function add_field(component_id, component, field_type, field_name)
+    if skip_field_types[field_type] then
+        return
+    elseif simple_field_types[field_type] or string.find(field_type, "::Enum", 1, true) then
+        component.attr[field_name] = ComponentGetValue2(component_id, field_name)
+    elseif string.find(field_type, "LensValue<", 1, true) then
+        component.attr[field_name] = ComponentGetMetaCustom(component_id, field_name)
+    elseif field_type == "vec2" or field_type == "ivec2" then
+        local x, y = ComponentGetValue2(component_id, field_name)
+        component.attr[field_name .. ".x"] = x
+        component.attr[field_name .. ".y"] = y
+    elseif field_type == "types::fcolor" then
+        local r, g, b, a = ComponentGetValue2(component_id, field_name)
+        component.attr[field_name .. ".r"] = r
+        component.attr[field_name .. ".g"] = g
+        component.attr[field_name .. ".b"] = b
+        component.attr[field_name .. ".a"] = a
+    elseif field_type == "ValueRange" then
+        local min, max = ComponentGetValue2(component_id, field_name)
+        component.attr[field_name .. ".min"] = min
+        component.attr[field_name .. ".max"] = max
+    elseif field_type == "types::aabb" then
+        local min_x, min_y, max_x, max_y = ComponentGetValue2(component_id, field_name)
+        component.attr[field_name .. ".min_x"] = min_x
+        component.attr[field_name .. ".min_y"] = min_y
+        component.attr[field_name .. ".max_x"] = max_x
+        component.attr[field_name .. ".max_y"] = max_y
+    elseif simple_object_types[field_type] then
+        local object = nxml.new_element(field_name, ComponentObjectGetMembers(component_id, field_name))
+        component:add_child(object)
+    else
+        print("No idea what to do with " .. field_name .. " (" .. field_type .. ")")
+    end
+end
