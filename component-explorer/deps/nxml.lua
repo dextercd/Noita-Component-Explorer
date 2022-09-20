@@ -531,6 +531,27 @@ local function attr_value_to_str(value)
     return tostring(value)
 end
 
+
+local function attribute_comp(attra, attrb)
+    a = attra[1]
+    b = attrb[1]
+
+    -- Want to order min before max so treat 'max' as 'mio' instead
+    a = a:gsub("([%._])max", "%1mio")
+    b = b:gsub("([%._])max", "%1mio")
+
+    -- In case the attribute starts with max we need to change it to min and add
+    -- and underscore at the end to maintain proper-ish ordering wrt unrelated
+    -- attributes.
+    -- Still looks a bit weird when there is no associated 'min' attribute but
+    -- oh well...
+    a = a:gsub("max([%._])(.*)", "min%1%2_")
+    b = b:gsub("max([%._])(.*)", "min%1%2_")
+
+    return a < b
+end
+
+
 function nxml.tostring(elem, packed, indent_char, cur_indent)
     indent_char = indent_char or "\t"
     cur_indent = cur_indent or ""
@@ -539,8 +560,15 @@ function nxml.tostring(elem, packed, indent_char, cur_indent)
 
     local s = "<" .. elem.name
 
-    local attr_count = 0
+    local ordered_attributes = {}
     for k, v in pairs(elem.attr) do
+        table.insert(ordered_attributes, {k, v})
+    end
+    table.sort(ordered_attributes, attribute_comp)
+
+    local attr_count = 0
+    for _, attribute in pairs(ordered_attributes) do
+        k, v = unpack(attribute)
         s = s .. "\n" .. deeper_indent .. k .. "=\"" .. attr_value_to_str(v) .. "\""
         attr_count = attr_count + 1
     end
