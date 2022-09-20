@@ -1,3 +1,5 @@
+dofile_once("mods/component-explorer/stringify.lua")
+
 function show_field_int(name, description, component_id)
     local value = ComponentGetValue2(component_id, name)
 
@@ -125,4 +127,42 @@ function show_field_abgr(name, description, component_id)
         imgui.SameLine()
         help_marker(description)
     end
+end
+
+
+local type_stored_in_vector = {"int", "float", "string"}
+
+function show_field_unknown(name, type, description, component_id)
+    if not imgui.TreeNode("UNKNOWN: " .. name .. " (" .. type .. ")") then
+        return
+    end
+
+    imgui.Text("ComponentGetValue(component_id, name)                     " .. stringify({ComponentGetValue(component_id, name)}))
+    imgui.Text("ComponentGetValue2(component_id, name)                    " .. stringify({ComponentGetValue2(component_id, name)}))
+    imgui.Text("ComponentGetValueBool(component_id, name)                 " .. stringify({ComponentGetValueBool(component_id, name)}))
+    imgui.Text("ComponentGetValueInt(component_id, name)                  " .. stringify({ComponentGetValueInt(component_id, name)}))
+    imgui.Text("ComponentGetValueFloat(component_id, name)                " .. stringify({ComponentGetValueFloat(component_id, name)}))
+    imgui.Text("ComponentGetValueVector2(component_id, name)              " .. stringify({ComponentGetValueVector2(component_id, name)}))
+    imgui.Text("ComponentGetMetaCustom(component_id, name)                " .. stringify({ComponentGetMetaCustom(component_id, name)}))
+    imgui.Text("ComponentObjectGetMembers(component_id, name)             " .. stringify({ComponentObjectGetMembers(component_id, name)}))
+    -- imgui.Text("ComponentGetMembers(component_id)                         " .. stringify({ComponentGetMembers(component_id)}))
+
+    local members = ComponentObjectGetMembers(component_id, name) or {}
+    for member, value in pairs(members) do
+        imgui.Text("----- " .. member)
+        imgui.Text("ComponentObjectGetValue(component_id, name, member)      " .. stringify({ComponentObjectGetValue(component_id, name, member)}))
+        -- imgui.Text("ComponentObjectGetValueBool(component_id, name, member)  " .. stringify({ComponentObjectGetValueBool(component_id, name, member)}))
+        -- imgui.Text("ComponentObjectGetValueInt(component_id, name, member)   " .. stringify({ComponentObjectGetValueInt(component_id, name, member)}))
+        -- imgui.Text("ComponentObjectGetValueFloat(component_id, name, member) " .. stringify({ComponentObjectGetValueFloat(component_id, name, member)}))
+        imgui.Text("ComponentObjectGetValue2(component_id, name, member)     " .. stringify({ComponentObjectGetValue2(component_id, name, member)}))
+    end
+
+    for _, type in ipairs(type_stored_in_vector) do
+        imgui.Text("##### " .. type)
+        imgui.Text("ComponentGetVectorSize(component_id, name, type)          " .. stringify({ComponentGetVectorSize(component_id, name, type)}))
+        imgui.Text("ComponentGetVectorValue(component_id, name, type, 0)      " .. stringify({ComponentGetVectorValue(component_id, name, type, 0)}))
+        imgui.Text("ComponentGetVector(component_id, name, type)              " .. stringify({ComponentGetVector(component_id, name, type)}))
+    end
+
+    imgui.TreePop()
 end
