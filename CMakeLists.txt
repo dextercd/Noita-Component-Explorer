@@ -92,7 +92,7 @@ render_jinja_template(OUTPUT components.lua
     TEMPLATE components.lua
     JSON
         ${CMAKE_CURRENT_BINARY_DIR}/component_documentation.json
-        ${CMAKE_CURRENT_SOURCE_DIR}/data/lens_values.json
+        ${CMAKE_CURRENT_SOURCE_DIR}/data/field_infos.json
 )
 add_custom_target(components_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/components.lua)
 

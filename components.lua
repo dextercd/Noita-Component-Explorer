@@ -90,8 +90,8 @@ function show_{{ component.name }}_fields(component_id)
         show_field_abgr("{{ field.name }}", {{ description }}, component_id)
         {% elif field_type in supported_fields %}
         show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)
-        {% elif lens_values.get(component.name, {}).get(field.name, {}).handler %}
-            {% set field_info = lens_values[component.name][field.name] %}
+        {% elif field_infos.get(component.name, {}).get(field.name, {}).handler %}
+            {% set field_info = field_infos[component.name][field.name] %}
             {% set handler = field_info.handler %}
             {% if handler.startswith("#") %}
                 {% if handler == "#done" %}
