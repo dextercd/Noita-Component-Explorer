@@ -52,6 +52,15 @@ function add_field(component_id, component, field_type, field_name)
         component.attr[field_name .. ".min_y"] = min_y
         component.attr[field_name .. ".max_x"] = max_x
         component.attr[field_name .. ".max_y"] = max_y
+    elseif field_type == "types::xform" then
+        local x, y, scale_x, scale_y, rotation = ComponentGetValue2(component_id, field_name)
+        local transform = nxml.new_element(field_name)
+        transform.attr["position.x"] = x
+        transform.attr["position.y"] = y
+        transform.attr["rotation"] = rotation
+        transform.attr["scale.x"] = scale_x
+        transform.attr["scale.y"] = scale_y
+        component:add_child(transform)
     elseif simple_object_types[field_type] then
         local object = nxml.new_element(field_name, ComponentObjectGetMembers(component_id, field_name))
         component:add_child(object)
