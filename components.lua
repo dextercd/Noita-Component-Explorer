@@ -118,6 +118,7 @@ function show_{{ component.name }}_fields(component_id)
 end
 
 function show_{{ component.name }}_window(entity_id, component_id)
+    imgui.SetNextWindowSize(600, 400, imgui.Cond.Once)
     local should_show, open = imgui.Begin("{{ component.name }}: " .. component_id, true)
 
     if not open then

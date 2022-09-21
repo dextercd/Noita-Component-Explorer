@@ -118,6 +118,7 @@ local function show_entity(entity_id, data)
         title = title .. name .. " (" .. tostring(entity_id) .. ")"
     end
 
+    imgui.SetNextWindowSize(600, 400, imgui.Cond.Once)
     local should_show, open = imgui.Begin(title .. "###show_entity" .. tostring(entity_id), true)
 
     if not open then

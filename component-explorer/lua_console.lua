@@ -17,6 +17,7 @@ end
 
 function console_draw(console)
     local should_show
+    imgui.SetNextWindowSize(600, 400, imgui.Cond.Once)
     should_show, console.open = imgui.Begin(console.name, console.open)
     if not should_show then
         return
