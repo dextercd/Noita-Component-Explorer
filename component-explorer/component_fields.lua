@@ -195,6 +195,11 @@ function show_field_unknown(name, type, description, component_id)
         return
     end
 
+    if description then
+        imgui.SameLine()
+        help_marker(description)
+    end
+
     imgui.Text("ComponentGetValue(component_id, name)                     " .. stringify({ComponentGetValue(component_id, name)}))
     imgui.Text("ComponentGetValue2(component_id, name)                    " .. stringify({ComponentGetValue2(component_id, name)}))
     imgui.Text("ComponentGetValueBool(component_id, name)                 " .. stringify({ComponentGetValueBool(component_id, name)}))
