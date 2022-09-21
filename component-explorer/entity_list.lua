@@ -1,3 +1,4 @@
+local string_util = dofile_once("mods/component-explorer/string_util.lua")
 dofile_once("mods/component-explorer/entity.lua")
 
 entity_list_open = true
@@ -35,9 +36,9 @@ function show_entity_list_window()
             local tags = EntityGetTags(entity)
             local file = EntityGetFilename(entity)
 
-            if (string.find(name, entity_search, 1, true) or
-                string.find(tags, entity_search, 1, true) or
-                string.find(file, entity_search, 1, true)) and
+            if (string_util.ifind(name, entity_search, 1, true) or
+                string_util.ifind(tags, entity_search, 1, true) or
+                string_util.ifind(file, entity_search, 1, true)) and
                (include_child_entities or EntityGetParent(entity) == 0)
             then
                 if name == "" then name = "<no name>" end

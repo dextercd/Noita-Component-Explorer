@@ -1,5 +1,6 @@
 local nxml = dofile_once("mods/component-explorer/deps/nxml.lua")
 dofile_once("mods/component-explorer/serialise_entity.lua")
+local string_util = dofile_once("mods/component-explorer/string_util.lua")
 
 local common_entity_tags = {
     "enabled_in_world",
@@ -253,7 +254,7 @@ local function show_entity(entity_id, data)
             for _, component_id in ipairs(components) do
                 local type = ComponentGetTypeName(component_id)
 
-                if string.find(type, data.component_search, 1, true) then
+                if string_util.ifind(type, data.component_search, 1, true) then
                     imgui.PushID(component_id)
 
                     imgui.TableNextColumn()
