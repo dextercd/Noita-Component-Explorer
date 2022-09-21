@@ -90,6 +90,21 @@ function show_{{ component.name }}_fields(component_id)
         show_field_abgr("{{ field.name }}", {{ description }}, component_id)
         {% elif field_type in supported_fields %}
         show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)
+        {% elif lens_values.get(component.name, {}).get(field.name, {}).handler %}
+            {% set field_info = lens_values[component.name][field.name] %}
+            {% set handler = field_info.handler %}
+            {% if handler.startswith("#") %}
+                {% if handler == "#done" %}
+                {% elif handler == "#spread_aabb" %}
+        show_field_spread_aabb("{{ field.name.removesuffix("_min_x") }}", {{ description }}, component_id)
+                {% elif handler == "#lens_enum" %}
+        show_field_lens_enum("{{ field.name }}", {{ description }}, component_id, {{ field_info.enum }})
+                {% else %}
+                    {{ "Unhandled case"/0 }}
+                {% endif %}
+            {% else %}
+        {{ handler }}("{{ field.name }}", {{ description }}, component_id)
+            {% endif %}
         {% else %}
         -- show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)
         {% endif -%}

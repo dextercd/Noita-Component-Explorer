@@ -1,4 +1,5 @@
 dofile_once("mods/component-explorer/stringify.lua")
+dofile_once("mods/component-explorer/field_enums.lua")
 
 function show_field_int(name, description, component_id)
     local value = ComponentGetValue2(component_id, name)
@@ -135,6 +136,49 @@ function show_field_LensValue_bool(name, description, component_id)
     local changed, value = imgui.Checkbox(name, value)
     if changed then
         ComponentSetValue2(component_id, name, value)
+    end
+
+    if description then
+        imgui.SameLine()
+        help_marker(description)
+    end
+end
+
+function show_field_spread_aabb(prefix, description, component_id)
+    local min_x = ComponentGetValue2(component_id, prefix .. "_min_x")
+    local min_y = ComponentGetValue2(component_id, prefix .. "_min_y")
+    local max_x = ComponentGetValue2(component_id, prefix .. "_max_x")
+    local max_y = ComponentGetValue2(component_id, prefix .. "_max_y")
+
+    local changed_min, changed_max
+    changed_min, min_x, min_y = imgui.InputFloat2(prefix .. " min", min_x, min_y)
+    if description then
+        imgui.SameLine()
+        help_marker(description)
+    end
+
+    changed_max, max_x, max_y = imgui.InputFloat2(prefix .. " max", max_x, max_y)
+
+    if changed_min then
+        ComponentSetValue2(component_id, prefix .. "_min_x", min_x)
+        ComponentSetValue2(component_id, prefix .. "_min_y", min_y)
+    end
+
+    if changed_max then
+        ComponentSetValue2(component_id, prefix .. "_max_x", max_x)
+        ComponentSetValue2(component_id, prefix .. "_max_y", max_y)
+    end
+end
+
+function show_field_lens_enum(name, description, component_id, enum_values)
+    local value = ComponentGetMetaCustom(component_id, name)
+    if imgui.BeginCombo(name, value) then
+        for _, enum_value in ipairs(enum_values) do
+            if imgui.Selectable(enum_value, value == enum_value) then
+                ComponentSetMetaCustom(component_id, name, enum_value)
+            end
+        end
+        imgui.EndCombo()
     end
 
     if description then

@@ -1,0 +1,110 @@
+{
+    "AnimalAIComponent": {
+        "attack_ranged_frames_between": {
+            "handler": "show_field_int"
+        },
+        "mAggression": {
+            "handler": "show_field_float"
+        }
+    },
+    "CharacterDataComponent": {
+        "collision_aabb_min_x": {
+            "handler": "#spread_aabb"
+        },
+        "collision_aabb_min_y": {
+            "handler": "#done"
+        },
+        "collision_aabb_max_x": {
+            "handler": "#done"
+        },
+        "collision_aabb_max_y": {
+            "handler": "#done"
+        },
+        "fly_time_max": {
+            "handler": "show_field_float"
+        }
+    },
+    "CharacterPlatformingComponent": {
+        "velocity_min_x": {
+            "handler": "#spread_aabb"
+        },
+        "velocity_min_y": {
+            "handler": "#done"
+        },
+        "velocity_max_x": {
+            "handler": "#done"
+        },
+        "velocity_max_y": {
+            "handler": "#done"
+        },
+        "run_velocity": {
+            "handler": "show_field_float"
+        },
+        "fly_velocity_x": {
+            "handler": "show_field_float"
+        },
+        "fly_speed_max_up": {
+            "handler": "show_field_float"
+        },
+        "fly_speed_max_down": {
+            "handler": "show_field_float"
+        }
+    },
+    "GenomeDataComponent": {
+        "herd_id": {
+            "handler": "#lens_enum",
+            "enum": "herd_id_values"
+        }
+    },
+    "KickComponent": {
+        "max_force": {
+            "handler": "show_field_float"
+        },
+        "player_kickforce": {
+            "handler": "show_field_float"
+        },
+        "kick_damage": {
+            "handler": "show_field_float"
+        },
+        "kick_knockback": {
+            "handler": "show_field_float"
+        }
+    },
+    "ParticleEmitterComponent": {
+        "m_material_id": {
+            "handler": "show_field_int"
+        },
+        "count_min": {
+            "handler": "show_field_int"
+        },
+        "count_max": {
+            "handler": "show_field_int"
+        }
+    },
+    "PathFindingComponent": {
+        "jump_velocity_multiplier": {
+            "handler": "show_field_float"
+        }
+    },
+    "SpriteStainsComponent": {
+        "stain_shaken_drop_chance_multiplier": {
+            "handler": "show_field_int"
+        }
+    },
+    "WorldStateComponent": {
+        "gore_multiplier": {
+            "handler": "show_field_int"
+        },
+        "trick_kill_gold_multiplier": {
+            "handler": "show_field_int"
+        },
+        "damage_flash_multiplier": {
+            "handler": "show_field_float"
+        }
+    },
+    "WormComponent": {
+        "ground_decceleration": {
+            "handler": "show_field_float"
+        }
+    }
+}
