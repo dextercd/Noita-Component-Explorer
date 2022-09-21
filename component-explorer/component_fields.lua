@@ -1,5 +1,6 @@
 dofile_once("mods/component-explorer/stringify.lua")
 dofile_once("mods/component-explorer/field_enums.lua")
+dofile_once("mods/component-explorer/entity.lua")
 
 function show_field_int(name, description, component_id)
     local value = ComponentGetValue2(component_id, name)
@@ -170,7 +171,7 @@ function show_field_spread_aabb(prefix, description, component_id)
     end
 end
 
-function show_field_lens_enum(name, description, component_id, enum_values)
+function show_field_enum(name, description, component_id, enum_values)
     local value = ComponentGetMetaCustom(component_id, name)
     if imgui.BeginCombo(name, value) then
         for _, enum_value in ipairs(enum_values) do
@@ -187,6 +188,33 @@ function show_field_lens_enum(name, description, component_id, enum_values)
     end
 end
 
+function show_field_static_text(name, description, component_id)
+    local text = tostring(ComponentGetValue2(component_id, name) or "")
+    imgui.Text(name .. ": " .. text)
+
+    if description then
+        imgui.SameLine()
+        help_marker(description)
+    end
+end
+
+function show_field_EntityID(name, description, component_id)
+    local entity_id = ComponentGetValue2(component_id, name)
+
+    imgui.SetNextItemWidth(200)
+    local changed, entity_id = imgui.InputInt(name, entity_id)
+    if changed then
+        ComponentSetValue2(component_id, name, entity_id)
+    end
+
+    imgui.SameLine()
+    open_entity_button(entity_id)
+
+    if description then
+        imgui.SameLine()
+        help_marker(description)
+    end
+end
 
 local type_stored_in_vector = {"int", "float", "string"}
 

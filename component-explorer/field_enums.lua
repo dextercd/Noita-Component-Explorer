@@ -35,3 +35,8 @@ herd_id_values = {
     "worm",
     "zombie",
 }
+
+arc_type_values = {
+    "MATERIAL",
+    "LIGHTNING"
+}

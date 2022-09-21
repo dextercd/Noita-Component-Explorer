@@ -53,6 +53,18 @@ function open_entity_small_button(entity_id)
     end
 end
 
+function open_entity_button(entity_id)
+    if entities_watching[entity_id] then
+        if imgui.Button("Close###open_entity_small_button" .. entity_id) then
+            unwatch_entity(entity_id)
+        end
+    else
+        if imgui.Button("Open###open_entity_small_button" .. entity_id) then
+            watch_entity(entity_id)
+        end
+    end
+end
+
 local function get_entity_label(entity_id)
     local name = EntityGetName(entity_id)
 

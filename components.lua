@@ -65,6 +65,7 @@ end
     "int", "unsignedint", "int16", "uint16", "int32", "uint32", "int64", "uint64",
     "vec2", "ivec2",
     "std_string",
+    "EntityID",
 ]
 %}
 
@@ -97,8 +98,8 @@ function show_{{ component.name }}_fields(component_id)
                 {% if handler == "#done" %}
                 {% elif handler == "#spread_aabb" %}
         show_field_spread_aabb("{{ field.name.removesuffix("_min_x") }}", {{ description }}, component_id)
-                {% elif handler == "#lens_enum" %}
-        show_field_lens_enum("{{ field.name }}", {{ description }}, component_id, {{ field_info.enum }})
+                {% elif handler == "#enum" %}
+        show_field_enum("{{ field.name }}", {{ description }}, component_id, {{ field_info.enum }})
                 {% else %}
                     {{ "Unhandled case"/0 }}
                 {% endif %}
