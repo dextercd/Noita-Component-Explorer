@@ -594,7 +594,7 @@ function nxml.tostring(elem, packed, indent_char, cur_indent)
     if not packed then s = s .. "\n" end
 
     for i, v in ipairs(elem.children) do
-        if not packed and (i ~= 0 or attr_count ~= 0) then
+        if not packed and (i ~= 1 or attr_count ~= 0) then
             s = s .. "\n"
         end
 
