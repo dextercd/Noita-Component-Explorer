@@ -1,7 +1,7 @@
 dofile_once("mods/component-explorer/serialise_component.lua")
 local nxml = dofile_once("mods/component-explorer/deps/nxml.lua")
 
-function serialise_entity(entity_id)
+function serialise_entity(entity_id, include_privates)
     local entity = nxml.new_element("Entity")
 
     local name = EntityGetName(entity_id)
@@ -21,7 +21,7 @@ function serialise_entity(entity_id)
 
     local component_ids = EntityGetAllComponents(entity_id)
     for _, component_id in ipairs(component_ids) do
-        entity:add_child(serialise_component(component_id))
+        entity:add_child(serialise_component(component_id, include_privates))
     end
 
     local child_entity_ids = EntityGetAllChildren(entity_id) or {}

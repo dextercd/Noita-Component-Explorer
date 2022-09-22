@@ -101,6 +101,7 @@ end
 
 local xml_use_tabs = false
 local xml_space_count = 4
+local include_privates = false
 
 local function show_entity(entity_id, data)
     if not EntityGetIsAlive(entity_id) then
@@ -151,13 +152,14 @@ local function show_entity(entity_id, data)
             _, xml_space_count = imgui.SliderInt("Space Count", xml_space_count, 1, 8)
         end
 
+        _, include_privates = imgui.Checkbox("Include privates", include_privates)
+
         if imgui.Button("Copy XML (Beta)") then
-            local entity_xml = serialise_entity(entity_id)
+            local entity_xml = serialise_entity(entity_id, include_privates)
             local indent = xml_use_tabs and "\t" or string.rep(" ", xml_space_count)
             local xml_string = nxml.tostring(entity_xml, false, indent)
             imgui.SetClipboardText(xml_string)
         end
-
 
         imgui.Separator()
 
