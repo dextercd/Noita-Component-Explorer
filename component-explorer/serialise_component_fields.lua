@@ -14,7 +14,7 @@ local simple_field_types = as_set({
 })
 
 local skip_field_types = as_set({
-    "EntityID", "LuaManager*", "b2Body*", "b2ObjectID",
+    "EntityID", "LuaManager*", "b2Body*", "b2ObjectID", "types::iaabb",
 })
 
 local simple_object_types = as_set({
