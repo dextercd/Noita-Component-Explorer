@@ -1,4 +1,5 @@
-dofile_once("mods/component-explorer/component_fields.lua")
+dofile_once("mods/component-explorer/serialise_component.lua")
+local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
 
 local components_watching = {}
 
@@ -128,6 +129,13 @@ function show_{{ component.name }}_window(entity_id, component_id)
     if not should_show then
         return
     end
+
+    if xml_serialise.button() then
+        local component_xml = serialise_component(component_id, xml_serialise.include_privates)
+        imgui.SetClipboardText(xml_serialise.tostring(component_xml))
+    end
+
+    imgui.Separator()
 
     toggle_component_button(entity_id, component_id)
 
