@@ -1,6 +1,6 @@
-local nxml = dofile_once("mods/component-explorer/deps/nxml.lua")
 dofile_once("mods/component-explorer/serialise_entity.lua")
 local string_util = dofile_once("mods/component-explorer/string_util.lua")
+local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
 
 local common_entity_tags = {
     "enabled_in_world",
@@ -99,10 +99,6 @@ function show_entity_children(entity_id)
     show_entity_sub_children(children)
 end
 
-local xml_use_tabs = false
-local xml_space_count = 4
-local include_privates = false
-
 local function show_entity(entity_id, data)
     if not EntityGetIsAlive(entity_id) then
         unwatch_entity(entity_id)
@@ -146,19 +142,9 @@ local function show_entity(entity_id, data)
 
         imgui.Separator()
 
-        _, xml_use_tabs = imgui.Checkbox("Use tabs", xml_use_tabs)
-        if not xml_use_tabs then
-            imgui.SameLine()
-            _, xml_space_count = imgui.SliderInt("Space Count", xml_space_count, 1, 8)
-        end
-
-        _, include_privates = imgui.Checkbox("Include privates", include_privates)
-
-        if imgui.Button("Copy XML (Beta)") then
-            local entity_xml = serialise_entity(entity_id, include_privates)
-            local indent = xml_use_tabs and "\t" or string.rep(" ", xml_space_count)
-            local xml_string = nxml.tostring(entity_xml, false, indent)
-            imgui.SetClipboardText(xml_string)
+        if xml_serialise.button() then
+            local entity_xml = serialise_entity(entity_id, xml_serialise.include_privates)
+            imgui.SetClipboardText(xml_serialise.tostring(entity_xml))
         end
 
         imgui.Separator()
