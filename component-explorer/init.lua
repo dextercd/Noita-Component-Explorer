@@ -3,6 +3,7 @@ dofile_once("mods/component-explorer/components.lua")
 dofile_once("mods/component-explorer/entity_list.lua")
 dofile_once("mods/component-explorer/entity.lua")
 dofile_once("mods/component-explorer/version.lua")
+dofile_once("mods/component-explorer/logger.lua")
 
 if not load_imgui then
     local msg = "Could not find Dear ImGui, Component Explorer won't work."
@@ -11,7 +12,7 @@ if not load_imgui then
     error(msg)
 end
 
-imgui = load_imgui({version="1.2.1", mod="Component Explorer"})
+imgui = load_imgui({version="1.3.0", mod="Component Explorer"})
 
 
 function help_marker(desc)
@@ -30,6 +31,7 @@ console.open = false
 
 local component_windows_open = true
 local entity_windows_open = true
+local overlay_open_logs = false
 
 function OnWorldPreUpdate()
     local window_flags = imgui.WindowFlags.MenuBar
@@ -42,6 +44,8 @@ function OnWorldPreUpdate()
                 _, entity_windows_open = imgui.MenuItem("Entity Windows", "", entity_windows_open)
                 _, console.open = imgui.MenuItem("Lua Console", "", console.open)
                 _, entity_list_open = imgui.MenuItem("Entity List", "", entity_list_open)
+                _, window_open_logs = imgui.MenuItem("Logs Window", "", window_open_logs)
+                _, overlay_open_logs = imgui.MenuItem("Logs Overlay", "", overlay_open_logs)
 
                 imgui.EndMenu()
             end
@@ -74,5 +78,13 @@ function OnWorldPreUpdate()
 
     if console.open then
         console_draw(console)
+    end
+
+    if window_open_logs then
+        draw_log_window()
+    end
+
+    if overlay_open_logs then
+        draw_log_overlay()
     end
 end
