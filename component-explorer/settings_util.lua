@@ -23,13 +23,13 @@ local function load_setting_value(key)
 end
 
 function load_settings()
-    for _, key in ipairs(settings_keys) do
-        settings[key] = load_setting_value(key)
-    end
+    settings = {}
 end
 
 function setting_get(key)
+    if settings[key] == nil then
+        settings[key] = load_setting_value(key)
+    end
+
     return settings[key]
 end
-
-load_settings()
