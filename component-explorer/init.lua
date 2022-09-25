@@ -1,3 +1,4 @@
+dofile_once("mods/component-explorer/settings_util.lua") -- Should be loaded early
 dofile_once("mods/component-explorer/lua_console.lua")
 dofile_once("mods/component-explorer/components.lua")
 dofile_once("mods/component-explorer/entity_list.lua")
@@ -27,11 +28,13 @@ function help_marker(desc)
 end
 
 local console = new_console()
-console.open = false
 
-local component_windows_open = true
-local entity_windows_open = true
-local overlay_open_logs = false
+window_open_entity_list = setting_get("window_open_entity_list")
+console.open = setting_get("window_open_lua_console")
+window_open_logs = setting_get("window_open_logs")
+local overlay_open_logs = setting_get("overlay_open_logs")
+local windows_open_component = true
+local windows_open_entity = true
 
 function OnWorldPreUpdate()
     local window_flags = imgui.WindowFlags.MenuBar
@@ -39,13 +42,12 @@ function OnWorldPreUpdate()
         if imgui.BeginMenuBar() then
 
             if imgui.BeginMenu("View") then
-
-                _, component_windows_open = imgui.MenuItem("Component Windows", "", component_windows_open)
-                _, entity_windows_open = imgui.MenuItem("Entity Windows", "", entity_windows_open)
-                _, console.open = imgui.MenuItem("Lua Console", "", console.open)
-                _, entity_list_open = imgui.MenuItem("Entity List", "", entity_list_open)
-                _, window_open_logs = imgui.MenuItem("Logs Window", "", window_open_logs)
-                _, overlay_open_logs = imgui.MenuItem("Logs Overlay", "", overlay_open_logs)
+                _, windows_open_component =  imgui.MenuItem("Component Windows", "", windows_open_component)
+                _, windows_open_entity =     imgui.MenuItem("Entity Windows", "", windows_open_entity)
+                _, console.open =            imgui.MenuItem("Lua Console", "", console.open)
+                _, window_open_entity_list = imgui.MenuItem("Entity List", "", window_open_entity_list)
+                _, window_open_logs =        imgui.MenuItem("Logs Window", "", window_open_logs)
+                _, overlay_open_logs =       imgui.MenuItem("Logs Overlay", "", overlay_open_logs)
 
                 imgui.EndMenu()
             end
@@ -64,15 +66,15 @@ function OnWorldPreUpdate()
         imgui.End()
     end
 
-    if component_windows_open then
+    if windows_open_component then
         show_component_windows()
     end
 
-    if entity_windows_open then
+    if windows_open_entity then
         show_entity_windows()
     end
 
-    if entity_list_open then
+    if window_open_entity_list then
         show_entity_list_window()
     end
 

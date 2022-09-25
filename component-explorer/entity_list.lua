@@ -1,15 +1,13 @@
 local string_util = dofile_once("mods/component-explorer/string_util.lua")
 dofile_once("mods/component-explorer/entity.lua")
 
-entity_list_open = true
-
 local all_entities = {}
 local entity_search = ""
 local include_child_entities = false
 
 function show_entity_list_window()
     local should_show
-    should_show, entity_list_open = imgui.Begin("Entities list", entity_list_open)
+    should_show, window_open_entity_list = imgui.Begin("Entities list", window_open_entity_list)
 
     if not should_show then
         return

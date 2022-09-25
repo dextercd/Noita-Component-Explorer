@@ -114,7 +114,6 @@ function update_logs()
 end
 
 local window_autoscroll = true
-window_open_logs = false
 
 function draw_log_window()
     local should_show

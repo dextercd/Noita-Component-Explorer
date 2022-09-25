@@ -1,10 +1,11 @@
 local nxml = dofile_once("mods/component-explorer/deps/nxml.lua")
+dofile_once("mods/component-explorer/settings_util.lua")
 
 local xml_serialise = {}
 
-xml_serialise.use_tabs = false
-xml_serialise.space_count = 4
-xml_serialise.include_privates = false
+xml_serialise.use_tabs = setting_get("xml_indent_tabs")
+xml_serialise.space_count = setting_get("xml_space_count")
+xml_serialise.include_privates = setting_get("xml_include_privates")
 
 function xml_serialise.button()
     _, xml_serialise.use_tabs = imgui.Checkbox("Use tabs", xml_serialise.use_tabs)
