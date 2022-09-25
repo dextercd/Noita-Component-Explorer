@@ -161,7 +161,7 @@ function draw_log_overlay()
     imgui.SetNextWindowPos(vx + reserve_left, vy + reserve_top)
     imgui.SetNextWindowSize(width, height)
 
-    imgui.SetNextWindowBgAlpha(0.35)
+    imgui.SetNextWindowBgAlpha(0.25)
     imgui.SetNextWindowViewport(imgui.GetMainViewportID())
     if imgui.Begin("log overlay", nil, flags) then
         draw_log_text(true, false)
