@@ -3,7 +3,7 @@ dofile_once("mods/component-explorer/settings_util.lua")
 
 local xml_serialise = {}
 
-xml_serialise.use_tabs = setting_get("xml_indent_tabs")
+xml_serialise.use_tabs = setting_get("xml_indent_char") == "tab"
 xml_serialise.space_count = setting_get("xml_space_count")
 xml_serialise.include_privates = setting_get("xml_include_privates")
 

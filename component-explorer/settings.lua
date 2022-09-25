@@ -1,7 +1,7 @@
 dofile("data/scripts/lib/mod_settings.lua")
 
 local mod_id = "component-explorer"
-mod_settings_version = 1
+mod_settings_version = 2
 mod_settings = {
     {
         category_id = "default_windows",
@@ -44,11 +44,11 @@ mod_settings = {
         ui_description = "What XML settings are selected by default",
         settings = {
             {
-                id = "xml_indent_tabs",
+                id = "xml_indent_char",
                 ui_name = "Indentation Character",
                 ui_description = "What character to use for indentation in the XML exports",
-                value_default = false,
-                values = {{false, "Spaces"}, {true, "Tabs"}},
+                value_default = "space",
+                values = {{"space", "Spaces"}, {"tab", "Tabs"}},
                 scope = MOD_SETTING_SCOPE_RUNTIME,
             },
             {

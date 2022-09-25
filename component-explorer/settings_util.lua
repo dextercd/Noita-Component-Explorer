@@ -5,7 +5,7 @@ local settings_keys = {
     "window_open_lua_console",
     "window_open_logs",
     "overlay_open_logs",
-    "xml_indent_tabs",
+    "xml_indent_char",
     "xml_space_count",
     "xml_include_privates",
 }
