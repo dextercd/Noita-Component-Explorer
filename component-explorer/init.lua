@@ -20,7 +20,7 @@ function help_marker(desc)
     imgui.TextDisabled("(?)")
     if imgui.IsItemHovered() then
         imgui.BeginTooltip()
-        imgui.PushTextWrapPos(300)
+        imgui.PushTextWrapPos(400)
         imgui.Text(desc)
         imgui.PopTextWrapPos()
         imgui.EndTooltip()
