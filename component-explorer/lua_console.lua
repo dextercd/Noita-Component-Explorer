@@ -1,3 +1,4 @@
+local string_util = dofile_once("mods/component-explorer/string_util.lua")
 dofile_once("mods/component-explorer/stringify.lua")
 dofile_once("mods/component-explorer/eval.lua")
 
@@ -38,6 +39,17 @@ end
 
 function console_remove_history(console, count)
     console.remove_items = count
+end
+
+local function decorated_text(decoration, text)
+    local output = ""
+    for line in string_util.splitstring(text, "\n", true) do
+        if output ~= "" then
+            output = output .. "\n"
+        end
+        output = output .. decoration .. line
+    end
+    return output
 end
 
 function console_run_command(console, command)
@@ -131,8 +143,9 @@ function console_contents_draw(console)
     if imgui.SmallButton("History to clipboard") then
         local all_history = ""
         for _, item in ipairs(console.history) do
-            all_history = (all_history ..
-                "> " .. item[1] .. "\n" ..
+            all_history = (
+                all_history ..
+                decorated_text("> ", item[1]) .. "\n" ..
                 item[2] .. "\n"
             )
         end
@@ -143,7 +156,15 @@ function console_contents_draw(console)
     imgui.Separator()
 
     local style = imgui.GetStyle()
-    local footer_height = style.ItemSpacing_y + imgui.GetFrameHeightWithSpacing()
+    local line_height = imgui.GetTextLineHeight()
+
+    local input_lines = 3
+
+    local footer_height = (
+        input_lines * line_height
+        + 2 * style.FramePadding_y
+        + style.ItemSpacing_y
+    )
 
     if imgui.BeginChild(
             "ScrollingRegion",
@@ -165,7 +186,7 @@ function console_contents_draw(console)
                 imgui.PushStyleColor(imgui.Col.Text, 1.0, 0.4, 0.4)
             end
 
-            imgui.Text("> " .. command)
+            imgui.Text(decorated_text("> ", command))
             console_item_context_menu("command_ctx" .. i, console, i)
             imgui.Text(output)
             console_item_context_menu("output_ctx" .. i, console, i)
@@ -185,21 +206,35 @@ function console_contents_draw(console)
         imgui.Separator()
     end
 
-    local submit
-    submit, console.input = imgui.InputText(
-        "Input", console.input,
+    local submit_input
+    submit_input, console.input = imgui.InputTextMultiline(
+        "##Input", console.input,
+        -line_height * 4, line_height * input_lines,
         imgui.InputTextFlags.EnterReturnsTrue
     )
-
-    if submit then
-        console_run_command(console, console.input)
-        console_focus_input(console)
-        console.input = ""
-    end
 
     if console.focus_input then
         console.focus_input = false
         imgui.SetKeyboardFocusHere(-1)
+    end
+
+    imgui.SameLine()
+    imgui.BeginGroup()
+
+    local submit_button = imgui.Button("Submit")
+    help_marker(
+        "Use CTRL+Enter or the submit button to evaluate the Lua expression.\n\n" ..
+
+        'You can use print or return to display values in the console, return displays ' ..
+        'items within tables while print will only display something like "table: 0x00741c68"'
+    )
+
+    imgui.EndGroup()
+
+    if submit_input or submit_button then
+        console_run_command(console, console.input)
+        console_focus_input(console)
+        console.input = ""
     end
 
     if console.remove_items ~= 0 then
