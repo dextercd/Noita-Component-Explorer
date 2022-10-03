@@ -37,6 +37,14 @@ local windows_open_component = true
 local windows_open_entity = true
 
 function OnWorldPreUpdate()
+    update_ui(false)
+end
+
+function OnPausePreUpdate()
+    update_ui(true)
+end
+
+function update_ui(is_paused)
     local window_flags = imgui.WindowFlags.MenuBar
     if imgui.Begin("Component Explorer", nil, window_flags) then
         if imgui.BeginMenuBar() then
