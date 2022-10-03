@@ -2,6 +2,12 @@ dofile_once("mods/component-explorer/serialise_component.lua")
 dofile_once("mods/component-explorer/component_fields.lua")
 local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
 
+component_types = {
+    {% for component in component_documentation %}
+    "{{ component.name }}",
+    {% endfor %}
+}
+
 local components_watching = {}
 
 function unwatch_component(component_id)

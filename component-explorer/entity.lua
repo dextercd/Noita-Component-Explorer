@@ -243,6 +243,19 @@ local function show_entity(entity_id, data)
     if imgui.CollapsingHeader("Components") then
         _, data.component_search = imgui.InputText("Type Search", data.component_search)
 
+        if imgui.Button("+ Add Component") then
+            imgui.OpenPopup("add_component_popup")
+        end
+
+        if imgui.BeginPopup("add_component_popup") then
+            for _, component_type in ipairs(component_types) do
+                if imgui.MenuItem(component_type) then
+                    EntityAddComponent(entity_id, component_type)
+                end
+            end
+            imgui.EndPopup()
+        end
+
         local table_flags = imgui.TableFlags.Resizable
         if imgui.BeginTable("EntityComponents", 4, table_flags) then
             imgui.TableSetupColumn("ID", imgui.TableColumnFlags.WidthFixed)
