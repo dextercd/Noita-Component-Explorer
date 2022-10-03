@@ -1,6 +1,7 @@
 dofile_once("mods/component-explorer/serialise_component.lua")
 dofile_once("mods/component-explorer/component_fields.lua")
 local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
+local comp_tag_util = dofile_once("mods/component-explorer/comp_tag_util.lua")
 
 component_types = {
     {% for component in component_documentation %}
@@ -89,6 +90,20 @@ function component_attributes(entity_id, component_id)
     imgui.PopStyleColor(3)
 end
 
+function component_tags(entity_id, component_id)
+    for i, tag in ipairs(comp_tag_util.special_tags) do
+        local has_tag = ComponentHasTag(component_id, tag)
+        local changed, new_val = imgui.Checkbox(tag, has_tag)
+        if changed then
+            if new_val then
+                ComponentAddTag(component_id, tag)
+            else
+                ComponentRemoveTag(component_id, tag)
+            end
+        end
+    end
+end
+
 {% set supported_fields = [
     "bool", "LensValue_bool",
     "float", "double",
@@ -161,6 +176,10 @@ function show_{{ component.name }}_window(entity_id, component_id)
 
     if imgui.CollapsingHeader("Attributes") then
         component_attributes(entity_id, component_id)
+    end
+
+    if imgui.CollapsingHeader("Tags") then
+        component_tags(entity_id, component_id)
     end
 
     show_{{ component.name }}_fields(component_id)
