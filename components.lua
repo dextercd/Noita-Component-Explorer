@@ -159,7 +159,9 @@ function show_{{ component.name }}_window(entity_id, component_id)
         return
     end
 
-    component_attributes(entity_id, component_id)
+    if imgui.CollapsingHeader("Attributes") then
+        component_attributes(entity_id, component_id)
+    end
 
     show_{{ component.name }}_fields(component_id)
 
