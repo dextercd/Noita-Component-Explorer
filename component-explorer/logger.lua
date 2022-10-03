@@ -145,8 +145,8 @@ function draw_log_overlay()
         imgui.WindowFlags.NoMove
     )
 
-    vw, vh = imgui.GetMainViewportSize()
-    vx, vy = imgui.GetMainViewportWorkPos()
+    local vw, vh = imgui.GetMainViewportSize()
+    local vx, vy = imgui.GetMainViewportWorkPos()
 
     local reserve_top = vh * 0.12
     local reserve_bottom = 20
