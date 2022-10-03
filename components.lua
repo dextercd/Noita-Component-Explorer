@@ -9,6 +9,7 @@ component_types = {
 }
 
 local components_watching = {}
+local components_to_remove = {}
 
 function unwatch_component(component_id)
     components_watching[component_id] = nil
@@ -55,9 +56,15 @@ function show_component_windows()
             unwatch_component(component)
         end
     end
+
+    for _, pair in ipairs(components_to_remove) do
+        local entity_id, component_id = unpack(pair)
+        EntityRemoveComponent(entity_id, component_id)
+    end
+    components_to_remove = {}
 end
 
-function toggle_component_button(entity_id, component_id)
+function component_attributes(entity_id, component_id)
     local enabled = ComponentGetIsEnabled(component_id)
     imgui.Text("Enabled: " .. tostring(enabled))
     imgui.SameLine()
@@ -65,6 +72,14 @@ function toggle_component_button(entity_id, component_id)
     if imgui.Button("Toggle") then
         EntitySetComponentIsEnabled(entity_id, component_id, not enabled)
     end
+
+    imgui.PushStyleColor(imgui.Col.Button, 1, 0.4, 0.4)
+    imgui.PushStyleColor(imgui.Col.ButtonHovered, 1, 0.6, 0.6)
+    imgui.PushStyleColor(imgui.Col.ButtonActive, 0.8, 0.4, 0.4)
+    if imgui.Button("Remove") then
+        table.insert(components_to_remove, {entity_id, component_id})
+    end
+    imgui.PopStyleColor(3)
 end
 
 {% set supported_fields = [
@@ -144,7 +159,7 @@ function show_{{ component.name }}_window(entity_id, component_id)
 
     imgui.Separator()
 
-    toggle_component_button(entity_id, component_id)
+    component_attributes(entity_id, component_id)
 
     show_{{ component.name }}_fields(component_id)
 
