@@ -65,6 +65,13 @@ function show_component_windows()
 end
 
 function component_attributes(entity_id, component_id)
+    if xml_serialise.button() then
+        local component_xml = serialise_component(component_id, xml_serialise.include_privates)
+        imgui.SetClipboardText(xml_serialise.tostring(component_xml))
+    end
+
+    imgui.Separator()
+
     local enabled = ComponentGetIsEnabled(component_id)
     imgui.Text("Enabled: " .. tostring(enabled))
     imgui.SameLine()
@@ -151,13 +158,6 @@ function show_{{ component.name }}_window(entity_id, component_id)
     if not should_show then
         return
     end
-
-    if xml_serialise.button() then
-        local component_xml = serialise_component(component_id, xml_serialise.include_privates)
-        imgui.SetClipboardText(xml_serialise.tostring(component_xml))
-    end
-
-    imgui.Separator()
 
     component_attributes(entity_id, component_id)
 
