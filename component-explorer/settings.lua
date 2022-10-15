@@ -69,6 +69,27 @@ mod_settings = {
             },
         },
     },
+    {
+        category_id = "pause",
+        ui_name = "Pause settings",
+        ui_description = "What should the mod do when the game is paused?",
+        settings = {
+            {
+                id = "pause_wands",
+                ui_name = "Run in wands menu",
+                ui_description = "Should the windows be shown in the wand pickup menu?",
+                value_default = true,
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            },
+            {
+                id = "pause_escape",
+                ui_name = "Run in escape menu",
+                ui_description = "Should component explorer windows be shown in the escape menu?",
+                value_default = false,
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            },
+        },
+    },
 }
 
 function ModSettingsUpdate(init_scope)

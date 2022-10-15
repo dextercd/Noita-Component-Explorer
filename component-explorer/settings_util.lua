@@ -8,6 +8,8 @@ local settings_keys = {
     "xml_indent_char",
     "xml_space_count",
     "xml_include_privates",
+    "pause_wands",
+    "pause_escape",
 }
 
 local function load_setting_value(key)

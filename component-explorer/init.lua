@@ -36,13 +36,30 @@ local overlay_open_logs = setting_get("overlay_open_logs")
 local windows_open_component = true
 local windows_open_entity = true
 
+
 function OnWorldPreUpdate()
     update_ui(false)
 end
 
-function OnPausePreUpdate()
-    update_ui(true)
+
+is_escape_paused = false
+is_inventory_paused = false
+
+function OnPausedChanged(paused, inventory_pause)
+    load_settings()  -- Settings might've changed, reload
+
+    is_escape_paused = paused and not inventory_pause
+    is_inventory_paused = inventory_pause
 end
+
+function OnPausePreUpdate()
+    if is_escape_paused and setting_get("pause_escape") or
+       is_inventory_paused and setting_get("pause_wands")
+    then
+        update_ui(true)
+    end
+end
+
 
 function update_ui(is_paused)
     local window_flags = imgui.WindowFlags.MenuBar
