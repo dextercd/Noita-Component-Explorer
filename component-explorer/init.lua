@@ -1,11 +1,3 @@
-dofile_once("mods/component-explorer/settings_util.lua") -- Should be loaded early
-dofile_once("mods/component-explorer/lua_console.lua")
-dofile_once("mods/component-explorer/components.lua")
-dofile_once("mods/component-explorer/entity_list.lua")
-dofile_once("mods/component-explorer/entity.lua")
-dofile_once("mods/component-explorer/version.lua")
-dofile_once("mods/component-explorer/logger.lua")
-
 if not load_imgui then
     local msg = "Could not find Dear ImGui, Component Explorer won't work."
     GamePrint(msg)
@@ -13,11 +5,20 @@ if not load_imgui then
     error(msg)
 end
 
+-- Loading imgui early so it's available when other files are loaded
 imgui = load_imgui({version="1.3.0", mod="Component Explorer"})
 
+dofile_once("mods/component-explorer/settings_util.lua") -- Should be loaded early
+dofile_once("mods/component-explorer/lua_console.lua")
+dofile_once("mods/component-explorer/components.lua")
+dofile_once("mods/component-explorer/entity_list.lua")
+dofile_once("mods/component-explorer/entity.lua")
+dofile_once("mods/component-explorer/version.lua")
+dofile_once("mods/component-explorer/logger.lua")
+dofile_once("mods/component-explorer/entity_picker.lua")
 
-function help_marker(desc)
-    imgui.TextDisabled("(?)")
+
+function help_tooltip(desc)
     if imgui.IsItemHovered() then
         imgui.BeginTooltip()
         imgui.PushTextWrapPos(400)
@@ -25,6 +26,11 @@ function help_marker(desc)
         imgui.PopTextWrapPos()
         imgui.EndTooltip()
     end
+end
+
+function help_marker(desc)
+    imgui.TextDisabled("(?)")
+    help_tooltip(desc)
 end
 
 local console = new_console()
@@ -62,17 +68,33 @@ end
 
 
 function update_ui(is_paused)
+    keyboard_shortcuts()
+
     local window_flags = imgui.WindowFlags.MenuBar
     if imgui.Begin("Component Explorer", nil, window_flags) then
         if imgui.BeginMenuBar() then
 
             if imgui.BeginMenu("View") then
-                _, windows_open_component =  imgui.MenuItem("Component Windows", "", windows_open_component)
-                _, windows_open_entity =     imgui.MenuItem("Entity Windows", "", windows_open_entity)
-                _, console.open =            imgui.MenuItem("Lua Console", "", console.open)
-                _, window_open_entity_list = imgui.MenuItem("Entity List", "", window_open_entity_list)
-                _, window_open_logs =        imgui.MenuItem("Logs Window", "", window_open_logs)
-                _, overlay_open_logs =       imgui.MenuItem("Logs Overlay", "", overlay_open_logs)
+                _, windows_open_component     = imgui.MenuItem("Component Windows", "", windows_open_component)
+                _, windows_open_entity        = imgui.MenuItem("Entity Windows", "", windows_open_entity)
+                _, console.open               = imgui.MenuItem("Lua Console", "", console.open)
+                _, window_open_entity_list    = imgui.MenuItem("Entity List", "", window_open_entity_list)
+                _, window_open_logs           = imgui.MenuItem("Logs Window", "", window_open_logs)
+                _, overlay_open_logs          = imgui.MenuItem("Logs Overlay", "", overlay_open_logs)
+
+                local clicked = imgui.MenuItem("Entity Picker", "", overlay_open_entity_picker)
+                if clicked then
+                    open_entity_picker_overlay()
+                    imgui.SetWindowFocus(nil)
+                end
+
+                if imgui.IsItemHovered() then
+                    help_tooltip(table.concat({
+                        "Allows you to move your mouse over an entity to open a window for it. ",
+                        "Press the entry number to select the entity. ESC to cancel the action.\n\n",
+                        "You can also hit CTRL+SHIFT+E to open the picker.",
+                    }))
+                end
 
                 imgui.EndMenu()
             end
@@ -113,5 +135,23 @@ function update_ui(is_paused)
 
     if overlay_open_logs then
         draw_log_overlay()
+    end
+
+    if overlay_open_entity_picker then
+        show_entity_picker_overlay()
+    end
+end
+
+function keyboard_shortcuts()
+    if not imgui.IsKeyDown(imgui.Key.LeftCtrl) then
+        return
+    end
+
+    if not imgui.IsKeyDown(imgui.Key.LeftShift) then
+        return
+    end
+
+    if not overlay_open_entity_picker and imgui.IsKeyDown(imgui.Key.E) then
+        open_entity_picker_overlay()
     end
 end
