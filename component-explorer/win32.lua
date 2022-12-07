@@ -40,6 +40,17 @@ typedef struct _OVERLAPPED {
   HANDLE    hEvent;
 } OVERLAPPED, *LPOVERLAPPED;
 
+HANDLE CreateEventA(
+  /* in, optional */ LPSECURITY_ATTRIBUTES lpEventAttributes,
+  /* in */           BOOL                  bManualReset,
+  /* in */           BOOL                  bInitialState,
+  /* in, optional */ LPCSTR                lpName
+);
+
+BOOL ResetEvent(
+  /* in */ HANDLE hEvent
+);
+
 DWORD WaitForMultipleObjects(
   /* in */ DWORD         nCount,
   /* in */ const HANDLE *lpHandles,
@@ -223,13 +234,13 @@ end
 
 ffi.cdef([[
 
-struct FileLifetime {
+struct HandleLifetime {
     HANDLE handle;
 };
 
 ]])
 
-local flmt = {
+local hlmt = {
     __gc = function(self)
         if self.handle ~= nil then
             C.CloseHandle(self.handle)
@@ -237,4 +248,4 @@ local flmt = {
     end
 }
 
-FileLifetime = ffi.metatype("struct FileLifetime", flmt)
+HandleLifetime = ffi.metatype("struct HandleLifetime", hlmt)

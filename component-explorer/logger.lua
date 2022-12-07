@@ -20,7 +20,7 @@ local function open_log_file()
         error("CreateFileA " .. last_error .. format_message(last_error))
     end
 
-    return FileLifetime(log_handle)
+    return HandleLifetime(log_handle)
 end
 
 local log_file
@@ -34,7 +34,10 @@ end
 local lines = {""}
 local remove_log_items = nil
 
+event = HandleLifetime(C.CreateEventA(nil, true, false, nil))
 local overlapped = ffi.new("OVERLAPPED")
+overlapped.hEvent = event.handle
+
 local read_buffer = ffi.new("char[2048]")
 local async_pending = false
 
@@ -73,30 +76,29 @@ function read_overlapped_result()
 end
 
 function read_logs()
-    if async_pending then
-        if not read_overlapped_result() then
-            return
+    if not async_pending then
+        local result = C.ReadFile(
+            log_handle(),
+            read_buffer,
+            ffi.sizeof(read_buffer),
+            nil,
+            overlapped
+        )
+
+        local last_error = C.GetLastError()
+        if result == 0 and last_error ~= WinError.ERROR_IO_PENDING then
+            error("ReadFile " .. format_message(last_error))
         end
+
+        async_pending = true
     end
 
-    assert(not async_pending)
-
-    local number_of_bytes_dummy = ffi.new("DWORD[1]")
-    local result = C.ReadFile(
-        log_handle(),
-        read_buffer,
-        ffi.sizeof(read_buffer),
-        nil,
-        overlapped
-    )
-    local last_error = C.GetLastError()
-    if result ~= 0 then
-        -- Immediate result
-        assert(read_overlapped_result())
-    elseif last_error == WinError.ERROR_IO_PENDING then
-        async_pending = true
-    else
-        error("ReadFile " .. format_message(last_error))
+    local wait_result = C.WaitForSingleObject(event.handle, 0)
+    if wait_result == 0 then
+        assert(C.ResetEvent(event.handle) ~= 0)
+        read_overlapped_result()
+    elseif wait_result ~= 0x102 then -- not timeout
+        error("WaitForSingleObject " .. format_message(C.GetLastError()))
     end
 end
 
