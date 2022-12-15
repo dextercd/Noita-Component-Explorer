@@ -8,10 +8,9 @@ local function loadstring_ish(str)
     local filename = "mods/component-explorer/command" .. nr .. ".lua"
     nr = nr + 1
 
-    local func_str = "return function()\n" .. str .. "\nend"
-    set_content(filename, func_str)
+    set_content(filename, str)
 
-    return dofile(filename)
+    return loadfile(filename)
 end
 
 function eval(str)
