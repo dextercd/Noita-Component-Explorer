@@ -2,7 +2,10 @@ local string_util = dofile_once("mods/component-explorer/string_util.lua")
 dofile_once("mods/component-explorer/stringify.lua")
 dofile_once("mods/component-explorer/eval.lua")
 
-Write = ModTextFileSetContent
+local globals = {
+    ModTextFileSetContent=ModTextFileSetContent,
+    ModTextFileGetContent=ModTextFileGetContent,
+}
 
 function new_console(name)
     name = name or "Console"
@@ -72,6 +75,10 @@ function console_run_command(console, command)
         end
 
         printed = printed .. "\n"
+    end
+
+    for k,v in pairs(globals) do
+        _G[k] = v
     end
 
     local status, value = eval(command)
