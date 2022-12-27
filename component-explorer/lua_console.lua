@@ -2,6 +2,8 @@ local string_util = dofile_once("mods/component-explorer/string_util.lua")
 dofile_once("mods/component-explorer/stringify.lua")
 dofile_once("mods/component-explorer/eval.lua")
 
+Write = ModTextFileSetContent
+
 function new_console(name)
     name = name or "Console"
     return {

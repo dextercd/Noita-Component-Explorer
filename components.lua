@@ -136,6 +136,10 @@ function show_{{ component.name }}_fields(component_id)
         show_field_abgr("{{ field.name }}", {{ description }}, component_id)
         {% elif field_type in supported_fields %}
         show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)
+        {% elif field.type == "RAGDOLL_FX::Enum" %}
+        show_field_enum("{{ field.name }}", {{ description }}, component_id, ragdoll_fx)
+        {% elif field.type == "PROJECTILE_TYPE::Enum" %}
+        show_field_enum("{{ field.name }}", {{ description }}, component_id, projectile_type)
         {% elif field_infos.get(component.name, {}).get(field.name, {}).handler %}
             {% set field_info = field_infos[component.name][field.name] %}
             {% set handler = field_info.handler %}

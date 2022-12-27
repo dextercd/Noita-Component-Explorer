@@ -38,5 +38,25 @@ herd_id_values = {
 
 arc_type_values = {
     "MATERIAL",
-    "LIGHTNING"
+    "LIGHTNING",
+}
+
+projectile_type = {
+    "PROJECTILE",
+    "LIGHTNING",
+    "VERLET",
+    "MATERIAL_PARTICLE",
+}
+
+ragdoll_fx = {
+    "NONE",
+    "NORMAL",
+    "BLOOD_EXPLOSION",
+    "BLOOD_SPRAY",
+    "FROZEN",
+    "CONVERT_TO_MATERIAL",
+    "CUSTOM_RAGDOLL_ENTITY",
+    "DISINTEGRATED",
+    "NO_RAGDOLL_FILE",
+    "PLAYER_RAGDOLL_CAMERA",
 }

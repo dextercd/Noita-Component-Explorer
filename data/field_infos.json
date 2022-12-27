@@ -56,11 +56,6 @@
             "handler": "show_field_float"
         }
     },
-    "DamageModelComponent": {
-        "ragdoll_fx_forced": {
-            "handler": "show_field_static_text"
-        }
-    },
     "GenomeDataComponent": {
         "herd_id": {
             "handler": "#enum",
