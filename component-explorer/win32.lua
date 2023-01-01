@@ -11,9 +11,12 @@ typedef void* HANDLE;
 typedef void* PVOID;
 typedef void* LPVOID;
 typedef HANDLE HLOCAL;
+typedef HANDLE HINSTANCE;
+typedef HINSTANCE HMODULE;
 typedef const void* LPCVOID;
 
 typedef char CHAR;
+typedef CHAR *LPSTR;
 typedef const CHAR *LPCSTR;
 
 typedef unsigned long ULONG_PTR, *PULONG_PTR;
@@ -188,6 +191,12 @@ LPVOID VirtualAlloc(
   /* in */           DWORD  flProtect
 );
 
+DWORD GetModuleFileNameA(
+  /* in, optional */  HMODULE hModule,
+  /* out */           LPSTR   lpFilename,
+  /* in */            DWORD   nSize
+);
+
 ]])
 
 DesiredAccess = ffi.new("struct DESIRED_ACCESS")
@@ -230,6 +239,21 @@ function format_message(error_code)
     C.LocalFree(message)
 
     return message_string
+end
+
+local exe_path = nil
+function get_exe_path()
+    if exe_path == nil then
+        local buffer = ffi.new("char[1000]")
+        local result = C.GetModuleFileNameA(nil, buffer, ffi.sizeof(buffer))
+        if result == 0 then
+            error("Couldn't get exe path: " .. format_message(C.GetLastError()))
+        end
+
+        exe_path = ffi.string(buffer, result)
+    end
+
+    return exe_path
 end
 
 ffi.cdef([[
