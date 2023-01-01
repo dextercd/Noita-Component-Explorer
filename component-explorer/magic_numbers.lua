@@ -2,7 +2,7 @@ local ffi = require("ffi")
 local string_util = dofile_once("mods/component-explorer/string_util.lua")
 dofile_once("mods/component-explorer/magic_number_items.lua")
 
-window_open_magic_numbers = true
+window_open_magic_numbers = false
 
 local search = ""
 
