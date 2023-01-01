@@ -16,6 +16,11 @@ dofile_once("mods/component-explorer/entity.lua")
 dofile_once("mods/component-explorer/version.lua")
 dofile_once("mods/component-explorer/logger.lua")
 dofile_once("mods/component-explorer/entity_picker.lua")
+dofile_once("mods/component-explorer/noita_version.lua")
+
+if is_steam_version() then
+    dofile_once("mods/component-explorer/magic_numbers.lua")
+end
 
 
 function help_tooltip(desc)
@@ -66,6 +71,33 @@ function OnPausePreUpdate()
     end
 end
 
+function view_menu_items()
+    _, windows_open_component  = imgui.MenuItem("Component Windows", "", windows_open_component)
+    _, windows_open_entity     = imgui.MenuItem("Entity Windows", "", windows_open_entity)
+    _, console.open            = imgui.MenuItem("Lua Console", "", console.open)
+    _, window_open_entity_list = imgui.MenuItem("Entity List", "", window_open_entity_list)
+    _, window_open_logs        = imgui.MenuItem("Logs Window", "", window_open_logs)
+    _, overlay_open_logs       = imgui.MenuItem("Logs Overlay", "", overlay_open_logs)
+
+    local clicked = imgui.MenuItem("Entity Picker", "", overlay_open_entity_picker)
+    if clicked then
+        open_entity_picker_overlay()
+        imgui.SetWindowFocus(nil)
+    end
+
+    if imgui.IsItemHovered() then
+        help_tooltip(table.concat({
+            "Allows you to move your mouse over an entity to open a window for it. ",
+            "Press the entry number to select the entity. ESC to cancel the action.\n\n",
+            "You can also hit CTRL+SHIFT+E to open the picker.",
+        }))
+    end
+
+    if is_steam_version() then
+        imgui.Separator()
+        _, window_open_magic_numbers = imgui.MenuItem("Magic Numbers", "", window_open_magic_numbers)
+    end
+end
 
 function update_ui(is_paused)
     keyboard_shortcuts()
@@ -75,26 +107,8 @@ function update_ui(is_paused)
         if imgui.BeginMenuBar() then
 
             if imgui.BeginMenu("View") then
-                _, windows_open_component     = imgui.MenuItem("Component Windows", "", windows_open_component)
-                _, windows_open_entity        = imgui.MenuItem("Entity Windows", "", windows_open_entity)
-                _, console.open               = imgui.MenuItem("Lua Console", "", console.open)
-                _, window_open_entity_list    = imgui.MenuItem("Entity List", "", window_open_entity_list)
-                _, window_open_logs           = imgui.MenuItem("Logs Window", "", window_open_logs)
-                _, overlay_open_logs          = imgui.MenuItem("Logs Overlay", "", overlay_open_logs)
+                view_menu_items()
 
-                local clicked = imgui.MenuItem("Entity Picker", "", overlay_open_entity_picker)
-                if clicked then
-                    open_entity_picker_overlay()
-                    imgui.SetWindowFocus(nil)
-                end
-
-                if imgui.IsItemHovered() then
-                    help_tooltip(table.concat({
-                        "Allows you to move your mouse over an entity to open a window for it. ",
-                        "Press the entry number to select the entity. ESC to cancel the action.\n\n",
-                        "You can also hit CTRL+SHIFT+E to open the picker.",
-                    }))
-                end
 
                 imgui.EndMenu()
             end
@@ -139,6 +153,12 @@ function update_ui(is_paused)
 
     if overlay_open_entity_picker then
         show_entity_picker_overlay()
+    end
+
+    if is_steam_version() then
+        if window_open_magic_numbers then
+            show_magic_numbers()
+        end
     end
 end
 
