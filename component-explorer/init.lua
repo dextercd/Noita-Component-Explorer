@@ -75,12 +75,12 @@ end
 function view_menu_items()
     _, windows_open_component  = imgui.MenuItem("Component Windows", "", windows_open_component)
     _, windows_open_entity     = imgui.MenuItem("Entity Windows", "", windows_open_entity)
-    _, console.open            = imgui.MenuItem("Lua Console", "", console.open)
+    _, console.open            = imgui.MenuItem("Lua Console", "CTRL+SHIFT+L", console.open)
     _, window_open_entity_list = imgui.MenuItem("Entity List", "", window_open_entity_list)
     _, window_open_logs        = imgui.MenuItem("Logs Window", "", window_open_logs)
-    _, overlay_open_logs       = imgui.MenuItem("Logs Overlay", "", overlay_open_logs)
+    _, overlay_open_logs       = imgui.MenuItem("Logs Overlay", "CTRL+SHIFT+O", overlay_open_logs)
 
-    local clicked = imgui.MenuItem("Entity Picker", "", overlay_open_entity_picker)
+    local clicked = imgui.MenuItem("Entity Picker", "CTRL+SHIFT+E", overlay_open_entity_picker)
     if clicked then
         open_entity_picker_overlay()
         imgui.SetWindowFocus(nil)
@@ -96,8 +96,8 @@ function view_menu_items()
 
     if is_steam_version() then
         imgui.Separator()
-        _, window_open_magic_numbers = imgui.MenuItem("Magic Numbers", "", window_open_magic_numbers)
-        _, window_open_debug = imgui.MenuItem("Debug", "", window_open_debug)
+        _, window_open_magic_numbers = imgui.MenuItem("Magic Numbers", "CTRL+SHIFT+M", window_open_magic_numbers)
+        _, window_open_debug = imgui.MenuItem("Debug", "CTRL+SHIFT+D", window_open_debug)
     end
 end
 
@@ -185,7 +185,7 @@ function keyboard_shortcuts()
         end
     end
 
-    if imgui.IsKeyPressed(imgui.Key.L) then
+    if imgui.IsKeyPressed(imgui.Key.W) then
         local world_entity = 1
         local world_component = EntityGetFirstComponent(world_entity, "WorldStateComponent")
         toggle_watch_component(world_entity, world_component)
@@ -195,6 +195,24 @@ function keyboard_shortcuts()
         local players = EntityGetWithTag("player_unit")
         for _, player in ipairs(players) do
             toggle_watch_entity(player)
+        end
+    end
+
+    if imgui.IsKeyPressed(imgui.Key.L) then
+        console.open = not console.open
+    end
+
+    if imgui.IsKeyPressed(imgui.Key.O) then
+        overlay_open_logs = not overlay_open_logs
+    end
+
+    if is_steam_version() then
+        if imgui.IsKeyPressed(imgui.Key.M) then
+            window_open_magic_numbers = not window_open_magic_numbers
+        end
+
+        if imgui.IsKeyPressed(imgui.Key.D) then
+            window_open_debug = not window_open_debug
         end
     end
 end
