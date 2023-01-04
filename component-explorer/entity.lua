@@ -41,6 +41,14 @@ function watch_entity(entity_id)
     }
 end
 
+function toggle_watch_entity(entity_id)
+    if entities_watching[entity_id] then
+        unwatch_entity(entity_id)
+    else
+        watch_entity(entity_id)
+    end
+end
+
 function open_entity_small_button(entity_id)
     if entities_watching[entity_id] then
         if imgui.SmallButton("Close###open_entity_small_button" .. entity_id) then

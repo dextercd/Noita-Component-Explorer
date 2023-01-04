@@ -21,6 +21,14 @@ function watch_component(entity_id, component_id)
     components_watching[component_id] = {entity_id, component_type_functions[type].show_window}
 end
 
+function toggle_watch_component(entity_id, component_id)
+    if components_watching[component_id] then
+        unwatch_component(component_id)
+    else
+        watch_component(entity_id, component_id)
+    end
+end
+
 function open_component_small_button(entity_id, component_id)
     if components_watching[component_id] then
         if imgui.SmallButton("Close###open_component_small_button" .. component_id) then

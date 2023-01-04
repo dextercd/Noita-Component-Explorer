@@ -184,4 +184,17 @@ function keyboard_shortcuts()
             open_entity_picker_overlay()
         end
     end
+
+    if imgui.IsKeyPressed(imgui.Key.L) then
+        local world_entity = 1
+        local world_component = EntityGetFirstComponent(world_entity, "WorldStateComponent")
+        toggle_watch_component(world_entity, world_component)
+    end
+
+    if imgui.IsKeyPressed(imgui.Key.P) then
+        local players = EntityGetWithTag("player_unit")
+        for _, player in ipairs(players) do
+            toggle_watch_entity(player)
+        end
+    end
 end
