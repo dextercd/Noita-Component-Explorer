@@ -6,7 +6,7 @@ if not load_imgui then
 end
 
 -- Loading imgui early so it's available when other files are loaded
-imgui = load_imgui({version="1.3.0", mod="Component Explorer"})
+imgui = load_imgui({version="1.7.0", mod="Component Explorer"})
 
 dofile_once("mods/component-explorer/settings_util.lua") -- Should be loaded early
 dofile_once("mods/component-explorer/lua_console.lua")
@@ -20,6 +20,7 @@ dofile_once("mods/component-explorer/noita_version.lua")
 
 if is_steam_version() then
     dofile_once("mods/component-explorer/magic_numbers.lua")
+    dofile_once("mods/component-explorer/debug.lua")
 end
 
 
@@ -96,6 +97,7 @@ function view_menu_items()
     if is_steam_version() then
         imgui.Separator()
         _, window_open_magic_numbers = imgui.MenuItem("Magic Numbers", "", window_open_magic_numbers)
+        _, window_open_debug = imgui.MenuItem("Debug", "", window_open_debug)
     end
 end
 
@@ -158,6 +160,10 @@ function update_ui(is_paused)
     if is_steam_version() then
         if window_open_magic_numbers then
             show_magic_numbers()
+        end
+
+        if window_open_debug then
+            show_debug()
         end
     end
 end
