@@ -90,7 +90,7 @@ function view_menu_items()
         help_tooltip(table.concat({
             "Allows you to move your mouse over an entity to open a window for it. ",
             "Press the entry number to select the entity. ESC to cancel the action.\n\n",
-            "You can also hit CTRL+SHIFT+E to open the picker.",
+            "You can also hit CTRL+SHIFT+E to open or close the picker.",
         }))
     end
 
@@ -177,7 +177,11 @@ function keyboard_shortcuts()
         return
     end
 
-    if not overlay_open_entity_picker and imgui.IsKeyDown(imgui.Key.E) then
-        open_entity_picker_overlay()
+    if imgui.IsKeyPressed(imgui.Key.E) then
+        if overlay_open_entity_picker then
+            overlay_open_entity_picker = false
+        else
+            open_entity_picker_overlay()
+        end
     end
 end
