@@ -145,7 +145,15 @@ function show_{{ component.name }}_fields(component_id)
         {%- set description = '"' ~ field.description ~ '"' if field.description else "nil" -%}
 
         {% if section_name == "Objects" %}
-        show_{{ field_type }}_fields("{{ field.name }}", {{ description }}, component_id)
+        local object_open = imgui.TreeNode("{{ field.name }} {{ field.type }}")
+        {% if field.description %}
+        imgui.SameLine()
+        help_marker("{{ field.description }}")
+        {% endif %}
+        if object_open then
+            show_{{ field_type }}_fields("{{ field.name }}", {{ description }}, component_id)
+            imgui.TreePop()
+        end
         {% elif field_type == "uint32" and "color" in field.name %}
         show_field_abgr("{{ field.name }}", {{ description }}, component_id)
         {% elif field_type in supported_fields %}

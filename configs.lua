@@ -40,7 +40,10 @@ function show_{{ config.name }}_fields(field_name, description, component_id)
     {%- for section_name, fields in sections.items() -%}
     {%- if fields %}
 
-    if imgui.TreeNode(field_name .. " {{ config.name }}: {{ section_name }}") then
+    {% if config.privates or config.custom_data_types %}
+    if imgui.TreeNode("{{ section_name }}") then
+    {% endif %}
+
         {% for field in fields -%}
 
         {%- set field_type = field.type|replace("::", "_")|replace("<", "_")|replace(">", "") -%}
@@ -53,8 +56,12 @@ function show_{{ config.name }}_fields(field_name, description, component_id)
         {% endif -%}
 
         {% endfor %}
+
+    {% if config.privates or config.custom_data_types %}
         imgui.TreePop()
     end
+    {% endif %}
+
     {% endif -%}
     {% endfor -%}
 end
