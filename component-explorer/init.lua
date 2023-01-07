@@ -110,8 +110,6 @@ function update_ui(is_paused)
 
             if imgui.BeginMenu("View") then
                 view_menu_items()
-
-
                 imgui.EndMenu()
             end
 
