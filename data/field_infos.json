@@ -7,12 +7,6 @@
             "handler": "show_field_float"
         }
     },
-    "ArcComponent": {
-        "type": {
-            "handler": "#enum",
-            "enum": "arc_type_values"
-        }
-    },
     "CharacterDataComponent": {
         "collision_aabb_min_x": {
             "handler": "#spread_aabb"
