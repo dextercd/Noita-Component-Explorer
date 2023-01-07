@@ -454,13 +454,12 @@ end
 local search = {}
 
 function show_debug()
-    if imgui.Begin("Debug") then
-
+    local should_show
+    should_show, window_open_debug = imgui.Begin("Debug", window_open_debug)
+    if should_show then
         if imgui.BeginTabBar("##debugtabs") then
-
             for _, category in ipairs(debug_categories) do
                 if imgui.BeginTabItem(category.name) then
-
                     local search_changed
                     search_changed, search[category] = imgui.InputText(
                         "Search", search[category] or ""
