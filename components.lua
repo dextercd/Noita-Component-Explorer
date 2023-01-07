@@ -122,6 +122,7 @@ end
     "ValueRange", "ValueRangeInt",
     "std_string",
     "EntityID",
+    "types_fcolor",
 ]
 %}
 

@@ -135,6 +135,20 @@ function show_field_abgr(name, description, component_id)
     end
 end
 
+function show_field_types_fcolor(name, description, component_id)
+    local r, g, b, a = ComponentGetValue2(component_id, name)
+
+    local changed, r, g, b, a = imgui.ColorEdit4(name, r, g, b, a)
+    if changed then
+        ComponentSetValue2(component_id, name, r, g, b, a)
+    end
+
+    if description then
+        imgui.SameLine()
+        help_marker(description)
+    end
+end
+
 function show_field_LensValue_bool(name, description, component_id)
     local value = ComponentGetValue2(component_id, name) ~= 0
 
