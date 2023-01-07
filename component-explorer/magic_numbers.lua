@@ -29,6 +29,7 @@ function show_magic_numbers()
 
         if imgui.BeginChild("magicinputs") then
             show_magic_items()
+            imgui.EndChild()
         end
         imgui.End()
     end
