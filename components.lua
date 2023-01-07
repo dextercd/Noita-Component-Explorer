@@ -84,12 +84,13 @@ function component_attributes(entity_id, component_id)
     imgui.Separator()
 
     local enabled = ComponentGetIsEnabled(component_id)
-    imgui.Text("Enabled: " .. tostring(enabled))
-    imgui.SameLine()
-    imgui.SetCursorPosX(imgui.GetFontSize() * 8)
-    if imgui.Button("Toggle") then
-        EntitySetComponentIsEnabled(entity_id, component_id, not enabled)
+    local enabled_changed
+    enabled_changed, enabled = imgui.Checkbox("Enabled", enabled)
+    if enabled_changed then
+        EntitySetComponentIsEnabled(entity_id, component_id, enabled)
     end
+
+    imgui.SameLine()
 
     imgui.PushStyleColor(imgui.Col.Button, 1, 0.4, 0.4)
     imgui.PushStyleColor(imgui.Col.ButtonHovered, 1, 0.6, 0.6)
