@@ -1,5 +1,7 @@
 dofile_once("mods/component-explorer/serialise_component.lua")
 dofile_once("mods/component-explorer/component_fields.lua")
+dofile_once("mods/component-explorer/configs.lua")
+
 local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
 local comp_tag_util = dofile_once("mods/component-explorer/comp_tag_util.lua")
 
@@ -116,7 +118,8 @@ end
     "bool", "LensValue_bool",
     "float", "double",
     "int", "unsignedint", "int16", "uint16", "int32", "uint32", "int64", "uint64",
-    "vec2", "ivec2",
+    "types_vector2", "vec2", "ivec2",
+    "ValueRange", "ValueRangeInt",
     "std_string",
     "EntityID",
 ]
@@ -140,7 +143,9 @@ function show_{{ component.name }}_fields(component_id)
         {%- set field_type = field.type|replace("::", "_")|replace("<", "_")|replace(">", "") -%}
         {%- set description = '"' ~ field.description ~ '"' if field.description else "nil" -%}
 
-        {% if field_type == "uint32" and "color" in field.name %}
+        {% if section_name == "Objects" %}
+        show_{{ field_type }}_fields("{{ field.name }}", {{ description }}, component_id)
+        {% elif field_type == "uint32" and "color" in field.name %}
         show_field_abgr("{{ field.name }}", {{ description }}, component_id)
         {% elif field_type in supported_fields %}
         show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)

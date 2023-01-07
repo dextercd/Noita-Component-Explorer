@@ -2,13 +2,13 @@ dofile_once("mods/component-explorer/stringify.lua")
 dofile_once("mods/component-explorer/field_enums.lua")
 dofile_once("mods/component-explorer/entity.lua")
 
-function show_field_int(name, description, component_id)
-    local value = ComponentGetValue2(component_id, name)
+function show_field_int(name, description, component_id, get, set)
+    local value = (get or ComponentGetValue2)(component_id, name)
 
     imgui.SetNextItemWidth(200)
     local changed, value = imgui.InputInt(name, value)
     if changed then
-        ComponentSetValue2(component_id, name, value)
+        (set or ComponentSetValue2)(component_id, name, value)
     end
 
     if description then
@@ -25,13 +25,13 @@ show_field_uint32 = show_field_int
 show_field_int64 = show_field_int
 show_field_uint64 = show_field_int
 
-function show_field_float(name, description, component_id)
-    local value = ComponentGetValue2(component_id, name)
+function show_field_float(name, description, component_id, get, set)
+    local value = (get or ComponentGetValue2)(component_id, name)
 
     imgui.SetNextItemWidth(200)
     local changed, value = imgui.InputFloat(name, value, 0.1)
     if changed then
-        ComponentSetValue2(component_id, name, value)
+        (set or ComponentSetValue2)(component_id, name, value)
     end
 
     if description then
@@ -42,12 +42,12 @@ end
 
 show_field_double = show_field_float
 
-function show_field_bool(name, description, component_id)
-    local value = ComponentGetValue2(component_id, name)
+function show_field_bool(name, description, component_id, get, set)
+    local value = (get or ComponentGetValue2)(component_id, name)
 
     local changed, value = imgui.Checkbox(name, value)
     if changed then
-        ComponentSetValue2(component_id, name, value)
+        (set or ComponentSetValue2)(component_id, name, value)
     end
 
     if description then
@@ -56,13 +56,13 @@ function show_field_bool(name, description, component_id)
     end
 end
 
-function show_field_std_string(name, description, component_id)
-    local value = ComponentGetValue2(component_id, name)
+function show_field_std_string(name, description, component_id, get, set)
+    local value = (get or ComponentGetValue2)(component_id, name)
 
     imgui.SetNextItemWidth(300)
     local changed, value = imgui.InputText(name, value)
     if changed then
-        ComponentSetValue2(component_id, name, value)
+        (set or ComponentSetValue2)(component_id, name, value)
     end
 
     if description then
@@ -71,13 +71,13 @@ function show_field_std_string(name, description, component_id)
     end
 end
 
-function show_field_vec2(name, description, component_id)
-    local x, y = ComponentGetValue2(component_id, name)
+function show_field_vec2(name, description, component_id, get, set)
+    local x, y = (get or ComponentGetValue2)(component_id, name)
 
     imgui.SetNextItemWidth(300)
     local changed, nx, ny = imgui.InputFloat2(name, x, y)
     if changed then
-        ComponentSetValue2(component_id, name, nx, ny)
+        (set or ComponentSetValue2)(component_id, name, nx, ny)
     end
 
     if description then
@@ -86,13 +86,13 @@ function show_field_vec2(name, description, component_id)
     end
 end
 
-function show_field_ivec2(name, description, component_id)
-    local x, y = ComponentGetValue2(component_id, name)
+function show_field_ivec2(name, description, component_id, get, set)
+    local x, y = (get or ComponentGetValue2)(component_id, name)
 
     imgui.SetNextItemWidth(300)
     local changed, nx, ny = imgui.InputInt2(name, x, y)
     if changed then
-        ComponentSetValue2(component_id, name, nx, ny)
+        (set or ComponentSetValue2)(component_id, name, nx, ny)
     end
 
     if description then
@@ -100,6 +100,10 @@ function show_field_ivec2(name, description, component_id)
         help_marker(description)
     end
 end
+
+show_field_types_vector2 = show_field_vec2
+show_field_ValueRange = show_field_vec2
+show_field_ValueRangeInt = show_field_ivec2
 
 function show_field_abgr(name, description, component_id)
     local value = ComponentGetValue2(component_id, name)
@@ -198,13 +202,13 @@ function show_field_static_text(name, description, component_id)
     end
 end
 
-function show_field_EntityID(name, description, component_id)
-    local entity_id = ComponentGetValue2(component_id, name)
+function show_field_EntityID(name, description, component_id, get, set)
+    local entity_id = (get or ComponentGetValue2)(component_id, name)
 
     imgui.SetNextItemWidth(200)
     local changed, entity_id = imgui.InputInt(name, entity_id)
     if changed then
-        ComponentSetValue2(component_id, name, entity_id)
+        (set or ComponentSetValue2)(component_id, name, entity_id)
     end
 
     imgui.SameLine()
