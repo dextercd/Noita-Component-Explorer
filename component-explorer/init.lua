@@ -44,6 +44,7 @@ local console = new_console()
 window_open_entity_list = setting_get("window_open_entity_list")
 console.open = setting_get("window_open_lua_console")
 window_open_logs = setting_get("window_open_logs")
+local window_open_about = false
 local overlay_open_logs = setting_get("overlay_open_logs")
 local windows_open_component = true
 local windows_open_entity = true
@@ -73,6 +74,7 @@ function OnPausePreUpdate()
 end
 
 function view_menu_items()
+    local _
     _, windows_open_component  = imgui.MenuItem("Component Windows", "", windows_open_component)
     _, windows_open_entity     = imgui.MenuItem("Entity Windows", "", windows_open_entity)
     _, console.open            = imgui.MenuItem("Lua Console", "CTRL+SHIFT+L", console.open)
@@ -101,12 +103,61 @@ function view_menu_items()
     end
 end
 
-function update_ui(is_paused)
-    keyboard_shortcuts()
+-- Can't know the width before creating the window.. Just an initial value, it's updated
+-- to the real value once we can call imgui.GetWindowWidth()
+local main_window_width = 100
 
-    local window_flags = imgui.WindowFlags.MenuBar
-    if imgui.Begin("Component Explorer", nil, window_flags) then
+function main_window_position()
+    local menubar_height = imgui.GetFontSize() + 2 * imgui.GetStyle().FramePadding_y
+
+    -- Available space
+    local aw, ah = imgui.GetMainViewportSize()
+    aw = aw - main_window_width
+    ah = ah - menubar_height + 3  -- Bit extra to get rid of the bottom deadzone of the window
+
+    local rx, ry
+
+    local side = setting_get("main_window_side")
+
+    if     side == "top"    then ry = 0
+    elseif side == "bottom" then ry = 1
+    elseif side == "left"   then rx = 0
+    elseif side == "right"  then rx = 1 end
+
+    local roffset = setting_get("main_window_side_offset") / 100
+
+    if     rx == nil then rx = roffset
+    elseif ry == nil then ry = roffset end
+
+    imgui.SetNextWindowViewport(imgui.GetMainViewportID())
+    return aw * rx, ah * ry
+end
+
+function main_window()
+    local window_flags = bit.bor(
+        imgui.WindowFlags.MenuBar,
+        imgui.WindowFlags.NoDocking,
+        imgui.WindowFlags.NoSavedSettings,
+        imgui.WindowFlags.NoFocusOnAppearing,
+        imgui.WindowFlags.NoMove,
+        imgui.WindowFlags.NoDecoration,
+        imgui.WindowFlags.NoBackground
+    )
+
+    imgui.SetNextWindowViewport(imgui.GetMainViewportID())
+    imgui.SetNextWindowPos(main_window_position())
+
+    if imgui.Begin("Main Menu", nil, window_flags) then
+
+        -- Save actual window width for next positioning
+        main_window_width = imgui.GetWindowWidth()
+
         if imgui.BeginMenuBar() then
+            if imgui.BeginMenu("CE") then
+                local _
+                _, window_open_about = imgui.MenuItem("About", "", window_open_about)
+                imgui.EndMenu()
+            end
 
             if imgui.BeginMenu("View") then
                 view_menu_items()
@@ -116,6 +167,14 @@ function update_ui(is_paused)
             imgui.EndMenuBar()
         end
 
+        imgui.End()
+    end
+end
+
+function show_about_window()
+    local should_show
+    should_show, window_open_about = imgui.Begin("About", window_open_about)
+    if should_show then
         imgui.Text("Component explorer version " .. version)
         imgui.Text("Made by dextercd#7326")
         imgui.Text("Homepage: " .. homepage)
@@ -125,6 +184,16 @@ function update_ui(is_paused)
         end
 
         imgui.End()
+    end
+end
+
+function update_ui(is_paused)
+    keyboard_shortcuts()
+
+    main_window()
+
+    if window_open_about then
+        show_about_window()
     end
 
     if windows_open_component then

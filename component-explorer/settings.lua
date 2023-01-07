@@ -4,6 +4,31 @@ local mod_id = "component-explorer"
 mod_settings_version = 2
 mod_settings = {
     {
+        category_id = "main_window",
+        ui_name = "Main window",
+        ui_description = "Where to put the main window?",
+        settings = {
+            {
+                id = "main_window_side",
+                ui_name = "Main window side",
+                ui_description = "What side of the screen should the window be?",
+                value_default = "top",
+                values = {{"top", "Top"}, {"bottom", "Bottom"}, {"left", "Left"}, {"right", "Right"}},
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            },
+            {
+                id = "main_window_side_offset",
+                ui_name = "Main window offset",
+                ui_description = "How far along the selected side should the window be?",
+                value_default = 95,
+                value_min = 0,
+                value_max = 100,
+                value_display_formatting = " $0 %",
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            }
+        },
+    },
+    {
         category_id = "default_windows",
         ui_name = "Default windows",
         ui_description = "What windows should be opened by default",
