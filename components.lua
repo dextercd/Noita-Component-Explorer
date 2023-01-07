@@ -99,6 +99,10 @@ function component_attributes(entity_id, component_id)
         table.insert(components_to_remove, {entity_id, component_id})
     end
     imgui.PopStyleColor(3)
+
+    imgui.Text("Entity:")
+    imgui.SameLine()
+    open_entity_small_button(entity_id)
 end
 
 function component_tags(entity_id, component_id)
