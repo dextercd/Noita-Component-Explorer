@@ -82,9 +82,9 @@ function view_menu_items()
     _, window_open_logs        = imgui.MenuItem("Logs Window", "", window_open_logs)
     _, overlay_open_logs       = imgui.MenuItem("Logs Overlay", "CTRL+SHIFT+O", overlay_open_logs)
 
-    local clicked = imgui.MenuItem("Entity Picker", "CTRL+SHIFT+E", overlay_open_entity_picker)
+    local clicked
+    clicked, overlay_open_entity_picker = imgui.MenuItem("Entity Picker...", "CTRL+SHIFT+E", overlay_open_entity_picker)
     if clicked then
-        open_entity_picker_overlay()
         imgui.SetWindowFocus(nil)
     end
 
@@ -245,11 +245,7 @@ function keyboard_shortcuts()
     end
 
     if imgui.IsKeyPressed(imgui.Key.E) then
-        if overlay_open_entity_picker then
-            overlay_open_entity_picker = false
-        else
-            open_entity_picker_overlay()
-        end
+        overlay_open_entity_picker = not overlay_open_entity_picker
     end
 
     if imgui.IsKeyPressed(imgui.Key.W) then

@@ -101,16 +101,6 @@ overlay_open_entity_picker = false
 local overlay_entities = {}
 local skip_entities_refresh_once = false
 
-function open_entity_picker_overlay()
-    if overlay_open_entity_picker then
-        return
-    end
-
-    overlay_open_entity_picker = true
-    overlay_entities = {}
-    skip_entities_refresh_once = false
-end
-
 function show_entity_picker_overlay()
     if imgui.IsKeyPressed(imgui.Key.Escape) then
         overlay_open_entity_picker = false
