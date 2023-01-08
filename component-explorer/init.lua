@@ -129,8 +129,8 @@ function main_window_position()
     if     rx == nil then rx = roffset
     elseif ry == nil then ry = roffset end
 
-    imgui.SetNextWindowViewport(imgui.GetMainViewportID())
-    return aw * rx, ah * ry
+    local vx, vy = imgui.GetMainViewportWorkPos()
+    return vx + aw * rx, vy + ah * ry
 end
 
 function main_window()
