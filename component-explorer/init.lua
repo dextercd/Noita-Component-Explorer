@@ -46,8 +46,8 @@ console.open = setting_get("window_open_lua_console")
 window_open_logs = setting_get("window_open_logs")
 local window_open_about = false
 local overlay_open_logs = setting_get("overlay_open_logs")
-local windows_open_component = true
-local windows_open_entity = true
+local windows_hidden_component = false
+local windows_hidden_entity = false
 
 
 function OnWorldPreUpdate()
@@ -75,8 +75,6 @@ end
 
 function view_menu_items()
     local _
-    _, windows_open_component  = imgui.MenuItem("Component Windows", "", windows_open_component)
-    _, windows_open_entity     = imgui.MenuItem("Entity Windows", "", windows_open_entity)
     _, console.open            = imgui.MenuItem("Lua Console", "CTRL+SHIFT+L", console.open)
     _, window_open_entity_list = imgui.MenuItem("Entity List", "", window_open_entity_list)
     _, window_open_logs        = imgui.MenuItem("Logs Window", "", window_open_logs)
@@ -101,6 +99,10 @@ function view_menu_items()
         _, window_open_magic_numbers = imgui.MenuItem("Magic Numbers", "CTRL+SHIFT+M", window_open_magic_numbers)
         _, window_open_debug = imgui.MenuItem("Debug", "CTRL+SHIFT+D", window_open_debug)
     end
+
+    imgui.Separator()
+    _, windows_hidden_entity     = imgui.MenuItem("Hide entity windows", "", windows_hidden_entity)
+    _, windows_hidden_component  = imgui.MenuItem("Hide component windows", "", windows_hidden_component)
 end
 
 -- Can't know the width before creating the window.. Just an initial value, it's updated
@@ -196,11 +198,11 @@ function update_ui(is_paused)
         show_about_window()
     end
 
-    if windows_open_component then
+    if not windows_hidden_component then
         show_component_windows()
     end
 
-    if windows_open_entity then
+    if not windows_hidden_entity then
         show_entity_windows()
     end
 
