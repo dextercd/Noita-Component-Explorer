@@ -3,9 +3,6 @@ local string_util = dofile_once("mods/component-explorer/string_util.lua")
 local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
 
 local common_entity_tags = {
-    "enabled_in_world",
-    "enabled_in_hand",
-    "enabled_in_inventory",
     "projectile_player",
     "hittable",
     "teleportable_NOT",
