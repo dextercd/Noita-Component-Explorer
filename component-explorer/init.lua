@@ -1,9 +1,10 @@
 if not load_imgui then
-    local msg = "Could not find Dear ImGui, Component Explorer won't work."
-    GamePrint(msg)
-    print(msg)
-    error(msg)
+    function OnWorldInitialized()
+        EntityLoad("mods/component-explorer/imgui_warning.xml")
+    end
+    error("Missing ImGui.")
 end
+
 
 -- Loading imgui early so it's available when other files are loaded
 imgui = load_imgui({version="1.7.0", mod="Component Explorer"})
