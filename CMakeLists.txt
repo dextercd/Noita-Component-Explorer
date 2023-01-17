@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(NoitaComponentExplorer
+project(ComponentExplorer
     VERSION 1.14.3
     HOMEPAGE_URL "https://github.com/dextercd/Noita-Component-Explorer"
     LANGUAGES
@@ -116,6 +116,8 @@ render_jinja_template(OUTPUT configs.lua
 add_custom_target(configs_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/configs.lua)
 
 
+configure_file(mod.xml.in mod.xml @ONLY)
+
 # Installing
 
 install(DIRECTORY component-explorer DESTINATION "." COMPONENT ComponentExplorer)
@@ -125,6 +127,7 @@ install(
         ${CMAKE_CURRENT_BINARY_DIR}/serialise_component.lua
         ${CMAKE_CURRENT_BINARY_DIR}/version.lua
         ${CMAKE_CURRENT_BINARY_DIR}/configs.lua
+        ${CMAKE_CURRENT_BINARY_DIR}/mod.xml
     DESTINATION "component-explorer"
     COMPONENT ComponentExplorer
 )

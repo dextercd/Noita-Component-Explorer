@@ -1,4 +1,4 @@
 <Mod
-    name="Component Explorer"
+    name="Component Explorer @ComponentExplorer_VERSION@"
     description="Various modding tools"
     request_no_api_restrictions="1" />
