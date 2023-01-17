@@ -4,7 +4,7 @@ local set_content = ModTextFileSetContent
 
 -- loadstring but returns nil if there's a syntax error
 local function loadstring_ish(str)
-    local filename = "mods/component-explorer/command" .. ".lua"
+    local filename = "mods/component-explorer/user_command.lua"
     set_content(filename, str)
     return loadfile(filename)
 end
