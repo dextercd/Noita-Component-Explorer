@@ -1,6 +1,6 @@
 local ffi = require("ffi")
 
-local string_util = dofile_once("mods/component-explorer/string_util.lua")
+local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 local memory_display = dofile_once("mods/component-explorer/memory_display.lua")
 
 dofile_once("mods/component-explorer/memory_type.lua")

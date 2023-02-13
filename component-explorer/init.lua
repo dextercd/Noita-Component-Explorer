@@ -9,7 +9,7 @@ end
 -- Loading imgui early so it's available when other files are loaded
 imgui = load_imgui({version="1.7.0", mod="Component Explorer"})
 
-dofile_once("mods/component-explorer/settings_util.lua") -- Should be loaded early
+dofile_once("mods/component-explorer/utils/settings_util.lua") -- Should be loaded early
 dofile_once("mods/component-explorer/lua_console.lua")
 dofile_once("mods/component-explorer/components.lua")
 dofile_once("mods/component-explorer/entity_list.lua")
@@ -17,7 +17,7 @@ dofile_once("mods/component-explorer/entity.lua")
 dofile_once("mods/component-explorer/version.lua")
 dofile_once("mods/component-explorer/logger.lua")
 dofile_once("mods/component-explorer/entity_picker.lua")
-dofile_once("mods/component-explorer/noita_version.lua")
+dofile_once("mods/component-explorer/utils/noita_version.lua")
 
 if is_steam_version() then
     dofile_once("mods/component-explorer/magic_numbers.lua")

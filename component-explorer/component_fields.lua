@@ -1,4 +1,4 @@
-dofile_once("mods/component-explorer/stringify.lua")
+dofile_once("mods/component-explorer/utils/stringify.lua")
 dofile_once("mods/component-explorer/field_enums.lua")
 dofile_once("mods/component-explorer/entity.lua")
 

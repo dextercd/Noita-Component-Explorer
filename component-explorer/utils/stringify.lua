@@ -1,4 +1,4 @@
-dofile_once("mods/component-explorer/copy.lua")
+dofile_once("mods/component-explorer/utils/copy.lua")
 
 function quote_string(str)
     local escaped = str:gsub('(["\\])', "\\%1")

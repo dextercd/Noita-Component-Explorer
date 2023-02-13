@@ -1,5 +1,5 @@
 local nxml = dofile_once("mods/component-explorer/deps/nxml.lua")
-local comp_tag_util = dofile_once("mods/component-explorer/comp_tag_util.lua")
+local comp_tag_util = dofile_once("mods/component-explorer/utils/component_tags.lua")
 dofile_once("mods/component-explorer/serialise_component_fields.lua")
 
 {% for component in component_documentation %}

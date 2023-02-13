@@ -1,4 +1,4 @@
-dofile_once("mods/component-explorer/win32.lua")
+dofile_once("mods/component-explorer/utils/win32.lua")
 
 local steam_identifiers = {
     {

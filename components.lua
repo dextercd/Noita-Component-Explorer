@@ -3,7 +3,7 @@ dofile_once("mods/component-explorer/component_fields.lua")
 dofile_once("mods/component-explorer/configs.lua")
 
 local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
-local comp_tag_util = dofile_once("mods/component-explorer/comp_tag_util.lua")
+local comp_tag_util = dofile_once("mods/component-explorer/utils/component_tags.lua")
 
 component_types = {
     {% for component in component_documentation %}

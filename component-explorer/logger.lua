@@ -1,5 +1,5 @@
-local string_util = dofile_once("mods/component-explorer/string_util.lua")
-dofile_once("mods/component-explorer/win32.lua")
+local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
+dofile_once("mods/component-explorer/utils/win32.lua")
 local style = dofile_once("mods/component-explorer/style.lua")
 
 local ffi = require("ffi")

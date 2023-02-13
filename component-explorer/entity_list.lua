@@ -1,4 +1,4 @@
-local string_util = dofile_once("mods/component-explorer/string_util.lua")
+local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 dofile_once("mods/component-explorer/entity.lua")
 
 local all_entities = {}

@@ -1,5 +1,5 @@
 dofile_once("mods/component-explorer/serialise_entity.lua")
-local string_util = dofile_once("mods/component-explorer/string_util.lua")
+local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
 
 local common_entity_tags = {

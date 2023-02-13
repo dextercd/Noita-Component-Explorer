@@ -1,6 +1,6 @@
-local string_util = dofile_once("mods/component-explorer/string_util.lua")
-dofile_once("mods/component-explorer/stringify.lua")
-dofile_once("mods/component-explorer/eval.lua")
+local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
+dofile_once("mods/component-explorer/utils/stringify.lua")
+dofile_once("mods/component-explorer/utils/eval.lua")
 
 EZWand = dofile_once("mods/component-explorer/deps/EZWand.lua")
 

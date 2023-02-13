@@ -1,5 +1,5 @@
 local nxml = dofile_once("mods/component-explorer/deps/nxml.lua")
-dofile_once("mods/component-explorer/settings_util.lua")
+dofile_once("mods/component-explorer/utils/settings_util.lua")
 
 local xml_serialise = {}
 
