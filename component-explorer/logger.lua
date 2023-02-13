@@ -1,5 +1,6 @@
 local string_util = dofile_once("mods/component-explorer/string_util.lua")
 dofile_once("mods/component-explorer/win32.lua")
+local style = dofile_once("mods/component-explorer/style.lua")
 
 local ffi = require("ffi")
 local C = ffi.C
@@ -172,9 +173,6 @@ function draw_log_overlay()
 end
 
 
-local colour_fail = {1, 0.4, 0.4, 1}
-local colour_warn = {0.96, 0.94, 0, 1}
-
 function line_colour(str)
     if string_util.ifind(str, "erro") or
        string_util.ifind(str, "problem") or
@@ -183,14 +181,14 @@ function line_colour(str)
        string_util.ifind(str, "We made a fucky wucky") or
        string_util.ifind(str, "critical")
     then
-        return unpack(colour_fail)
+        return unpack(style.colour_fail)
     end
 
     if string_util.ifind(str, "warn") or
        string_util.ifind(str, "couldn't") or
        string_util.ifind(str, "missing")
     then
-        return unpack(colour_warn)
+        return unpack(style.colour_warn)
     end
 end
 
