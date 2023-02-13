@@ -4,7 +4,7 @@ function string_util.ifind(s, pattern, init, plain)
     return string.find(s:lower(), pattern:lower(), init, plain)
 end
 
-function string_util.splitstring(str, sep, plain)
+function string_util.split_iter(str, sep, plain)
     local start = 1
 
     return function()
@@ -18,6 +18,14 @@ function string_util.splitstring(str, sep, plain)
             return value
         end
     end
+end
+
+function string_util.split(str, sep, plain)
+    local result = {}
+    for value in string_util.split_iter(str, sep, plain) do
+        table.insert(result, value)
+    end
+    return result
 end
 
 return string_util

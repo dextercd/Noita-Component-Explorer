@@ -50,7 +50,7 @@ end
 
 local function decorated_text(decoration, text)
     local output = ""
-    for line in string_util.splitstring(text, "\n", true) do
+    for line in string_util.split_iter(text, "\n", true) do
         if output ~= "" then
             output = output .. "\n"
         end

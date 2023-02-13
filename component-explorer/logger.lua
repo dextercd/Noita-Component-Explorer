@@ -45,7 +45,7 @@ local async_pending = false
 function process_read_response(size)
     local log_text = ffi.string(read_buffer, size)
     local first = nil
-    for line in string_util.splitstring(log_text, "\n", true) do
+    for line in string_util.split_iter(log_text, "\n", true) do
         if first == nil then
             first = line
             lines[#lines] = lines[#lines] .. first
