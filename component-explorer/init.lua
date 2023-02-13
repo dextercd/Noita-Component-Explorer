@@ -18,6 +18,7 @@ dofile_once("mods/component-explorer/version.lua")
 dofile_once("mods/component-explorer/logger.lua")
 dofile_once("mods/component-explorer/entity_picker.lua")
 dofile_once("mods/component-explorer/utils/noita_version.lua")
+dofile_once("mods/component-explorer/wiki_wands.lua")
 
 if is_steam_version() then
     dofile_once("mods/component-explorer/magic_numbers.lua")
@@ -80,6 +81,7 @@ function view_menu_items()
     _, window_open_entity_list = imgui.MenuItem("Entity List", "", window_open_entity_list)
     _, window_open_logs        = imgui.MenuItem("Logs Window", "", window_open_logs)
     _, overlay_open_logs       = imgui.MenuItem("Logs Overlay", "CTRL+SHIFT+O", overlay_open_logs)
+    _, window_open_wiki_wands  = imgui.MenuItem("Wiki Wands", "", window_open_wiki_wands)
 
     local clicked
     clicked, overlay_open_entity_picker = imgui.MenuItem("Entity Picker...", "CTRL+SHIFT+E", overlay_open_entity_picker)
@@ -225,6 +227,10 @@ function update_ui(is_paused)
 
     if overlay_open_entity_picker then
         show_entity_picker_overlay()
+    end
+
+    if window_open_wiki_wands then
+        show_wiki_wands()
     end
 
     if is_steam_version() then
