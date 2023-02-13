@@ -1,6 +1,6 @@
 if not load_imgui then
     function OnWorldInitialized()
-        EntityLoad("mods/component-explorer/imgui_warning.xml")
+        EntityLoad("mods/component-explorer/entities/imgui_warning.xml")
     end
     error("Missing ImGui.")
 end
