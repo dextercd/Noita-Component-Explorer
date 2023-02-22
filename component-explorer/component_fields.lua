@@ -71,6 +71,8 @@ function show_field_std_string(name, description, component_id, get, set)
     end
 end
 
+show_field_USTRING = show_field_std_string
+
 function show_field_vec2(name, description, component_id, get, set)
     local x, y = (get or ComponentGetValue2)(component_id, name)
 

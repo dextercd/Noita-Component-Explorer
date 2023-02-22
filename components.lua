@@ -125,7 +125,7 @@ end
     "int", "unsignedint", "int16", "uint16", "int32", "uint32", "int64", "uint64",
     "types_vector2", "vec2", "ivec2",
     "ValueRange", "ValueRangeInt",
-    "std_string",
+    "std_string", "USTRING",
     "EntityID",
     "types_fcolor",
 ]
