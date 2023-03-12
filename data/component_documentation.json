@@ -356,6 +356,12 @@
                 "description": "if 1, TODO( PETRI)"
             },
             {
+                "type": "int",
+                "name": "gun_level",
+                "example": "1 [1, 10]",
+                "description": "the level of the wand, set in gun_procedural.lua"
+            },
+            {
                 "type": "std::string",
                 "name": "add_these_child_actions",
                 "description": "e.g. 'bullet,bullet,damage' ... actions are parsed into a string. These are added as actual entities when the item is initialized"
@@ -1485,6 +1491,11 @@
                 "type": "AudioSourceHandle",
                 "name": "m_source",
                 "example": "-1 [0, 1]"
+            },
+            {
+                "type": "int",
+                "name": "m_frame_created",
+                "example": "-1 [0, 1]"
             }
         ]
     },
@@ -2072,6 +2083,12 @@
                 "name": "send_transform_update_message",
                 "example": "0 [0, 1]",
                 "description": "if 1, will send Message_TransformUpdated to updated entities and their children when the component is processed by PlayerCollisionSystem or CharacterCollisionSystem"
+            },
+            {
+                "type": "float",
+                "name": "mFlyingTimeLeft",
+                "example": "1000 [0, 1]",
+                "description": "How much flying energy do we have left? - NOTE( Petri ): 1.3.2023 - This used to be a private variable. It was changed to fix the save/load infinite flying bug."
             }
         ],
         "privates": [
@@ -2088,12 +2105,6 @@
             {
                 "type": "vec2",
                 "name": "mVelocity"
-            },
-            {
-                "type": "float",
-                "name": "mFlyingTimeLeft",
-                "example": "1000 [0, 1]",
-                "description": "how much flying energy do we have left?"
             },
             {
                 "type": "bool",
@@ -4546,6 +4557,12 @@
                 "type": "std::string",
                 "name": "extra_death_msg",
                 "description": "set when e.g. polymorphed"
+            },
+            {
+                "type": "int",
+                "name": "player_polymorph_count",
+                "example": "0 [0, 1]",
+                "description": "skip loading of stats if this higher than 0 and decrament this by one"
             }
         ]
     },
@@ -5905,9 +5922,21 @@
             },
             {
                 "type": "bool",
+                "name": "pick_up_any_item_buggy",
+                "example": "0 [0, 1]",
+                "description": "If true, will pick up _any_ item. Breaks all kinds of things, but maybe mods will find this fun to mess around with"
+            },
+            {
+                "type": "bool",
                 "name": "is_immune_to_kicks",
                 "example": "0 [0, 1]",
                 "description": "if set, won't drop the wand if kicked. Mainly used by wand ghosts."
+            },
+            {
+                "type": "EntityID",
+                "name": "only_pick_this_entity",
+                "example": "0 [0, 1]",
+                "description": "picks up this entity and only this entity. Overrides the is_in_npc checks that try to limit things to pickuppable wands"
             },
             {
                 "type": "bool",
@@ -6575,6 +6604,11 @@
                 "type": "std::string",
                 "name": "script_portal_teleport_used",
                 "description": "if set, calls function 'portal_teleport_used( entity_that_was_teleported, from_x, from_y, to_x, to_y )' when we receive Message_PortalTeleportUsed"
+            },
+            {
+                "type": "std::string",
+                "name": "script_polymorphing_to",
+                "description": "if set, calls function 'polymorphing_to( string_entity_we_are_about_to_polymorph_to )' when we receive Message_PolymorphingTo"
             },
             {
                 "type": "int",
