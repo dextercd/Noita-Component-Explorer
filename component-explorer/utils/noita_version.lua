@@ -1,12 +1,13 @@
 dofile_once("mods/component-explorer/utils/win32.lua")
 
+-- These are offsets in the exe, not the addresses as they are loaded in memory.
 local steam_identifiers = {
     {
-        location = 0x00a392ac,
-        string = "Noita-Build-Apr 23 2021-18:44:24",
+        location = 0x00a00208,
+        string = "Noita-Build-Mar 11 2023-14:09:24",
     },
     {
-        location = 0x00b37e4c,
+        location = 0x00b3ecba,
         string = "steam_api.dll",
     },
 }
