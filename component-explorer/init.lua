@@ -11,6 +11,7 @@ imgui = load_imgui({version="1.7.0", mod="Component Explorer"})
 
 dofile_once("mods/component-explorer/utils/settings_util.lua") -- Should be loaded early
 dofile_once("mods/component-explorer/lua_console.lua")
+dofile_once("mods/component-explorer/configure_globals.lua")
 dofile_once("mods/component-explorer/components.lua")
 dofile_once("mods/component-explorer/entity_list.lua")
 dofile_once("mods/component-explorer/entity.lua")
@@ -96,6 +97,8 @@ function view_menu_items()
             "You can also hit CTRL+SHIFT+E to open or close the picker.",
         }))
     end
+
+    _, window_open_globals  = imgui.MenuItem("Globals", "", window_open_globals)
 
     if is_steam_version() then
         imgui.Separator()
@@ -200,6 +203,11 @@ function update_ui(is_paused)
     if window_open_about then
         show_about_window()
     end
+
+    if window_open_globals then
+        show_configure_globals()
+    end
+    show_globals_windows()
 
     if not windows_hidden_component then
         show_component_windows()
