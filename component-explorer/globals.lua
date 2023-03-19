@@ -15,7 +15,7 @@ local type_options = {
 local globals_windows = {}
 local remove_next = {}
 
-function show_configure_globals()
+function show_globals()
     imgui.SetNextWindowSize(400, 150, imgui.Cond.Once)
     local should_show
     should_show, window_open_globals = imgui.Begin(

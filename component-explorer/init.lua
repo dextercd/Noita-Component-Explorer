@@ -11,7 +11,7 @@ imgui = load_imgui({version="1.7.0", mod="Component Explorer"})
 
 dofile_once("mods/component-explorer/utils/settings_util.lua") -- Should be loaded early
 dofile_once("mods/component-explorer/lua_console.lua")
-dofile_once("mods/component-explorer/configure_globals.lua")
+dofile_once("mods/component-explorer/globals.lua")
 dofile_once("mods/component-explorer/components.lua")
 dofile_once("mods/component-explorer/entity_list.lua")
 dofile_once("mods/component-explorer/entity.lua")
@@ -205,7 +205,7 @@ function update_ui(is_paused)
     end
 
     if window_open_globals then
-        show_configure_globals()
+        show_globals()
     end
     show_globals_windows()
 
