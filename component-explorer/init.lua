@@ -53,11 +53,6 @@ local windows_hidden_component = false
 local windows_hidden_entity = false
 
 
-function OnWorldPreUpdate()
-    update_ui(false)
-end
-
-
 is_escape_paused = false
 is_inventory_paused = false
 
@@ -68,12 +63,16 @@ function OnPausedChanged(paused, inventory_pause)
     is_inventory_paused = inventory_pause
 end
 
+function OnWorldPreUpdate()
+    update_ui(false, GameGetFrameNum())
+end
+
+function OnWorldPostUpdate()
+    update_ui(false, GameGetFrameNum())
+end
+
 function OnPausePreUpdate()
-    if is_escape_paused and setting_get("pause_escape") or
-       is_inventory_paused and setting_get("pause_wands")
-    then
-        update_ui(true)
-    end
+    update_ui(true, GameGetFrameNum() + 1)
 end
 
 function view_menu_items()
@@ -195,7 +194,22 @@ function show_about_window()
     end
 end
 
-function update_ui(is_paused)
+local last_frame_run = -1
+
+function update_ui(paused, current_frame_run)
+    if paused then
+        if is_escape_paused and not setting_get("pause_escape") or
+           is_inventory_paused and not setting_get("pause_wands")
+        then
+            return
+        end
+    else
+        if last_frame_run >= current_frame_run then
+            return
+        end
+    end
+    last_frame_run = current_frame_run
+
     keyboard_shortcuts()
 
     main_window()
