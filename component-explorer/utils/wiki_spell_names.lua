@@ -399,4 +399,13 @@ wiki_spell_names.by_action_id = {
     RAINBOW_TRAIL = "Rainbow trail",
 }
 
+local to_action_id = {}
+for action_id, name in pairs(wiki_spell_names.by_action_id) do
+    to_action_id[name:lower()] = action_id
+end
+
+function wiki_spell_names.to_action_id(name)
+    return to_action_id[name:lower()]
+end
+
 return wiki_spell_names

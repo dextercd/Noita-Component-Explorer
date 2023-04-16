@@ -28,4 +28,34 @@ function string_util.split(str, sep, plain)
     return result
 end
 
+function string_util.trim(s)
+   return s:gsub("^%s*(.-)%s*$", "%1")
+end
+
+function string_util.starts_with(s, start)
+    if #s < #start then return false end
+    local part = s:sub(1, #start)
+    return part == start
+end
+
+function string_util.ends_with(s, ending)
+    if #s < #ending then return false end
+    local part = s:sub(#s - #ending + 1)
+    return part == ending
+end
+
+function string_util.remove_prefix(s, start)
+    if not string_util.starts_with(s, start) then
+        return s
+    end
+    return s:sub(#start + 1)
+end
+
+function string_util.remove_suffix(s, ending)
+    if not string_util.ends_with(s, ending) then
+        return s
+    end
+    return s:sub(1, #s - #ending)
+end
+
 return string_util

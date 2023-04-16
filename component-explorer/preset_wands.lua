@@ -1,0 +1,67 @@
+return {
+    {
+        name = "Level 1",
+        data = {
+            capacity = 8,
+            castDelay = 16,
+            manaChargeSpeed = 54,
+            manaMax = 240,
+            rechargeTime = 32,
+            shuffle = false,
+            spellsPerCast = 1,
+            spread = 0,
+        },
+    },
+    {
+        name = "Level 2",
+        data = {
+            capacity = 10,
+            castDelay = 14,
+            manaChargeSpeed = 106,
+            manaMax = 300,
+            rechargeTime = 30,
+            shuffle = false,
+            spellsPerCast = 1,
+            spread = -1,
+        },
+    },
+    {
+        name = "Level 3",
+        data = {
+            capacity = 12,
+            castDelay = 8,
+            manaChargeSpeed = 161,
+            manaMax = 550,
+            rechargeTime = 22,
+            shuffle = false,
+            spellsPerCast = 1,
+            spread = -2,
+        },
+    },
+    {
+        name = "Level 4",
+        data = {
+            capacity = 20,
+            castDelay = 4,
+            manaChargeSpeed = 213,
+            manaMax = 800,
+            rechargeTime = 15,
+            shuffle = false,
+            spellsPerCast = 1,
+            spread = -20,
+        },
+    },
+    {
+        name = "Level 5",
+        data = {
+            capacity = 25,
+            castDelay = 2,
+            manaChargeSpeed = 270,
+            manaMax = 2430,
+            rechargeTime = 9,
+            shuffle = false,
+            spellsPerCast = 1,
+            spread = -30,
+        },
+    },
+}
