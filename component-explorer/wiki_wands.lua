@@ -3,10 +3,10 @@ local EZWand = dofile_once("mods/component-explorer/deps/EZWand.lua")
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 local wiki_spell_names = dofile_once("mods/component-explorer/utils/wiki_spell_names.lua")
 local wiki = dofile_once("mods/component-explorer/utils/wiki.lua")
+local wand_sprites = dofile_once("mods/component-explorer/wand_sprites.lua")
 dofile_once("mods/component-explorer/utils/copy.lua")
 
 dofile_once("data/scripts/gun/procedural/wands.lua")
-local procedural_wands = wands
 
 local preset_wands = dofile_once("mods/component-explorer/preset_wands.lua")
 
@@ -20,14 +20,16 @@ end
 
 local function get_wand_values(wand, wand_card)
     local values = {}
-    local sprite_path = string_util.split(wand:GetSprite(), "/", true)
-    local sprite_filename = sprite_path[#sprite_path]
+    local sprite_file = wand:GetSprite()
+    local wiki_file_name = wand_sprites.to_wiki_name(sprite_file)
 
     if wand_card then
         table.insert(values, {"wandName", "My Wand"})
     end
 
-    table.insert(values, {"wandPic", sprite_filename})
+    if wiki_file_name then
+        table.insert(values, {"wandPic", wiki_file_name})
+    end
 
     if wand.shuffle then
         table.insert(values, {"shuffle", "Yes"})
@@ -78,20 +80,15 @@ local function wand_get_wiki_text(wand, wand_card)
 end
 
 local function set_sprite_by_filename(wand, filename)
-    for _, prwand in ipairs(procedural_wands) do
-        local sprite_path = string_util.split(prwand.file, "/", true)
-        local sprite_filename = sprite_path[#sprite_path]
-        if sprite_filename == filename then
-            wand:SetSprite(prwand.file,
-                prwand.grip_x,
-                prwand.grip_y,
-                (prwand.tip_x - prwand.grip_x),
-                (prwand.tip_y - prwand.grip_y))
-            return true
-        end
-    end
+    local data = wand_sprites.from_wiki_name(filename)
+    if data == nil then return false end
 
-    return false
+    wand:SetSprite(
+        data.sprite_file or data.image_file,
+        data.offset_x, data.offset_y,
+        data.tip_x, data.tip_y)
+
+    return true
 end
 
 local function write_wand_template(wand, template_data)
@@ -100,9 +97,7 @@ local function write_wand_template(wand, template_data)
         map[v[1]] = v[2]
     end
 
-    if map.wandPic and string_util.ends_with(map.wandPic, ".png") then
-        set_sprite_by_filename(wand, map.wandPic)
-    end
+    set_sprite_by_filename(wand, map.wandPic)
 
     wand.shuffle = map.shuffle == "true"
     wand.spellsPerCast = map.spellsCast and tonumber(map.spellsCast) or 1

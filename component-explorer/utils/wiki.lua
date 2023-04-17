@@ -105,4 +105,15 @@ function wiki.parse_template(template_text)
     }
 end
 
+function wiki.normalise_name(name)
+    -- Capitalise
+    name = name:sub(1, 1):upper() .. name:sub(2)
+    -- Use spaces
+    name = name:gsub("_", " ")
+    -- Collapse spaces
+    name = name:gsub("  +", " ")
+
+    return name
+end
+
 return wiki
