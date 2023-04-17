@@ -24,7 +24,18 @@ local function get_wand_values(wand, wand_card)
     local wiki_file_name = wand_sprites.to_wiki_name(sprite_file)
 
     if wand_card then
-        table.insert(values, {"wandName", "My Wand"})
+        local item_name = nil
+
+        local item_comp = EntityGetFirstComponentIncludingDisabled(wand.entity_id, "ItemComponent")
+        if item_comp then
+            if ComponentGetValue2(item_comp, "always_use_item_name_in_ui") then
+                item_name = ComponentGetValue2(item_comp, "item_name")
+            end
+        end
+
+        if item_name then
+            table.insert(values, {"wandName", GameTextGetTranslatedOrNot(item_name)})
+        end
     end
 
     if wiki_file_name then
@@ -103,6 +114,12 @@ local function write_wand_template(wand, template_data)
     end
 
     set_sprite_by_filename(wand, map.wandPic)
+
+    if map.wandName then
+        local item_comp = EntityGetFirstComponentIncludingDisabled(wand.entity_id, "ItemComponent")
+        ComponentSetValue2(item_comp, "always_use_item_name_in_ui", true)
+        ComponentSetValue2(item_comp, "item_name", map.wandName)
+    end
 
     wand.shuffle = map.shuffle == "true"
     wand.spellsPerCast = map.spellsCast and tonumber(map.spellsCast) or 1
