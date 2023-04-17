@@ -46,7 +46,7 @@ function wand_sprites.to_wiki_name(sprite_file)
     for _, v in ipairs(unique_wand_sprites) do
         if v.sprite_file == sprite_file then
             -- For some reason the offsets that were extracted aren't accurate.
-            -- Replacing with 4 seems to work??
+            -- Replacing with 4 seems more accurate overall but not perfect.
             v.offset_x = 4
             v.offset_y = 4
             return v.wiki_file
