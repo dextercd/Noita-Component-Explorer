@@ -47,7 +47,12 @@ local function get_wand_values(wand, wand_card)
     end
 
     local spells, attached_spells = wand:GetSpells()
-    table.insert(values, {"capacity", #spells})
+
+    if wand_card then
+        table.insert(values, {"capacity", wand.capacity})
+    else
+        table.insert(values, {"capacity", #spells})
+    end
 
     if wand_card then
         table.insert(values, {"spread", wand.spread})
