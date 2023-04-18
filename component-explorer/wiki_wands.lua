@@ -20,8 +20,7 @@ end
 
 local function get_wand_values(wand, wand_card)
     local values = {}
-    local sprite_file = wand:GetSprite()
-    local wiki_file_name = wand_sprites.to_wiki_name(sprite_file)
+    local wiki_file_name = wand_sprites.wiki_sprite_filename(wand)
 
     if wand_card then
         local item_name = nil

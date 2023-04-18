@@ -36,21 +36,36 @@ function wand_sprites.from_wiki_name(name)
     return nil
 end
 
-function wand_sprites.to_wiki_name(sprite_file)
-    if string_util.ends_with(sprite_file, ".png") then
-        local path = string_util.split(sprite_file, "/", true)
-        local filename = path[#path]
-        return wiki.normalise_name(filename)
+function wand_sprites.wiki_sprite_filename(wand)
+    local sprite1
+    local sprite2
+
+    if wand.ability_component then
+        sprite1 = ComponentGetValue2(wand.ability_component, "sprite_file")
     end
 
+    local sprite_comp = EntityGetFirstComponentIncludingDisabled(wand.entity_id, "SpriteComponent", "item")
+    if sprite_comp then
+        sprite2 = ComponentGetValue2(sprite_comp, "image_file")
+    end
+
+    -- Some wand scripts like data/scripts/gun/procedural/wand_vihta.lua replace
+    -- the sprite on the sprite/item component but not the ability component.
+
     for _, v in ipairs(unique_wand_sprites) do
-        if v.sprite_file == sprite_file then
+        if (sprite2 and sprite2 == v.image_file) or sprite1 == v.sprite_file then
             -- For some reason the offsets that were extracted aren't accurate.
             -- Replacing with 4 seems more accurate overall but not perfect.
             v.offset_x = 4
             v.offset_y = 4
             return v.wiki_file
         end
+    end
+
+    if string_util.ends_with(sprite1, ".png") then
+        local path = string_util.split(sprite1, "/", true)
+        local filename = path[#path]
+        return wiki.normalise_name(filename)
     end
 
     return nil
