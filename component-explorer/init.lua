@@ -61,18 +61,16 @@ function OnPausedChanged(paused, inventory_pause)
 
     is_escape_paused = paused and not inventory_pause
     is_inventory_paused = inventory_pause
+
+    if not paused then update_ui(true, GameGetFrameNum()) end
 end
 
 function OnWorldPreUpdate()
     update_ui(false, GameGetFrameNum())
 end
 
-function OnWorldPostUpdate()
-    update_ui(false, GameGetFrameNum())
-end
-
 function OnPausePreUpdate()
-    update_ui(true, GameGetFrameNum() + 1)
+    update_ui(true, GameGetFrameNum())
 end
 
 function view_menu_items()
