@@ -151,6 +151,7 @@ function main_window()
 
     imgui.SetNextWindowViewport(imgui.GetMainViewportID())
     imgui.SetNextWindowPos(main_window_position())
+    imgui.SetNextWindowSize(0, 0)
 
     if imgui.Begin("Main Menu", nil, window_flags) then
 
