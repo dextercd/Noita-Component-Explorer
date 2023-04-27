@@ -112,7 +112,9 @@ local function write_wand_template(wand, template_data)
         map[v[1]] = v[2]
     end
 
-    set_sprite_by_filename(wand, map.wandPic)
+    if map.wandPic then
+        set_sprite_by_filename(wand, map.wandPic)
+    end
 
     if map.wandName then
         local item_comp = EntityGetFirstComponentIncludingDisabled(wand.entity_id, "ItemComponent")
