@@ -106,6 +106,10 @@ function component_attributes(entity_id, component_id)
 end
 
 function component_tags(entity_id, component_id)
+    imgui.Text("Note: Only showing some tags.")
+    imgui.SameLine()
+    help_marker("There's no way to get all tags on a component, so only some special tags are listed.")
+
     for i, tag in ipairs(comp_tag_util.special_tags) do
         local has_tag = ComponentHasTag(component_id, tag)
         local changed, new_val = imgui.Checkbox(tag, has_tag)
