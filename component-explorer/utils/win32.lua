@@ -149,6 +149,7 @@ struct WIN_ERROR {
     static const DWORD ERROR_INSUFFICIENT_BUFFER            = 122;
     static const DWORD ERROR_INVALID_NAME                   = 123;
     static const DWORD ERROR_BUSY                           = 170;
+    static const DWORD ERROR_ALREADY_EXISTS                 = 183;
     static const DWORD ERROR_MORE_DATA                      = 234;
     static const DWORD WAIT_TIMEOUT                         = 258;
     static const DWORD ERROR_IO_PENDING                     = 997;
@@ -197,6 +198,11 @@ DWORD GetModuleFileNameA(
   /* in, optional */  HMODULE hModule,
   /* out */           LPSTR   lpFilename,
   /* in */            DWORD   nSize
+);
+
+BOOL CreateDirectoryA(
+  /* in */           LPCSTR                lpPathName,
+  /* in, optional */ LPSECURITY_ATTRIBUTES lpSecurityAttributes
 );
 
 ]])
@@ -276,5 +282,19 @@ local hlmt = {
 }
 
 win32.HandleLifetime = ffi.metatype("struct HandleLifetime", hlmt)
+
+function win32.create_directory(name)
+    local success = C.CreateDirectoryA(name, nil)
+    if success then
+        return "success"
+    end
+
+    local err = C.GetLastError()
+    if err == win32.WinError.ERROR_ALREADY_EXISTS then
+        return "already-exists"
+    end
+
+    error("CreateDirectoryA " .. win32.format_message(err))
+end
 
 return win32
