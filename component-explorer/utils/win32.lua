@@ -1,6 +1,8 @@
 local ffi = require("ffi")
 local C = ffi.C
 
+local win32 = {}
+
 ffi.cdef([[
 
 typedef int BOOL;
@@ -199,15 +201,15 @@ DWORD GetModuleFileNameA(
 
 ]])
 
-DesiredAccess = ffi.new("struct DESIRED_ACCESS")
-ShareMode = ffi.new("struct SHARE_MODE")
-CreationDisposition = ffi.new("struct CREATION_DISPOSITION")
-FileAttribute = ffi.new("struct FILE_ATTRIBUTE")
-WinError = ffi.new("struct WIN_ERROR")
+win32.DesiredAccess = ffi.new("struct DESIRED_ACCESS")
+win32.ShareMode = ffi.new("struct SHARE_MODE")
+win32.CreationDisposition = ffi.new("struct CREATION_DISPOSITION")
+win32.FileAttribute = ffi.new("struct FILE_ATTRIBUTE")
+win32.WinError = ffi.new("struct WIN_ERROR")
 
-INVALID_HANDLE_VALUE = ffi.cast("HANDLE", -1)
+win32.INVALID_HANDLE_VALUE = ffi.cast("HANDLE", -1)
 
-function format_message(error_code)
+function win32.format_message(error_code)
     local flags =
         0x100  + -- FORMAT_MESSAGE_ALLOCATE_BUFFER
         0x1000 + -- FORMAT_MESSAGE_FROM_SYSTEM
@@ -242,12 +244,13 @@ function format_message(error_code)
 end
 
 local exe_path = nil
-function get_exe_path()
+function win32.get_exe_path()
     if exe_path == nil then
         local buffer = ffi.new("char[1000]")
         local result = C.GetModuleFileNameA(nil, buffer, ffi.sizeof(buffer))
         if result == 0 then
-            error("Couldn't get exe path: " .. format_message(C.GetLastError()))
+            error("Couldn't get exe path: " ..
+                win32.format_message(C.GetLastError()))
         end
 
         exe_path = ffi.string(buffer, result)
@@ -272,4 +275,6 @@ local hlmt = {
     end
 }
 
-HandleLifetime = ffi.metatype("struct HandleLifetime", hlmt)
+win32.HandleLifetime = ffi.metatype("struct HandleLifetime", hlmt)
+
+return win32

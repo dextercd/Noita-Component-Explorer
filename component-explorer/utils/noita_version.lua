@@ -1,4 +1,4 @@
-dofile_once("mods/component-explorer/utils/win32.lua")
+local win32 = dofile_once("mods/component-explorer/utils/win32.lua")
 
 -- These are offsets in the exe, not the addresses as they are loaded in memory.
 local steam_identifiers = {
@@ -17,7 +17,7 @@ function is_steam_version()
     if steam_version == nil then
         -- Changed to true if all checks succeed
         steam_version = false
-        local nf = io.open(get_exe_path(), "rb")
+        local nf = io.open(win32.get_exe_path(), "rb")
 
         for _, identifier in ipairs(steam_identifiers) do
             nf:seek("set", identifier.location)

@@ -1,5 +1,5 @@
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
-dofile_once("mods/component-explorer/utils/win32.lua")
+local win32 = dofile_once("mods/component-explorer/utils/win32.lua")
 local style = dofile_once("mods/component-explorer/style.lua")
 
 local ffi = require("ffi")
@@ -8,20 +8,25 @@ local C = ffi.C
 local function open_log_file()
     local log_handle = C.CreateFileA(
         "logger.txt",
-        DesiredAccess.GENERIC_READ,
-        bit.bor(ShareMode.FILE_SHARE_READ, ShareMode.FILE_SHARE_WRITE, ShareMode.FILE_SHARE_DELETE),
+        win32.DesiredAccess.GENERIC_READ,
+        bit.bor(
+            win32.ShareMode.FILE_SHARE_READ,
+            win32.ShareMode.FILE_SHARE_WRITE,
+            win32.ShareMode.FILE_SHARE_DELETE),
         nil,
-        CreationDisposition.OPEN_EXISTING,
-        bit.bor(FileAttribute.FILE_ATTRIBUTE_NORMAL, FileAttribute.FILE_FLAG_OVERLAPPED),
+        win32.CreationDisposition.OPEN_EXISTING,
+        bit.bor(
+            win32.FileAttribute.FILE_ATTRIBUTE_NORMAL,
+            win32.FileAttribute.FILE_FLAG_OVERLAPPED),
         nil
     )
 
-    if log_handle == INVALID_HANDLE_VALUE then
+    if log_handle == win32.INVALID_HANDLE_VALUE then
         local last_error = C.GetLastError()
-        error("CreateFileA " .. last_error .. format_message(last_error))
+        error("CreateFileA " .. last_error .. win32.format_message(last_error))
     end
 
-    return HandleLifetime(log_handle)
+    return win32.HandleLifetime(log_handle)
 end
 
 local log_file
@@ -35,7 +40,7 @@ end
 local lines = {""}
 local remove_log_items = nil
 
-event = HandleLifetime(C.CreateEventA(nil, true, false, nil))
+event = win32.HandleLifetime(C.CreateEventA(nil, true, false, nil))
 local overlapped = ffi.new("OVERLAPPED")
 overlapped.hEvent = event.handle
 
@@ -67,12 +72,12 @@ function read_overlapped_result()
     if result ~= 0 then
         process_read_response(number_of_bytes[0])
         return true
-    elseif last_error == WinError.ERROR_IO_PENDING then
+    elseif last_error == win32.WinError.ERROR_IO_PENDING then
         return false
-    elseif last_error == WinError.ERROR_HANDLE_EOF then
+    elseif last_error == win32.WinError.ERROR_HANDLE_EOF then
         async_pending = false
     else
-        error("GetOverlappedResult " .. format_message(last_error))
+        error("GetOverlappedResult " .. win32.format_message(last_error))
     end
 end
 
@@ -87,8 +92,8 @@ function read_logs()
         )
 
         local last_error = C.GetLastError()
-        if result == 0 and last_error ~= WinError.ERROR_IO_PENDING then
-            error("ReadFile " .. format_message(last_error))
+        if result == 0 and last_error ~= win32.WinError.ERROR_IO_PENDING then
+            error("ReadFile " .. win32.format_message(last_error))
         end
 
         async_pending = true
@@ -99,7 +104,7 @@ function read_logs()
         assert(C.ResetEvent(event.handle) ~= 0)
         read_overlapped_result()
     elseif wait_result ~= 0x102 then -- not timeout
-        error("WaitForSingleObject " .. format_message(C.GetLastError()))
+        error("WaitForSingleObject " .. win32.format_message(C.GetLastError()))
     end
 end
 
