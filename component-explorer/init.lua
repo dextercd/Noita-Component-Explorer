@@ -74,15 +74,19 @@ function OnPausePreUpdate()
 end
 
 function view_menu_items()
+    local function sct(shortcut_text)
+        return setting_get("keyboard_shortcuts") and shortcut_text or ""
+    end
+
     local _
-    _, console.open            = imgui.MenuItem("Lua Console", "CTRL+SHIFT+L", console.open)
+    _, console.open            = imgui.MenuItem("Lua Console", sct("CTRL+SHIFT+L"), console.open)
     _, window_open_entity_list = imgui.MenuItem("Entity List", "", window_open_entity_list)
     _, window_open_logs        = imgui.MenuItem("Logs Window", "", window_open_logs)
-    _, overlay_open_logs       = imgui.MenuItem("Logs Overlay", "CTRL+SHIFT+O", overlay_open_logs)
+    _, overlay_open_logs       = imgui.MenuItem("Logs Overlay", sct("CTRL+SHIFT+O"), overlay_open_logs)
     _, window_open_wiki_wands  = imgui.MenuItem("Wiki Wands", "", window_open_wiki_wands)
 
     local clicked
-    clicked, overlay_open_entity_picker = imgui.MenuItem("Entity Picker...", "CTRL+SHIFT+E", overlay_open_entity_picker)
+    clicked, overlay_open_entity_picker = imgui.MenuItem("Entity Picker...", sct("CTRL+SHIFT+E"), overlay_open_entity_picker)
     if clicked then
         imgui.SetWindowFocus(nil)
     end
@@ -91,7 +95,7 @@ function view_menu_items()
         help_tooltip(table.concat({
             "Allows you to move your mouse over an entity to open a window for it. ",
             "Press the entry number to select the entity. ESC to cancel the action.\n\n",
-            "You can also hit CTRL+SHIFT+E to open or close the picker.",
+            "When keyboard shortcuts are enabled, you can hit CTRL+SHIFT+E to open or close the picker.",
         }))
     end
 
@@ -99,8 +103,8 @@ function view_menu_items()
 
     if is_steam_version() then
         imgui.Separator()
-        _, window_open_magic_numbers = imgui.MenuItem("Magic Numbers", "CTRL+SHIFT+M", window_open_magic_numbers)
-        _, window_open_debug = imgui.MenuItem("Debug", "CTRL+SHIFT+D", window_open_debug)
+        _, window_open_magic_numbers = imgui.MenuItem("Magic Numbers", sct("CTRL+SHIFT+M"), window_open_magic_numbers)
+        _, window_open_debug = imgui.MenuItem("Debug", sct("CTRL+SHIFT+D"), window_open_debug)
     end
 
     imgui.Separator()
@@ -209,7 +213,9 @@ function update_ui(paused, current_frame_run)
     end
     last_frame_run = current_frame_run
 
-    keyboard_shortcuts()
+    if setting_get("keyboard_shortcuts") then
+        keyboard_shortcuts()
+    end
 
     main_window()
 

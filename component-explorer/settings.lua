@@ -115,6 +115,20 @@ mod_settings = {
             },
         },
     },
+    {
+        category_id = "keyboard",
+        ui_name = "Keyboard shortcuts",
+        ui_description = "Customize how Component Explorer uses keyboard shortcuts.",
+        settings = {
+            {
+                id = "keyboard_shortcuts",
+                ui_name = "Enable Shortcuts",
+                ui_description = "Enable/disable all keyboard shortcuts",
+                value_default = true,
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            }
+        }
+    }
 }
 
 function ModSettingsUpdate(init_scope)
