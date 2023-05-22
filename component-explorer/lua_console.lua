@@ -141,7 +141,7 @@ function console_contents_draw(console)
     end
 
     imgui.SameLine()
-    if imgui.SmallButton("Commands to clipboard") then
+    if imgui.SmallButton("Copy commands") then
         local all_commands = ""
         for _, item in ipairs(console.history) do
             all_commands = all_commands .. item[1] .. "\n"
@@ -151,7 +151,7 @@ function console_contents_draw(console)
     end
 
     imgui.SameLine()
-    if imgui.SmallButton("History to clipboard") then
+    if imgui.SmallButton("Copy history") then
         local all_history = ""
         for _, item in ipairs(console.history) do
             all_history = (
