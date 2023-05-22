@@ -9,7 +9,7 @@ local us = {}
 
 function us.user_script(script_name)
     -- mods/../ prevents the game from complaining about wrong script paths.
-    loadfile("mods/../" .. directory_path .. "/" .. script_name)()
+    return loadfile("mods/../" .. directory_path .. "/" .. script_name)()
 end
 
 local SCRIPTS_TREE_FETCH_EVERY = 60 * 3
