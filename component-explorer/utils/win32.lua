@@ -8,6 +8,7 @@ ffi.cdef([[
 typedef int BOOL;
 typedef int WINBOOL;
 typedef unsigned DWORD, *LPDWORD;
+typedef unsigned short WORD;
 
 typedef void* HANDLE;
 typedef void* PVOID;
@@ -142,7 +143,9 @@ struct WAIT_RESULT {
 struct WIN_ERROR {
     static const DWORD NO_ERROR                             = 0;
     static const DWORD ERROR_INVALID_FUNCTION               = 1;
+    static const DWORD ERROR_FILE_NOT_FOUND                 = 2;
     static const DWORD ERROR_NOT_ENOUGH_MEMORY              = 8;
+    static const DWORD ERROR_NO_MORE_FILES                  = 18;
     static const DWORD ERROR_HANDLE_EOF                     = 38;
     static const DWORD ERROR_DEV_NOT_EXIST                  = 55;
     static const DWORD ERROR_INVALID_PARAMETER              = 87;
@@ -205,6 +208,41 @@ BOOL CreateDirectoryA(
   /* in, optional */ LPSECURITY_ATTRIBUTES lpSecurityAttributes
 );
 
+typedef struct _FILETIME {
+  DWORD dwLowDateTime;
+  DWORD dwHighDateTime;
+} FILETIME, *PFILETIME, *LPFILETIME;
+
+typedef struct _WIN32_FIND_DATAA {
+  DWORD dwFileAttributes;
+  FILETIME ftCreationTime;
+  FILETIME ftLastAccessTime;
+  FILETIME ftLastWriteTime;
+  DWORD nFileSizeHigh;
+  DWORD nFileSizeLow;
+  DWORD dwReserved0;
+  DWORD dwReserved1;
+  CHAR cFileName[260];
+  CHAR cAlternateFileName[14];
+  DWORD dwFileType;
+  DWORD dwCreatorType;
+  WORD  wFinderFlags;
+} WIN32_FIND_DATAA, *PWIN32_FIND_DATAA, *LPWIN32_FIND_DATAA;
+
+HANDLE FindFirstFileA(
+  /* in */  LPCSTR             lpFileName,
+  /* out */ LPWIN32_FIND_DATAA lpFindFileData
+);
+
+BOOL FindNextFileA(
+  /* in */  HANDLE             hFindFile,
+  /* out */ LPWIN32_FIND_DATAA lpFindFileData
+);
+
+BOOL FindClose(
+  /* in, out */ HANDLE hFindFile
+);
+
 ]])
 
 win32.DesiredAccess = ffi.new("struct DESIRED_ACCESS")
@@ -246,7 +284,7 @@ function win32.format_message(error_code)
 
     C.LocalFree(message)
 
-    return message_string
+    return message_string .. " ( " .. tostring(error_code) .. ")"
 end
 
 local exe_path = nil
@@ -295,6 +333,39 @@ function win32.create_directory(name)
     end
 
     error("CreateDirectoryA " .. win32.format_message(err))
+end
+
+function win32.list_dir_contents(name)
+    local find_data = ffi.new("WIN32_FIND_DATAA")
+    local handle = C.FindFirstFileA(name, find_data)
+
+    local file_list = {}
+    local succ, err = pcall(function()
+        local success = handle ~= win32.INVALID_HANDLE_VALUE
+        while success do
+            table.insert(file_list, ffi.string(find_data.cFileName))
+            success = C.FindNextFileA(handle, find_data) ~= 0
+        end
+    end)
+
+    local last_find_result = C.GetLastError()
+
+    if handle ~= win32.INVALID_HANDLE_VALUE then
+        C.FindClose(handle)
+    end
+
+    if not succ then
+        error(err)
+    end
+
+    if
+        last_find_result ~= win32.WinError.ERROR_FILE_NOT_FOUND and
+        last_find_result ~= win32.WinError.ERROR_NO_MORE_FILES
+    then
+        error("Find*FileA: " .. win32.format_message(last_find_result))
+    end
+
+    return file_list
 end
 
 return win32
