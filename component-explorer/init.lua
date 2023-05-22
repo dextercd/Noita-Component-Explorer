@@ -301,6 +301,10 @@ function keyboard_shortcuts()
         console.open = not console.open
     end
 
+    if imgui.IsKeyPressed(imgui.Key.U) then
+        console.user_scripts_open = not console.user_scripts_open
+    end
+
     if imgui.IsKeyPressed(imgui.Key.O) then
         overlay_open_logs = not overlay_open_logs
     end

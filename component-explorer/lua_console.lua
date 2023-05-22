@@ -2,11 +2,15 @@ local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 dofile_once("mods/component-explorer/utils/stringify.lua")
 dofile_once("mods/component-explorer/utils/eval.lua")
 
+local us = dofile_once("mods/component-explorer/user_scripts.lua")
+local uswindow = dofile_once("mods/component-explorer/user_scripts_window.lua")
+
 EZWand = dofile_once("mods/component-explorer/deps/EZWand.lua")
 
 local globals = {
-    ModTextFileSetContent=ModTextFileSetContent,
-    ModTextFileGetContent=ModTextFileGetContent,
+    user_script = us.user_script,
+    ModTextFileSetContent = ModTextFileSetContent,
+    ModTextFileGetContent = ModTextFileGetContent,
 }
 
 function new_console(name)
@@ -20,10 +24,18 @@ function new_console(name)
         scroll_to_bottom = false,
         focus_input = false,
         remove_items = 0,
+        user_scripts_open = false,
     }
 end
 
 function console_draw(console)
+    if console.user_scripts_open then
+        local script = uswindow.draw_user_scripts_window(console)
+        if script then
+            console_run_command(console, 'user_script("' .. script .. '")')
+        end
+    end
+
     local should_show
     imgui.SetNextWindowSize(600, 400, imgui.Cond.Once)
     should_show, console.open = imgui.Begin(console.name, console.open)
@@ -32,7 +44,6 @@ function console_draw(console)
     end
 
     console_contents_draw(console)
-
     imgui.End()
 end
 
@@ -162,6 +173,12 @@ function console_contents_draw(console)
         end
 
         imgui.SetClipboardText(all_history)
+    end
+
+    imgui.SameLine()
+    local ustext = console.user_scripts_open and "Close user scripts" or "Open user scripts"
+    if imgui.SmallButton(ustext) then
+        console.user_scripts_open = not console.user_scripts_open
     end
 
     imgui.Separator()
