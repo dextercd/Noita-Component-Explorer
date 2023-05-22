@@ -46,6 +46,7 @@ local console = new_console()
 
 window_open_entity_list = setting_get("window_open_entity_list")
 console.open = setting_get("window_open_lua_console")
+console.user_scripts_open = setting_get("window_open_user_scripts")
 window_open_logs = setting_get("window_open_logs")
 local window_open_about = false
 local overlay_open_logs = setting_get("overlay_open_logs")
@@ -242,6 +243,8 @@ function update_ui(paused, current_frame_run)
 
     if console.open then
         console_draw(console)
+        -- So that current setting is preserved
+        setting_set("window_open_user_scripts", console.user_scripts_open )
     end
 
     if window_open_logs then

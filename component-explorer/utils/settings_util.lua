@@ -35,3 +35,10 @@ function setting_get(key)
 
     return settings[key]
 end
+
+function setting_set(key, value)
+    if setting_get(key) ~= value then
+        ModSettingSet(mod_id .. "." .. key, value)
+        settings[key] = value
+    end
+end
