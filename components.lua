@@ -1,6 +1,7 @@
 dofile_once("mods/component-explorer/serialise_component.lua")
 dofile_once("mods/component-explorer/component_fields.lua")
 dofile_once("mods/component-explorer/configs.lua")
+local matinv_field = dofile_once("mods/component-explorer/matinv_field.lua")
 
 local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
 local comp_tag_util = dofile_once("mods/component-explorer/utils/component_tags.lua")
@@ -136,7 +137,7 @@ end
 %}
 
 {% for component in component_documentation %}
-function show_{{ component.name }}_fields(component_id)
+function show_{{ component.name }}_fields(entity_id, component_id)
     {%- set sections = {
         "Members": component.members,
         "Privates": component.privates,
@@ -167,6 +168,8 @@ function show_{{ component.name }}_fields(component_id)
         show_field_abgr("{{ field.name }}", {{ description }}, component_id)
         {% elif field_type in supported_fields %}
         show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)
+        {% elif field_type == "MATERIAL_VEC_DOUBLES" %}
+        matinv_field.show_field_MATERIAL_VEC_DOUBLES("{{ field.name }}", {{ description }}, entity_id, component_id)
         {% elif field.type.endswith("::Enum") and "ComponentState" not in field.type %}
         show_field_enum("{{ field.name }}", {{ description }}, component_id, {{ field.type.rpartition("::Enum")[0].lower() }})
         {% elif field_infos.get(component.name, {}).get(field.name, {}).handler %}
@@ -215,7 +218,7 @@ function show_{{ component.name }}_window(entity_id, component_id)
         component_tags(entity_id, component_id)
     end
 
-    show_{{ component.name }}_fields(component_id)
+    show_{{ component.name }}_fields(entity_id, component_id)
 
     imgui.End()
 end
