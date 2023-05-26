@@ -3172,7 +3172,7 @@
                 "type": "double",
                 "name": "max_hp_cap",
                 "example": "0 [0, 12]",
-                "description": "Note(Petri): Is this used anywhere? - the maximum 'max_hp' that this can have, <= 0 means no limits"
+                "description": "the maximum 'max_hp' that this can have, <= 0 means no limits. Used by perks such as GLASS_CANNON"
             },
             {
                 "type": "double",
@@ -6508,7 +6508,7 @@
             {
                 "type": "std::string",
                 "name": "script_damage_about_to_be_received",
-                "description": "if set, calls function 'script_damage_about_to_be_received( damage:number, x:number, y:number, entity_thats_responsible:int, critical_hit_chance:int )' when we receive a message (Message_DamageAboutToBeReceived) -> new_damage:number,new_critical_hit_chance:int"
+                "description": "if set, calls function 'damage_about_to_be_received( damage:number, x:number, y:number, entity_thats_responsible:int, critical_hit_chance:int )' when we receive a message (Message_DamageAboutToBeReceived) -> new_damage:number,new_critical_hit_chance:int"
             },
             {
                 "type": "std::string",
@@ -7206,6 +7206,17 @@
             {
                 "type": "NINJA_ROPE_SEGMENT_VECTOR",
                 "name": "mSegments"
+            }
+        ]
+    },
+    {
+        "name": "NullDamageComponent",
+        "members": [
+            {
+                "type": "float",
+                "name": "null_chance",
+                "example": "1 [0, 1]",
+                "description": "if less than 1, then will roll the die to see if it will NULL all damage. Stick this into your projectile entity"
             }
         ]
     },
