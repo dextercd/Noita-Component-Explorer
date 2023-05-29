@@ -403,4 +403,8 @@ function win32.open(path)
     shell32.ShellExecuteA(nil, "open", path, nil, nil, win32.SW.SHOWNORMAL)
 end
 
+function win32.explore(path)
+    shell32.ShellExecuteA(nil, "explore", path, nil, nil, win32.SW.SHOWNORMAL)
+end
+
 return win32

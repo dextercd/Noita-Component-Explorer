@@ -1,5 +1,6 @@
 local us = dofile_once("mods/component-explorer/user_scripts.lua")
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
+local win32 = dofile_once("mods/component-explorer/utils/win32.lua")
 
 local uswindow = {}
 
@@ -12,6 +13,10 @@ function uswindow.draw_user_scripts_window(console)
 
     if not should_show then
         return
+    end
+
+    if imgui.Button("Open script folder") then
+        win32.explore(us.directory_path)
     end
 
     local search_changed
