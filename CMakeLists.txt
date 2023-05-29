@@ -5,6 +5,7 @@ project(ComponentExplorer
     HOMEPAGE_URL "https://github.com/dextercd/Noita-Component-Explorer"
     LANGUAGES
 )
+set(PROJECT_WIKI "https://noita.wiki.gg/wiki/Mod:Component_Explorer")
 
 set(COMPONENT_EXPLORER_DEV OFF CACHE BOOL "Extra build functionality")
 
@@ -31,7 +32,10 @@ function(render_jinja_template)
     cmake_parse_arguments(RJINJA "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
 
     set(COMMAND_LIST
-        ${CMAKE_COMMAND} -E env "VERSION=${PROJECT_VERSION}" "HOMEPAGE=${PROJECT_HOMEPAGE_URL}" --
+        ${CMAKE_COMMAND} -E env
+            "VERSION=${PROJECT_VERSION}"
+            "HOMEPAGE=${PROJECT_HOMEPAGE_URL}"
+            "WIKI=${PROJECT_WIKI}" --
         ${Python_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/codegen/gen.py" --output ${RJINJA_OUTPUT}
     )
 

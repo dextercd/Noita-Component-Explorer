@@ -15,7 +15,7 @@ dofile_once("mods/component-explorer/globals.lua")
 dofile_once("mods/component-explorer/components.lua")
 dofile_once("mods/component-explorer/entity_list.lua")
 dofile_once("mods/component-explorer/entity.lua")
-dofile_once("mods/component-explorer/version.lua")
+local version = dofile_once("mods/component-explorer/version.lua")
 dofile_once("mods/component-explorer/logger.lua")
 dofile_once("mods/component-explorer/entity_picker.lua")
 dofile_once("mods/component-explorer/utils/noita_version.lua")
@@ -168,6 +168,7 @@ function main_window()
             if imgui.BeginMenu("CE") then
                 local _
                 _, window_open_about = imgui.MenuItem("About", "", window_open_about)
+                link_ui.menu_item("Docs", "Opens noita.wiki.gg", version.wiki)
                 imgui.EndMenu()
             end
 
@@ -187,9 +188,9 @@ function show_about_window()
     local should_show
     should_show, window_open_about = imgui.Begin("About", window_open_about)
     if should_show then
-        imgui.Text("Component explorer version " .. version)
+        imgui.Text("Component explorer version " .. version.version)
         imgui.Text("Made by dextercd#7326")
-        link_ui.button("Homepage", homepage)
+        link_ui.button("Homepage", version.homepage)
 
         imgui.End()
     end

@@ -14,4 +14,10 @@ function link_ui.button(label, url)
     end
 end
 
+function link_ui.menu_item(label, extra, url)
+    if imgui.MenuItem(label, extra) then
+        win32.open(url)
+    end
+end
+
 return link_ui
