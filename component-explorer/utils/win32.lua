@@ -7,6 +7,7 @@ ffi.cdef([[
 
 typedef int BOOL;
 typedef int WINBOOL;
+typedef int INT;
 typedef unsigned DWORD, *LPDWORD;
 typedef unsigned short WORD;
 
@@ -15,6 +16,7 @@ typedef void* PVOID;
 typedef void* LPVOID;
 typedef HANDLE HLOCAL;
 typedef HANDLE HINSTANCE;
+typedef HANDLE HWND;
 typedef HINSTANCE HMODULE;
 typedef const void* LPCVOID;
 
@@ -161,6 +163,23 @@ struct WIN_ERROR {
     static const DWORD ERROR_NO_MORE_DEVICES                = 1248;
 };
 
+struct SW {
+    static const DWORD HIDE = 0;
+    static const DWORD SHOWNORMAL = 1;
+    static const DWORD NORMAL = 1;
+    static const DWORD SHOWMINIMIZED = 2;
+    static const DWORD SHOWMAXIMIZED = 3;
+    static const DWORD MAXIMIZE = 3;
+    static const DWORD SHOWNOACTIVATE = 4;
+    static const DWORD SHOW = 5;
+    static const DWORD MINIMIZE = 6;
+    static const DWORD SHOWMINNOACTIVE = 7;
+    static const DWORD SHOWNA = 8;
+    static const DWORD RESTORE = 9;
+    static const DWORD SHOWDEFAULT = 10;
+    static const DWORD FORCEMINIMIZE = 11;
+};
+
 HLOCAL LocalFree(
   /* in */ HLOCAL hMem
 );
@@ -243,6 +262,15 @@ BOOL FindClose(
   /* in, out */ HANDLE hFindFile
 );
 
+HINSTANCE ShellExecuteA(
+  /* in, optional */ HWND   hwnd,
+  /* in, optional */ LPCSTR lpOperation,
+  /* in */           LPCSTR lpFile,
+  /* in, optional */ LPCSTR lpParameters,
+  /* in, optional */ LPCSTR lpDirectory,
+  /* in */           INT    nShowCmd
+);
+
 ]])
 
 win32.DesiredAccess = ffi.new("struct DESIRED_ACCESS")
@@ -250,6 +278,9 @@ win32.ShareMode = ffi.new("struct SHARE_MODE")
 win32.CreationDisposition = ffi.new("struct CREATION_DISPOSITION")
 win32.FileAttribute = ffi.new("struct FILE_ATTRIBUTE")
 win32.WinError = ffi.new("struct WIN_ERROR")
+win32.SW = ffi.new("struct SW")
+
+local shell32 = ffi.load("Shell32.dll")
 
 win32.INVALID_HANDLE_VALUE = ffi.cast("HANDLE", -1)
 
@@ -366,6 +397,10 @@ function win32.list_dir_contents(name)
     end
 
     return file_list
+end
+
+function win32.open(path)
+    shell32.ShellExecuteA(nil, "open", path, nil, nil, win32.SW.SHOWNORMAL)
 end
 
 return win32

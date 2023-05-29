@@ -20,6 +20,7 @@ dofile_once("mods/component-explorer/logger.lua")
 dofile_once("mods/component-explorer/entity_picker.lua")
 dofile_once("mods/component-explorer/utils/noita_version.lua")
 dofile_once("mods/component-explorer/wiki_wands.lua")
+local link_ui = dofile_once("mods/component-explorer/link_ui.lua")
 
 if is_steam_version() then
     dofile_once("mods/component-explorer/magic_numbers.lua")
@@ -188,11 +189,7 @@ function show_about_window()
     if should_show then
         imgui.Text("Component explorer version " .. version)
         imgui.Text("Made by dextercd#7326")
-        imgui.Text("Homepage: " .. homepage)
-        imgui.SameLine()
-        if imgui.SmallButton("Copy") then
-            imgui.SetClipboardText(homepage)
-        end
+        link_ui.button("Homepage", homepage)
 
         imgui.End()
     end
