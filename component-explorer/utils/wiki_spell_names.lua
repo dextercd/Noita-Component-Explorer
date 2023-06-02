@@ -2,6 +2,16 @@
 -- Can't use `GameTextGetTranslatedOrNot` because it won't work if someone is
 -- playing Noita configured to a different language.
 
+--[[
+wiki_spell_names = dofile("mods/component-explorer/utils/wiki_spell_names.lua")
+dofile("data/scripts/gun/gun_actions.lua")
+for k, v in ipairs(actions) do
+    if wiki_spell_names.by_action_id[v.id] == nil then
+        print(v.id .. " = " .. '"' .. GameTextGetTranslatedOrNot(v.name) .. '",')
+    end
+end
+]]
+
 local wiki_spell_names = {}
 wiki_spell_names.by_action_id = {
     BOMB = "Bomb",
@@ -397,6 +407,18 @@ wiki_spell_names.by_action_id = {
     COLOUR_RAINBOW = "Rainbow Glimmer",
     COLOUR_INVIS = "Invisible Spell",
     RAINBOW_TRAIL = "Rainbow trail",
+    HOOK = "Hookbolt",
+    WHITE_HOLE_BIG = "Giga white hole",
+    FISH = "Summon fish",
+    CASTER_CAST = "Inner spell",
+    TRUE_ORBIT = "True Orbit",
+    ANTI_HOMING = "Anti Homing",
+    HOMING_WAND = "Wand Homing",
+    ZERO_DAMAGE = "Null shot",
+    SEA_SWAMP = "Summon Swamp",
+    BOUNCE_SMALL_EXPLOSION = "Sparkly bounce",
+    BOUNCE_LIGHTNING = "Lightning bounce",
+    BOUNCE_HOLE = "Vacuum bounce",
 }
 
 local to_action_id = {}
