@@ -33,7 +33,7 @@ function entity_markers.add_marker(entity_id)
         return
     end
 
-    local has_marker = entity_markers.really_has_marker(entity_id) 
+    local has_marker = entity_markers.really_has_marker(entity_id)
     entities_with_markers[entity_id] = has_marker
     if has_marker then
         return

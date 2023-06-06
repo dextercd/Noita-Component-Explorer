@@ -4,8 +4,8 @@
         />
     <SpriteComponent
         image_file="data/fonts/font_pixel_white.xml"
-        never_ragdollify_on_death="1"
         is_text_sprite="1"
+        never_ragdollify_on_death="1"
         z_index="-10000"
         offset_x="-4"
         has_special_scale="1"
