@@ -1,0 +1,24 @@
+<Entity name="ce_marker" serialize="0">
+    <InheritTransformComponent
+        only_position="1"
+        />
+    <SpriteComponent
+        image_file="data/fonts/font_pixel_white.xml"
+        never_ragdollify_on_death="1"
+        is_text_sprite="1"
+        z_index="-10000"
+        offset_x="-4"
+        has_special_scale="1"
+        special_scale_x="0.5"
+        special_scale_y="0.5"
+        />
+    <SpriteComponent
+        image_file="mods/component-explorer/entities/entity_marker/marker.xml"
+        never_ragdollify_on_death="1"
+        z_index="-10000"
+        />
+    <LuaComponent
+        script_source_file="mods/component-explorer/entities/entity_marker/init.lua"
+        execute_every_n_frame="2"
+        />
+</Entity>

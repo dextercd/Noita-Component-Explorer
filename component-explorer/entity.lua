@@ -1,6 +1,7 @@
 dofile_once("mods/component-explorer/serialise_entity.lua")
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
+local entity_markers = dofile_once("mods/component-explorer/entity_markers.lua")
 
 local common_entity_tags = {
     "card_action",
@@ -139,6 +140,16 @@ local function show_entity(entity_id, data)
         name_change, name = imgui.InputText("Name", name)
         if name_change then
             EntitySetName(entity_id, name)
+        end
+
+        imgui.SameLine()
+        local marker_changed, marker = imgui.Checkbox("Marker", entity_markers.has_marker(entity_id))
+        if marker_changed then
+            if marker then
+                entity_markers.add_marker(entity_id)
+            else
+                entity_markers.remove_marker(entity_id)
+            end
         end
 
         local filename = EntityGetFilename(entity_id)
