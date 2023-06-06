@@ -4,11 +4,14 @@ dofile_once("mods/component-explorer/utils/eval.lua")
 
 local us = dofile_once("mods/component-explorer/user_scripts.lua")
 local uswindow = dofile_once("mods/component-explorer/user_scripts_window.lua")
+local entity_markers = dofile_once("mods/component-explorer/entity_markers.lua")
 
 EZWand = dofile_once("mods/component-explorer/deps/EZWand.lua")
 
 local globals = {
     user_script = us.user_script,
+    add_marker = entity_markers.add_marker,
+    remove_marker = entity_markers.remove_marker,
     ModTextFileSetContent = ModTextFileSetContent,
     ModTextFileGetContent = ModTextFileGetContent,
 }
