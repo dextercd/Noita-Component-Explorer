@@ -11,21 +11,18 @@ function entity_markers.has_marker(entity_id)
 end
 
 function entity_markers.really_has_marker(entity_id)
-    if not EntityGetIsAlive(entity_id) then
-        return
-    end
-
-    local children = EntityGetAllChildren(entity_id)
-    if not children then
-        return
-    end
-
-    for _, child_id in ipairs(children) do
-        if EntityGetName(child_id) == "ce_marker" then
-            entities_with_markers[entity_id] = child_id
-            return child_id
+    local has_marker = false
+    if EntityGetIsAlive(entity_id) then
+        for _, child_id in ipairs(EntityGetAllChildren(entity_id) or {}) do
+            if EntityGetName(child_id) == "ce_marker" then
+                has_marker = true
+                break
+            end
         end
     end
+
+    entities_with_markers[entity_id] = has_marker
+    return has_marker
 end
 
 function entity_markers.add_marker(entity_id)
@@ -34,7 +31,6 @@ function entity_markers.add_marker(entity_id)
     end
 
     local has_marker = entity_markers.really_has_marker(entity_id)
-    entities_with_markers[entity_id] = has_marker
     if has_marker then
         return
     end
