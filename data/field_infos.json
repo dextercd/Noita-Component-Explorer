@@ -7,6 +7,11 @@
             "handler": "show_field_float"
         }
     },
+    "CellEaterComponent": {
+        "materials": {
+            "handler": "show_field_material_id_list"
+        }
+    },
     "CharacterDataComponent": {
         "collision_aabb_min_x": {
             "handler": "#spread_aabb"
@@ -50,6 +55,14 @@
             "handler": "show_field_float"
         }
     },
+    "DamageModelComponent": {
+        "mDamageMaterials": {
+            "handler": "show_field_material_id_list"
+        },
+        "mCollisionMessageMaterials": {
+            "handler": "show_field_material_id_list"
+        }
+    },
     "GenomeDataComponent": {
         "herd_id": {
             "handler": "#enum",
@@ -68,6 +81,14 @@
         },
         "kick_knockback": {
             "handler": "show_field_float"
+        }
+    },
+    "MagicConvertMaterialComponent": {
+        "mFromMaterialArray": {
+            "handler": "show_field_material_id_list"
+        },
+        "mToMaterialArray": {
+            "handler": "show_field_material_id_list"
         }
     },
     "ParticleEmitterComponent": {
@@ -100,6 +121,11 @@
         },
         "damage_flash_multiplier": {
             "handler": "show_field_float"
+        }
+    },
+    "WorldStateComponent": {
+        "changed_materials": {
+            "handler": "show_field_material_pairs"
         }
     },
     "WormComponent": {

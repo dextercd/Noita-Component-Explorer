@@ -1,25 +1,8 @@
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 local style = dofile_once("mods/component-explorer/style.lua")
+local matutil = dofile_once("mods/component-explorer/utils/matutil.lua")
 
 local matinv_field = {}
-
-local _all_materials = nil
-local function get_all_materials()
-    if _all_materials == nil then
-        _all_materials = {}
-        local i = 0
-        while true do
-            local material_name = CellFactory_GetName(i)
-            if material_name == "unknown" then
-                break
-            end
-
-            table.insert(_all_materials, material_name)
-            i = i + 1
-        end
-    end
-    return _all_materials
-end
 
 local NONE_MAT_SELECTED = "--Material to add--"
 
@@ -49,8 +32,7 @@ local function add_material_input(entity_id, component_id, value)
             c.add_mat_search = ""
         end
 
-        local all_materials = get_all_materials()
-        for i, mat in ipairs(all_materials) do
+        for i, mat in ipairs(matutil.get_all_material_names()) do
             if value[i] == 0 and string_util.ifind(mat, c.add_mat_search, 1, true) then
                 if imgui.Selectable(mat, mat == c.selected_material) then
                     c.selected_material = mat
@@ -114,7 +96,7 @@ function matinv_field.show_field_MATERIAL_VEC_DOUBLES(name, description, entity_
     for material_id_, count in ipairs(value) do
         if count ~= 0 then
             local material_id = material_id_ - 1
-            local material_name = CellFactory_GetName(material_id)
+            local material_name = matutil.material_name(material_id)
             if string_util.ifind(material_name, c.search, 1, true) then
                 if can_edit then
                     imgui.SetNextItemWidth(180)

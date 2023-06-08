@@ -128,13 +128,34 @@ end
     "bool", "LensValue_bool",
     "float", "double",
     "int", "unsignedint", "int16", "uint16", "int32", "uint32", "int64",
+    "AudioSourceHandle",
     "types_vector2", "vec2", "ivec2",
+    "types_aabb",
+    "types_xform",
     "ValueRange", "ValueRangeInt",
     "std_string", "USTRING",
     "EntityID",
     "types_fcolor",
+    "VECTOR_ENTITYID", "VEC_ENTITY", "ENTITY_VEC",
+    "VISITED_VEC",
+    "EntityTypeID",
 ]
 %}
+
+{% set simple_vectors = [
+    "VECTOR_FLOAT",
+    "VEC_OF_MATERIALS",
+    "VECTOR_INT32",
+    "VECTOR_INT",
+    "std_vector_int",
+    "std_vector_float",
+    "VECTOR_STRING",
+    "VECTOR_STR",
+    "FloatArrayInline",
+    "Vec2ArrayInline",
+]%}
+{# ArrayInline can be written to #}
+{# changed_materials on WorldStateComponent can use a better handler #}
 
 {% for component in component_documentation %}
 function show_{{ component.name }}_fields(entity_id, component_id)
@@ -166,12 +187,6 @@ function show_{{ component.name }}_fields(entity_id, component_id)
         end
         {% elif field_type == "uint32" and "color" in field.name %}
         show_field_abgr("{{ field.name }}", {{ description }}, component_id)
-        {% elif field_type in supported_fields %}
-        show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)
-        {% elif field_type == "MATERIAL_VEC_DOUBLES" %}
-        matinv_field.show_field_MATERIAL_VEC_DOUBLES("{{ field.name }}", {{ description }}, entity_id, component_id)
-        {% elif field.type.endswith("::Enum") and "ComponentState" not in field.type %}
-        show_field_enum("{{ field.name }}", {{ description }}, component_id, {{ field.type.rpartition("::Enum")[0].lower() }})
         {% elif field_infos.get(component.name, {}).get(field.name, {}).handler %}
             {% set field_info = field_infos[component.name][field.name] %}
             {% set handler = field_info.handler %}
@@ -187,6 +202,14 @@ function show_{{ component.name }}_fields(entity_id, component_id)
             {% else %}
         {{ handler }}("{{ field.name }}", {{ description }}, component_id)
             {% endif %}
+        {% elif field_type in supported_fields %}
+        show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)
+        {% elif field_type == "MATERIAL_VEC_DOUBLES" %}
+        matinv_field.show_field_MATERIAL_VEC_DOUBLES("{{ field.name }}", {{ description }}, entity_id, component_id)
+        {% elif field.type.endswith("::Enum") and "ComponentState" not in field.type %}
+        show_field_enum("{{ field.name }}", {{ description }}, component_id, {{ field.type.rpartition("::Enum")[0].lower() }})
+        {% elif field_type in simple_vectors %}
+        show_field_ro_list("{{ field.name }}", {{ description }}, component_id)
         {% else %}
         -- show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)
         {% endif -%}
