@@ -55,14 +55,16 @@ local overlay_open_logs = setting_get("overlay_open_logs")
 local windows_hidden_component = false
 local windows_hidden_entity = false
 
-local function run_us_ifexists(script)
-    if us.exists(script) then
-        console_run_command(console, us.user_script_call_string(script))
+function OnMagicNumbersAndWorldSeedInitialized()
+    local function run_us_ifexists(script)
+        if us.exists(script) then
+            console_run_command(console, us.user_script_call_string(script))
+        end
     end
-end
 
-run_us_ifexists("init.lua")
-run_us_ifexists("_init.lua")
+    run_us_ifexists("init.lua")
+    run_us_ifexists("_init.lua")
+end
 
 is_escape_paused = false
 is_inventory_paused = false
