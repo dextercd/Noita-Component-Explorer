@@ -35,7 +35,7 @@ function console_draw(console)
     if console.user_scripts_open then
         local script = uswindow.draw_user_scripts_window(console)
         if script then
-            console_run_command(console, 'return user_script("' .. script .. '")')
+            console_run_command(console, us.user_script_call_string(script))
         end
     end
 

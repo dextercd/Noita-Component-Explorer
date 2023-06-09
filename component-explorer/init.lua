@@ -21,6 +21,7 @@ dofile_once("mods/component-explorer/entity_picker.lua")
 dofile_once("mods/component-explorer/utils/noita_version.lua")
 dofile_once("mods/component-explorer/wiki_wands.lua")
 local link_ui = dofile_once("mods/component-explorer/link_ui.lua")
+local us = dofile_once("mods/component-explorer/user_scripts.lua")
 
 if is_steam_version() then
     dofile_once("mods/component-explorer/magic_numbers.lua")
@@ -54,6 +55,14 @@ local overlay_open_logs = setting_get("overlay_open_logs")
 local windows_hidden_component = false
 local windows_hidden_entity = false
 
+local function run_us_ifexists(script)
+    if us.exists(script) then
+        console_run_command(console, us.user_script_call_string(script))
+    end
+end
+
+run_us_ifexists("init.lua")
+run_us_ifexists("_init.lua")
 
 is_escape_paused = false
 is_inventory_paused = false
@@ -242,7 +251,7 @@ function update_ui(paused, current_frame_run)
     if console.open then
         console_draw(console)
         -- So that current setting is preserved
-        setting_set("window_open_user_scripts", console.user_scripts_open )
+        setting_set("window_open_user_scripts", console.user_scripts_open)
     end
 
     if window_open_logs then

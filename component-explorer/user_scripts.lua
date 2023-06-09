@@ -12,6 +12,10 @@ function us.user_script(script_name)
     return loadfile("mods/../" .. us.directory_path .. "/" .. script_name)()
 end
 
+function us.user_script_call_string(script_name)
+    return 'return user_script("' .. script_name .. '")'
+end
+
 local SCRIPTS_TREE_FETCH_EVERY = 60 * 3
 
 local cached_scripts_tree = {}
@@ -38,6 +42,16 @@ end
 
 function us.is_hidden(filename)
     return #filename >= 1 and string.sub(filename, 1, 1) == "_"
+end
+
+function us.exists(filename)
+    filename = filename:lower()
+    for _, v in ipairs(us.get_scripts_tree()) do
+        if filename == v:lower() then
+            return true
+        end
+    end
+    return false
 end
 
 return us
