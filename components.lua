@@ -223,7 +223,8 @@ end
 
 function show_{{ component.name }}_window(entity_id, component_id)
     imgui.SetNextWindowSize(600, 400, imgui.Cond.Once)
-    local should_show, open = imgui.Begin("{{ component.name }}: " .. component_id, true)
+    local flags = imgui.WindowFlags.NoSavedSettings
+    local should_show, open = imgui.Begin("{{ component.name }}: " .. component_id, true, flags)
 
     if not open then
         unwatch_component(component_id)

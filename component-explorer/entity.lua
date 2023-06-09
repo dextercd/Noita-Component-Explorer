@@ -123,7 +123,8 @@ local function show_entity(entity_id, data)
     end
 
     imgui.SetNextWindowSize(600, 400, imgui.Cond.Once)
-    local should_show, open = imgui.Begin(title .. "###show_entity" .. tostring(entity_id), true)
+    local flags = imgui.WindowFlags.NoSavedSettings
+    local should_show, open = imgui.Begin(title .. "###show_entity" .. tostring(entity_id), true, flags)
 
     if not open then
         unwatch_entity(entity_id)
