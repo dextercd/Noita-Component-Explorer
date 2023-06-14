@@ -5,6 +5,7 @@ local matinv_field = dofile_once("mods/component-explorer/matinv_field.lua")
 
 local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
 local comp_tag_util = dofile_once("mods/component-explorer/utils/component_tags.lua")
+local tags_gui = dofile_once("mods/component-explorer/tags_gui.lua")
 
 component_types = {
     {% for component in component_documentation %}
@@ -21,7 +22,13 @@ end
 
 function watch_component(entity_id, component_id)
     local type = ComponentGetTypeName(component_id)
-    components_watching[component_id] = {entity_id, component_type_functions[type].show_window}
+    components_watching[component_id] = {
+        entity_id,
+        component_type_functions[type].show_window,
+        --[[ data --]] {
+            tag_data = {}
+        },
+    }
 end
 
 function toggle_watch_component(entity_id, component_id)
@@ -47,7 +54,7 @@ end
 function show_component_windows()
     local known_components = {}
     for component, entry in pairs(components_watching) do
-        local entity, show = unpack(entry)
+        local entity, show, data = unpack(entry)
 
         if known_components[entity] == nil then
             if not EntityGetIsAlive(entity) then
@@ -63,7 +70,7 @@ function show_component_windows()
         end
 
         if known_components[entity] and known_components[entity][component] then
-            show(entity, component)
+            show(entity, component, data)
         else
             unwatch_component(component)
         end
@@ -106,10 +113,22 @@ function component_attributes(entity_id, component_id)
     open_entity_small_button(entity_id)
 end
 
-function component_tags(entity_id, component_id)
+local function new_component_tags(component_id, data)
+    local tag_string = ComponentGetTags(component_id)
+    local tags = {}
+    for tag in string.gmatch(tag_string, "[^,]+") do
+        table.insert(tags, tag)
+    end
+
+    local function add_tag(t) ComponentAddTag(component_id, t) end
+    local function remove_tag(t) ComponentRemoveTag(component_id, t) end
+    tags_gui.show(data.tag_data, tags, add_tag, remove_tag, comp_tag_util.special_tags)
+end
+
+local function limited_component_tags(component_id)
     imgui.Text("Note: Only showing some tags.")
     imgui.SameLine()
-    help_marker("There's no way to get all tags on a component, so only some special tags are listed.")
+    help_marker("In this version of Noita there's no way to get all tags on a component, so only some special tags are listed.")
 
     for i, tag in ipairs(comp_tag_util.special_tags) do
         local has_tag = ComponentHasTag(component_id, tag)
@@ -121,6 +140,14 @@ function component_tags(entity_id, component_id)
                 ComponentRemoveTag(component_id, tag)
             end
         end
+    end
+end
+
+local function component_tags(component_id, data)
+    if ComponentGetTags then
+        new_component_tags(component_id, data)
+    else
+        limited_component_tags(component_id)
     end
 end
 
@@ -158,7 +185,7 @@ end
 {# changed_materials on WorldStateComponent can use a better handler #}
 
 {% for component in component_documentation %}
-function show_{{ component.name }}_fields(entity_id, component_id)
+function show_{{ component.name }}_fields(entity_id, component_id, data)
     {%- set sections = {
         "Members": component.members,
         "Privates": component.privates,
@@ -221,7 +248,7 @@ function show_{{ component.name }}_fields(entity_id, component_id)
     {%- endfor %}
 end
 
-function show_{{ component.name }}_window(entity_id, component_id)
+function show_{{ component.name }}_window(entity_id, component_id, data)
     imgui.SetNextWindowSize(600, 400, imgui.Cond.Once)
     local flags = imgui.WindowFlags.NoSavedSettings
     local should_show, open = imgui.Begin("{{ component.name }}: " .. component_id, true, flags)
@@ -239,10 +266,10 @@ function show_{{ component.name }}_window(entity_id, component_id)
     end
 
     if imgui.CollapsingHeader("Tags") then
-        component_tags(entity_id, component_id)
+        component_tags(component_id, data)
     end
 
-    show_{{ component.name }}_fields(entity_id, component_id)
+    show_{{ component.name }}_fields(entity_id, component_id, data)
 
     imgui.End()
 end

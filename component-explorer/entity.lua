@@ -2,6 +2,7 @@ dofile_once("mods/component-explorer/serialise_entity.lua")
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
 local entity_markers = dofile_once("mods/component-explorer/entity_markers.lua")
+local tags_gui = dofile_once("mods/component-explorer/tags_gui.lua")
 
 local common_entity_tags = {
     "card_action",
@@ -36,7 +37,7 @@ end
 function watch_entity(entity_id)
     entities_watching[entity_id] = {
         component_search = "",
-        new_tag_input = "",
+        tag_data = {},
     }
 end
 
@@ -191,67 +192,15 @@ local function show_entity(entity_id, data)
     end
 
     if imgui.CollapsingHeader("Tags") then
-        imgui.SetNextItemWidth(200)
-        local submit
-        submit, data.new_tag_input = imgui.InputText(
-            "Add tag", data.new_tag_input,
-            imgui.InputTextFlags.EnterReturnsTrue
-        )
-        if submit then
-            EntityAddTag(entity_id, data.new_tag_input)
-            data.new_tag_input = ""
-        end
-
         local tag_string = EntityGetTags(entity_id)
         local tags = {}
-        local tag_set = {}
         for tag in string.gmatch(tag_string, "[^,]+") do
             table.insert(tags, tag)
-            tag_set[tag] = true
         end
 
-        imgui.SameLine()
-        if imgui.Button("Common..") then
-            imgui.OpenPopup("common_tags_popup")
-        end
-
-        if imgui.BeginPopup("common_tags_popup") then
-            for _, tag in ipairs(common_entity_tags) do
-                if imgui.MenuItem(tag, "", tag_set[tag] ~= nil) then
-                    if tag_set[tag] then
-                        EntityRemoveTag(entity_id, tag)
-                    else
-                        EntityAddTag(entity_id, tag)
-                    end
-                end
-            end
-            imgui.EndPopup()
-        end
-
-        local table_flags = imgui.TableFlags.Resizable
-        if imgui.BeginTable("tags", 2, table_flags) then
-
-            imgui.TableSetupColumn("Tag")
-            imgui.TableSetupColumn("Remove", imgui.TableColumnFlags.WidthFixed)
-            imgui.TableHeadersRow()
-
-            for _, tag in ipairs(tags) do
-                imgui.PushID(tag)
-
-                imgui.TableNextColumn()
-                imgui.Text(tag)
-
-                imgui.TableNextColumn()
-                if imgui.SmallButton("-") then
-                    EntityRemoveTag(entity_id, tag)
-                end
-
-                imgui.PopID()
-            end
-
-            imgui.EndTable()
-        end
-
+        local function add_tag(t) EntityAddTag(entity_id, t) end
+        local function remove_tag(t) EntityRemoveTag(entity_id, t) end
+        tags_gui.show(data.tag_data, tags, add_tag, remove_tag, common_entity_tags)
     end
 
     if imgui.CollapsingHeader("Child Entities") then
