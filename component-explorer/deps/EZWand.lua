@@ -1,5 +1,5 @@
 -- #########################################
--- #######   EZWand version v1.5.0   #######
+-- #######   EZWand version v1.7.2   #######
 -- #########################################
 
 dofile_once("data/scripts/gun/procedural/gun_action_utils.lua")
@@ -14,15 +14,15 @@ dofile_once("data/scripts/gun/procedural/wands.lua")
 -- Removes spells from a table whose ID is not found in the gun_actions table
 local function filter_spells(spells)
   dofile_once("data/scripts/gun/gun_actions.lua")
-  if not spell_lookup then
-    spell_lookup = {}
+  if not spell_exist_lookup then
+    spell_exist_lookup = {}
     for i, v in ipairs(actions) do
-      spell_lookup[v.id] = true
+      spell_exist_lookup[v.id] = true
     end
   end
   local out = {}
   for i, spell in ipairs(spells) do
-    if spell_lookup[spell] then
+    if spell == "" or spell_exist_lookup[spell] then
       table.insert(out, spell)
     end
   end
@@ -309,6 +309,14 @@ end
 -- To get this easily you can use EZWand.Deserialize(EZWand(wand):Serialize())
 -- Better cache it though, it's not super expensive but...
 local function render_tooltip(origin_x, origin_y, wand, gui_)
+  origin_x = tonumber(origin_x)
+  if not origin_x then
+    error("RenderTooltip: Argument x is required and must be a number", 2)
+  end
+  origin_y = tonumber(origin_y)
+  if not origin_y then
+    error("RenderTooltip: Argument y is required and must be a number", 2)
+  end
   -- gui = gui or GuiCreate()
   gui = gui_ or gui or GuiCreate()
   if not gui_ then
@@ -320,7 +328,7 @@ local function render_tooltip(origin_x, origin_y, wand, gui_)
     spell_lookup = {}
     dofile_once("data/scripts/gun/gun_actions.lua")
     for i, action in ipairs(actions) do
-      spell_lookup[action.id] = { 
+      spell_lookup[action.id] = {
         icon = action.sprite,
         type = action.type
       }
@@ -392,14 +400,21 @@ local function render_tooltip(origin_x, origin_y, wand, gui_)
     local _, _, _, x, y, w, h = GuiGetPreviousWidgetInfo(gui)
     most_right_text_x = math.max(most_right_text_x, x + w)
   end
+  local function format_cast_delay_and_recharge_time(input)
+    local pattern = "%.2f"
+    if input % 1 == 0 then
+      return input .. ".0 s"
+    end
+    return (pattern):format(input) .. " s"
+  end
   gui_text_with_shadow(gui, 0, 5, GameTextGetTranslatedOrNot(wand.props.shuffle and "$menu_yes" or "$menu_no"), 1)
   local _, _, _, _, no_text_y = GuiGetPreviousWidgetInfo(gui)
   update_most_right_text_x()
   gui_text_with_shadow(gui, 0, margin, ("%.0f"):format(wand.props.spellsPerCast), 1)
   update_most_right_text_x()
-  gui_text_with_shadow(gui, 0, margin, ("%.2f s"):format(wand.props.castDelay / 60), 1)
+  gui_text_with_shadow(gui, 0, margin, format_cast_delay_and_recharge_time(wand.props.castDelay / 60), 1)
   update_most_right_text_x()
-  gui_text_with_shadow(gui, 0, margin, ("%.2f s"):format(wand.props.rechargeTime / 60), 1)
+  gui_text_with_shadow(gui, 0, margin, format_cast_delay_and_recharge_time(wand.props.rechargeTime / 60), 1)
   update_most_right_text_x()
   gui_text_with_shadow(gui, 0, margin, ("%.0f"):format(wand.props.manaMax), 1)
   update_most_right_text_x()
@@ -431,7 +446,7 @@ local function render_tooltip(origin_x, origin_y, wand, gui_)
       end
       local item_bg_icon = get_spell_bg(spell)
       local w, h = GuiGetImageDimensions(gui, item_bg_icon, background_scale)
-      local x, y 
+      local x, y
       if i == 1 then
         x, y = ac_icon_x + ac_icon_width + 3, math.floor(ac_icon_y - ac_icon_height / 2 + 2)
       else
@@ -451,33 +466,36 @@ local function render_tooltip(origin_x, origin_y, wand, gui_)
   end
   -- /Always casts
   -- Spells
-  local spell_icon_scale = 0.711
-  local background_scale = 0.768
-  GuiLayoutBeginHorizontal(gui, last_icon_x, last_icon_y + last_icon_height + 7 + add_some, true)
+  local spell_icon_scale = 0.70066976733398
+  local background_scale = 0.76863774490356
+  GuiLayoutBeginHorizontal(gui, last_icon_x, last_icon_y + last_icon_height + 7 + add_some + 0.05, true)
   local row = 0
   for i=1, wand.props.capacity do
     GuiZSetForNextWidget(gui, 9)
-    GuiImage(gui, new_id(), -0.3, -0.5, "data/ui_gfx/inventory/inventory_box.png", 1, background_scale, background_scale)
+    GuiImage(gui, new_id(), -0.3, -0.4, "data/ui_gfx/inventory/inventory_box.png", 0.95, background_scale, background_scale)
     update_bounds()
-    if wand.spells[i] then
-      local _, _, _, x, y = GuiGetPreviousWidgetInfo(gui)
-      x = x + 0.3
-      y = y + 0.5
-      local item_bg_icon = get_spell_bg(wand.spells[i])
-      GuiZSetForNextWidget(gui, 8.5)
-      GuiOptionsAddForNextWidget(gui, GUI_OPTION.Layout_NoLayouting)
+    local _, _, _, x, y = GuiGetPreviousWidgetInfo(gui)
+    x = x + 0.32479339599609
+    y = y + 0.4
+    local item_bg_icon = get_spell_bg(wand.spells[i])
+    GuiZSetForNextWidget(gui, 8.5)
+    GuiOptionsAddForNextWidget(gui, GUI_OPTION.Layout_NoLayouting)
+    if not wand.spells[i] or wand.spells[i] == "" then
+      -- Render an invisible (alpha = 0.0001) item just so it counts for the auto-layout
+      GuiImage(gui, new_id(), x - 2, y - 2, item_bg_icon, 0.0001, background_scale, background_scale)
+    else
       -- Background / Spell type border
-      GuiImage(gui, new_id(), x - 2, y - 2, item_bg_icon, 0.8, background_scale + 0.01, background_scale + 0.01)
+      GuiImage(gui, new_id(), x - 2, y - 2, item_bg_icon, 0.75, background_scale, background_scale)
       GuiZSetForNextWidget(gui, 8)
       GuiOptionsAddForNextWidget(gui, GUI_OPTION.Layout_NoLayouting)
-      GuiImage(gui, new_id(), x, y, (spell_lookup[wand.spells[i]] and spell_lookup[wand.spells[i]].icon) or "data/ui_gfx/gun_actions/unidentified.png", 1, spell_icon_scale, spell_icon_scale)
+      GuiImage(gui, new_id(), x + 0.11, y, (spell_lookup[wand.spells[i]] and spell_lookup[wand.spells[i]].icon) or "data/ui_gfx/gun_actions/unidentified.png", 0.8, spell_icon_scale, spell_icon_scale)
     end
     -- Start a new row after 10 spells
     if i % 10 == 0 then
       row = row + 1
       GuiLayoutEnd(gui)
       _, _, _, _, last_icon_y, last_icon_width, last_icon_height = GuiGetPreviousWidgetInfo(gui)
-      GuiLayoutBeginHorizontal(gui, last_icon_x, last_icon_y + 19.7 * spell_icon_scale, true)
+      GuiLayoutBeginHorizontal(gui, last_icon_x, y + 14.00, true)
     end
   end
   GuiLayoutEnd(gui)
@@ -512,6 +530,26 @@ local function refresh_wand_if_in_inventory(wand_id)
       ComponentSetValue2(inventory2_comp, "mActualActiveItem", 0)
     end
   end
+end
+
+local function add_spell_at_pos(wand, action_id, pos)
+  local spells_on_wand = wand:GetSpells()
+  -- Check if there's space for one more spell
+  if wand.capacity == #spells_on_wand then
+    return false
+  end
+  -- Check if there's already a spell at the desired position
+  for i, spell in ipairs(spells_on_wand) do
+    if spell.inventory_x + 1 == pos then
+      return false
+    end
+  end
+  local action_entity_id = CreateItemActionEntity(action_id)
+  EntityAddChild(wand.entity_id, action_entity_id)
+  EntitySetComponentsWithTagEnabled(action_entity_id, "enabled_in_world", false)
+  local item_component = EntityGetFirstComponentIncludingDisabled(action_entity_id, "ItemComponent")
+  ComponentSetValue2(item_component, "inventory_slot", pos-1, 0)
+  return true
 end
 
 -- ##########################
@@ -570,7 +608,11 @@ function wand:new(from, rng_seed_x, rng_seed_y)
       -- Filter spells whose ID no longer exist (for instance when a modded spellpack was disabled)
       values.spells = filter_spells(values.spells)
       values.always_cast_spells = filter_spells(values.always_cast_spells)
-      o:AddSpells(values.spells)
+      for i, action_id in ipairs(values.spells) do
+        if action_id ~= "" then
+          add_spell_at_pos(o, action_id, i)
+        end
+      end
       o:AttachSpells(values.always_cast_spells)
       o:SetSprite(values.sprite_image_file, values.offset_x, values.offset_y, values.tip_x, values.tip_y)
     -- Load a wand by xml
@@ -645,6 +687,9 @@ function wand:_SetProperty(key, value)
 end
 -- Retrieves the actual property from the component or object
 function wand:_GetProperty(key)
+  if not variable_mappings[key] then
+    error(("EZWand has no property '%s'"):format(key), 4)
+  end
   local mapped_key = variable_mappings[key].name
   local target_getters = {
     ability_component = function(key)
@@ -809,8 +854,7 @@ function wand:GetSpells()
 		local permanent = false
     local item_action_component = EntityGetFirstComponentIncludingDisabled(spell, "ItemActionComponent")
     if item_action_component then
-      local val = ComponentGetValue2(item_action_component, "action_id")
-      action_id = val
+      action_id = ComponentGetValue2(item_action_component, "action_id")
     end
     local inventory_x, inventory_y = -1, -1
     local item_component = EntityGetFirstComponentIncludingDisabled(spell, "ItemComponent")
@@ -826,6 +870,34 @@ function wand:GetSpells()
 			end
 		end
   end
+
+  local function assign_inventory_x(t)
+    local a = {}
+    for i, v in ipairs(t) do
+      if v.inventory_x > 0 then
+        a[v.inventory_x+1] = v
+      end
+    end
+    local inventory_x = 1
+    for i, v in ipairs(t) do
+      if v.inventory_x == 0 then
+        while a[inventory_x] do
+          inventory_x = inventory_x + 1
+        end
+        v.inventory_x = inventory_x-1
+        a[inventory_x] = v
+      end
+    end
+    for i = #t, 1, -1 do
+      if not t[i].inventory_x then
+        table.remove(t, i)
+      end
+    end
+  end
+  -- When a wand is spawned its spell's inventory_x is always set to 0, only once the inventory is opened
+  -- is inventory_x assigned correctly to all spells, so to fake that we go through all the spells manually
+  -- and assign inventory_x to either what it was set as or by the order the entities appear on the wand
+  assign_inventory_x(spells)
   table.sort(spells, function(a, b) return a.inventory_x < b.inventory_x end)
 	return spells, always_cast_spells
 end
@@ -1013,7 +1085,7 @@ function wand:PlaceAt(x, y)
 	EntitySetComponentIsEnabled(self.entity_id, sprite_component, true)
   local light_component = EntityGetFirstComponentIncludingDisabled(self.entity_id, "LightComponent")
   EntitySetComponentIsEnabled(self.entity_id, light_component, true)
-  
+
   ComponentSetValue(item_component, "has_been_picked_by_player", "0")
   ComponentSetValue(item_component, "play_hover_animation", "1")
   ComponentSetValueVector2(item_component, "spawn_pos", x, y)
@@ -1064,8 +1136,12 @@ function wand:Serialize()
   local spells_string = ""
   local always_casts_string = ""
   local spells, always_casts = self:GetSpells()
+  local slots = {}
   for i, spell in ipairs(spells) do
-    spells_string = spells_string .. (i == 1 and "" or ",") .. spell.action_id
+    slots[spell.inventory_x+1] = spell
+  end
+  for i=1, self.capacity do
+    spells_string = spells_string .. (i == 1 and "" or ",") .. (slots[i] and slots[i].action_id or "")
   end
   for i, spell in ipairs(always_casts) do
     always_casts_string = always_casts_string .. (i == 1 and "" or ",") .. spell.action_id
@@ -1111,6 +1187,13 @@ local function get_held_wand()
     local inventory2_comp = EntityGetFirstComponentIncludingDisabled(player, "Inventory2Component")
     local active_item = ComponentGetValue2(inventory2_comp, "mActiveItem")
     return entity_is_wand(active_item) and wand:new(active_item)
+  end
+end
+
+function wand:RenderTooltip(origin_x, origin_y, gui_)
+  local success, error_msg = pcall(render_tooltip, origin_x, origin_y, deserialize(self:Serialize()), gui_)
+  if not success then
+    error(error_msg, 2)
   end
 end
 
