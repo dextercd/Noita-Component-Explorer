@@ -82,6 +82,7 @@ function matinv_field.show_field_MATERIAL_VEC_DOUBLES(name, description, entity_
         imgui.PopStyleColor()
     end
 
+    ---@type number[]
     local value = (get or ComponentGetValue2)(component_id, name)
 
     if can_edit then
@@ -100,10 +101,23 @@ function matinv_field.show_field_MATERIAL_VEC_DOUBLES(name, description, entity_
             if string_util.ifind(material_name, c.search, 1, true) then
                 if can_edit then
                     imgui.SetNextItemWidth(180)
-                    local changed, new_count = imgui.InputInt(material_name, count)
+                    -- Noita's AddMaterialInventoryMaterial function only
+                    -- accepts integers, but the component field can store
+                    -- doubles. Detect this case and inform the user.
+                    local whole_count = math.floor(count)
+                    local changed, new_count = imgui.InputInt(material_name, whole_count)
 
                     if changed then
                         AddMaterialInventoryMaterial(entity_id, material_name, new_count)
+                    end
+
+                    if whole_count ~= count then
+                        imgui.SameLine()
+                        imgui.Text(tostring(count))
+                        imgui.SameLine()
+                        help_marker(
+                            "There's a fractional amount of material in the inventory, " ..
+                            "but the Lua API can only write whole numbers.")
                     end
                 else
                     imgui.Text(material_name .. ": " .. count)
