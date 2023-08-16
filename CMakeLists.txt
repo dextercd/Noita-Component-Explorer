@@ -39,8 +39,18 @@ function(render_jinja_template)
         ${Python_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/codegen/gen.py" --output ${RJINJA_OUTPUT}
     )
 
+    # Aliases are in the form of <path>@<alias>
+    # To setup dependencies properly we collect the paths in here
+    set(JSON_PATHS)
+
     foreach(JSON IN LISTS RJINJA_JSON)
         list(APPEND COMMAND_LIST --json ${JSON})
+
+        if (JSON MATCHES "(.*)@")
+            list(APPEND JSON_PATHS ${CMAKE_MATCH_1})
+        else()
+            list(APPEND JSON_PATHS ${JSON})
+        endif()
     endforeach()
 
     cmake_path(ABSOLUTE_PATH RJINJA_TEMPLATE BASE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -49,7 +59,7 @@ function(render_jinja_template)
 
         DEPENDS install_component_explorer_python_packages
             "${CMAKE_CURRENT_SOURCE_DIR}/codegen/gen.py"
-            ${RJINJA_JSON} ${RJINJA_TEMPLATE}
+            ${JSON_PATHS} ${RJINJA_TEMPLATE}
 
         VERBATIM
         COMMAND ${COMMAND_LIST} ${RJINJA_TEMPLATE}
@@ -68,47 +78,46 @@ if (COMPONENT_EXPLORER_DEV)
 
     set(NOITA_COMPONENT_DOC ${NOITA_INSTALL_DIR}/tools_modding/component_documentation.txt)
 
-    add_custom_command(
-        OUTPUT component_documentation.json
-        DEPENDS
-            ${CMAKE_CURRENT_SOURCE_DIR}/component_parser/parse.py
-            ${NOITA_COMPONENT_DOC}
+    foreach(FILE_VERSION main beta)
+        add_custom_target(update_${FILE_VERSION}_repo_components_file
+            DEPENDS
+                ${CMAKE_CURRENT_SOURCE_DIR}/component_parser/parse.py
+                ${NOITA_COMPONENT_DOC}
 
-        VERBATIM
-        COMMAND Python::Interpreter ${CMAKE_CURRENT_SOURCE_DIR}/component_parser/parse.py
-            --output component_documentation.json
-            ${NOITA_COMPONENT_DOC}
-    )
-
-    add_custom_target(update_repo_components_file
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/component_documentation.json
-        COMMAND ${CMAKE_COMMAND} -E copy
-            component_documentation.json
-            ${CMAKE_CURRENT_SOURCE_DIR}/data/component_documentation.json
-    )
-else()
-    configure_file(data/component_documentation.json component_documentation.json
-        COPYONLY
-    )
+            VERBATIM
+            COMMAND Python::Interpreter ${CMAKE_CURRENT_SOURCE_DIR}/component_parser/parse.py
+                --output ${CMAKE_CURRENT_SOURCE_DIR}/data/component_${FILE_VERSION}_documentation.json
+                ${NOITA_COMPONENT_DOC}
+        )
+    endforeach()
 endif()
 
-render_jinja_template(OUTPUT components.lua
-    TEMPLATE components.lua
-    JSON
-        ${CMAKE_CURRENT_BINARY_DIR}/component_documentation.json
-        ${CMAKE_CURRENT_SOURCE_DIR}/data/field_infos.json
-)
-add_custom_target(components_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/components.lua)
+foreach(FILE_VERSION main beta)
+    render_jinja_template(OUTPUT components_${FILE_VERSION}.lua
+        TEMPLATE components.lua
+        JSON
+            ${CMAKE_CURRENT_SOURCE_DIR}/data/component_${FILE_VERSION}_documentation.json@component_documentation
+            ${CMAKE_CURRENT_SOURCE_DIR}/data/field_infos.json
+    )
+    add_custom_target(components_${FILE_VERSION}_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/components_${FILE_VERSION}.lua)
 
-render_jinja_template(OUTPUT serialise_component.lua
-    TEMPLATE serialise_component.lua
-    JSON ${CMAKE_CURRENT_BINARY_DIR}/component_documentation.json
-)
-add_custom_target(serialise_component_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/serialise_component.lua)
+    render_jinja_template(OUTPUT serialise_component_${FILE_VERSION}.lua
+        TEMPLATE serialise_component.lua
+        JSON ${CMAKE_CURRENT_SOURCE_DIR}/data/component_${FILE_VERSION}_documentation.json@component_documentation
+    )
+    add_custom_target(serialise_component_${FILE_VERSION}_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/serialise_component_${FILE_VERSION}.lua)
+
+    install(
+        FILES
+            ${CMAKE_CURRENT_BINARY_DIR}/serialise_component_${FILE_VERSION}.lua
+            ${CMAKE_CURRENT_BINARY_DIR}/components_${FILE_VERSION}.lua
+        DESTINATION "component-explorer"
+        COMPONENT ComponentExplorer
+    )
+endforeach()
 
 render_jinja_template(OUTPUT version.lua
     TEMPLATE version.lua
-    JSON ${CMAKE_CURRENT_BINARY_DIR}/component_documentation.json
 )
 add_custom_target(version_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/version.lua)
 
@@ -127,8 +136,6 @@ configure_file(mod.xml.in mod.xml @ONLY)
 install(DIRECTORY component-explorer DESTINATION "." COMPONENT ComponentExplorer)
 install(
     FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/components.lua
-        ${CMAKE_CURRENT_BINARY_DIR}/serialise_component.lua
         ${CMAKE_CURRENT_BINARY_DIR}/version.lua
         ${CMAKE_CURRENT_BINARY_DIR}/configs.lua
         ${CMAKE_CURRENT_BINARY_DIR}/mod.xml
