@@ -419,6 +419,14 @@ wiki_spell_names.by_action_id = {
     BOUNCE_SMALL_EXPLOSION = "Sparkly bounce",
     BOUNCE_LIGHTNING = "Lightning bounce",
     BOUNCE_HOLE = "Vacuum bounce",
+    LANCE_HOLY = "Holy Lance",
+    I_SHOT = "Iplicate Spell",
+    Y_SHOT = "Yplicate Spell",
+    T_SHOT = "Tiplicate Spell",
+    W_SHOT = "Wuplicate Spell",
+    QUAD_SHOT = "Quplicate Spell",
+    PENTA_SHOT = "Peplicate Spell",
+    HEXA_SHOT = "Heplicate Spell",
 }
 
 local to_action_id = {}
