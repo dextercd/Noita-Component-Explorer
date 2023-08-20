@@ -1553,6 +1553,24 @@
         ]
     },
     {
+        "name": "BiomeTrackerComponent",
+        "members": [
+            {
+                "type": "int",
+                "name": "limit_to_every_n_frame",
+                "example": "0 [0, 1]",
+                "description": "if > 1, we will only check the biome every n frames"
+            }
+        ],
+        "privates": [
+            {
+                "type": "Biome*",
+                "name": "current_biome",
+                "description": "used to track in which biome we are at"
+            }
+        ]
+    },
+    {
         "name": "BlackHoleComponent",
         "members": [
             {
@@ -4489,10 +4507,22 @@
                 "description": "How many times has this GameEffectComponent teleported the owner?"
             },
             {
+                "type": "double",
+                "name": "no_heal_max_hp_cap",
+                "example": "3.40282e+038 [0, 1]",
+                "description": "If current hp is less than this, we store it here. Then we make sure the hp never exceeds this."
+            },
+            {
                 "type": "bool",
                 "name": "caused_by_ingestion_status_effect",
                 "example": "0 [0, 1]",
                 "description": "Did this effect occur because someone ate something?"
+            },
+            {
+                "type": "bool",
+                "name": "caused_by_stains",
+                "example": "0 [0, 1]",
+                "description": "was this caused by stains"
             },
             {
                 "type": "bool",
@@ -6558,6 +6588,12 @@
             },
             {
                 "type": "bool",
+                "name": "limit_all_callbacks",
+                "example": "0 [0, 1]",
+                "description": "NOTE( Petri ): 19.8.2023 - by default limit_how_many_times_per_frame and limit_to_every_n_frame only works for script_shot. If this is set to true, will limit all callbacks. Also note that this limit is shared within this component. So if this is true and both script_shot and script_damage_received and both are called within limit_to_every_n_frame frames, only one of them will be called."
+            },
+            {
+                "type": "bool",
                 "name": "remove_after_executed",
                 "example": "0 [0, 1]"
             },
@@ -6686,6 +6722,11 @@
                 "type": "std::string",
                 "name": "script_polymorphing_to",
                 "description": "if set, calls function 'polymorphing_to( string_entity_we_are_about_to_polymorph_to )' when we receive Message_PolymorphingTo"
+            },
+            {
+                "type": "std::string",
+                "name": "script_biome_entered",
+                "description": "if set, calls function 'biome_entered( string_biome_name, string_biome_old_name )' when this entity changes biomes. Requires BiomeTrackerComponent"
             },
             {
                 "type": "int",
@@ -7043,6 +7084,18 @@
                 "description": "requires do_reactions > 0 - are we allowed to load entities when doing reactions?"
             },
             {
+                "type": "int",
+                "name": "reaction_speed",
+                "example": "5 [0, 1]",
+                "description": "Note( Petri ): 17.8.2023 - how 'fast' do we let reactions happen. How many pixels of material do we convert at one time (5-10) seems like a nice speed."
+            },
+            {
+                "type": "bool",
+                "name": "reactions_shaking_speeds_up",
+                "example": "1 [0, 1]",
+                "description": "Note( Petri ): 17.8.2023 - added the ability of shaking the bottle to cause reactions to happen quicker. "
+            },
+            {
                 "type": "double",
                 "name": "max_capacity",
                 "example": "-1 [0, 1]",
@@ -7066,6 +7119,17 @@
                 "type": "bool",
                 "name": "is_death_handled",
                 "example": "0 [0, 1]"
+            },
+            {
+                "type": "vec2",
+                "name": "ex_position",
+                "description": "used to figure out movement velocity"
+            },
+            {
+                "type": "float",
+                "name": "ex_angle",
+                "example": "0 [0, 1]",
+                "description": "used to figure out movement velocity"
             }
         ],
         "custom_data_types": [
@@ -7854,6 +7918,12 @@
                 "name": "initial_jump_max_distance_y",
                 "example": "80 [0, 1000]",
                 "description": "TODO: Comment"
+            },
+            {
+                "type": "int",
+                "name": "read_state",
+                "example": "0 [0, 1]",
+                "description": "Read only value to get mState as an integer. Used to detect when the worst cheesers are trying to cheese our beloved squidward."
             }
         ],
         "privates": [
