@@ -42,7 +42,20 @@ function show_field_float(name, description, component_id, get, set)
     end
 end
 
-show_field_double = show_field_float
+function show_field_double(name, description, component_id, get, set)
+    local value = (get or ComponentGetValue2)(component_id, name)
+
+    imgui.SetNextItemWidth(200)
+    local changed, value = imgui.InputDouble(name, value, 0.1)
+    if changed then
+        (set or ComponentSetValue2)(component_id, name, value)
+    end
+
+    if description then
+        imgui.SameLine()
+        help_marker(description)
+    end
+end
 
 function show_field_bool(name, description, component_id, get, set)
     local value = (get or ComponentGetValue2)(component_id, name)
