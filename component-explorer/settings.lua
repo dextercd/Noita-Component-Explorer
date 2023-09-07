@@ -128,6 +128,25 @@ mod_settings = {
                 scope = MOD_SETTING_SCOPE_RUNTIME,
             }
         }
+    },
+    {
+        category_id = "data_display",
+        ui_name = "Data Display",
+        ui_description = "How should Component Explorer display data to you?",
+        settings = {
+            {
+                id = "preferred_decimal_format",
+                ui_name = "Preferred decimal format",
+                value_default = "decimal",
+                values = {
+                    {"decimal", "Decimal"},
+                    {"all_scientific", "Scientific (all)"},
+                    {"double_scientific", "Scientific (only doubles)"},
+                    {"magnitude", "Switch on magnitude"},
+                },
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            }
+        }
     }
 }
 

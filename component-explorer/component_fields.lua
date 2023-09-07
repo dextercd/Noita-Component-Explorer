@@ -1,6 +1,7 @@
 dofile_once("mods/component-explorer/utils/stringify.lua")
 dofile_once("mods/component-explorer/field_enums.lua")
 dofile_once("mods/component-explorer/entity.lua")
+dofile_once("mods/component-explorer/utils/settings_util.lua")
 local matutil = dofile_once("mods/component-explorer/utils/matutil.lua")
 
 function show_field_int(name, description, component_id, get, set)
@@ -27,11 +28,28 @@ show_field_int64 = show_field_int
 show_field_AudioSourceHandle = show_field_int
 show_field_EntityTypeID = show_field_int
 
+-- float format
+local function ff(type)
+    local configured = setting_get("preferred_decimal_format")
+
+    if
+        type == "double" and configured == "double_scientific" or
+        --[[ any type ... ]] configured == "all_scientific"
+    then
+        return "%e"
+    end
+
+    if configured == "magnitude" then return "%g" end
+
+    if type == "double" then return "%.6f" end
+    return "%.3f"
+end
+
 function show_field_float(name, description, component_id, get, set)
     local value = (get or ComponentGetValue2)(component_id, name)
 
     imgui.SetNextItemWidth(200)
-    local changed, value = imgui.InputFloat(name, value, 0.1)
+    local changed, value = imgui.InputFloat(name, value, 0.1, 0.0, ff("float"))
     if changed then
         (set or ComponentSetValue2)(component_id, name, value)
     end
@@ -46,7 +64,7 @@ function show_field_double(name, description, component_id, get, set)
     local value = (get or ComponentGetValue2)(component_id, name)
 
     imgui.SetNextItemWidth(200)
-    local changed, value = imgui.InputDouble(name, value, 0.1)
+    local changed, value = imgui.InputDouble(name, value, 0.1, 0.0, ff("double"))
     if changed then
         (set or ComponentSetValue2)(component_id, name, value)
     end
