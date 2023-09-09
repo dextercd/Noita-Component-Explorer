@@ -75,8 +75,7 @@ end
 function get_value(name, type)
     local text_value = GlobalsGetValue(name, VARIABLE_NOT_SET_VALUE)
     if text_value == VARIABLE_NOT_SET_VALUE then
-        set_default(name, type)
-        return get_value(name, type)
+        return nil
     end
 
     if type == "number" or type == "integer" then
@@ -114,6 +113,19 @@ function show_global_window(name, data)
 
     local current_value = get_value(name, data.type)
 
+    if current_value == nil then
+        imgui.Text("Global not set")
+        imgui.SameLine()
+        if imgui.SmallButton("Set to default") then
+            set_default(name, data.type)
+            current_value = get_value(name, data.type)
+        end
+    end
+
+    if current_value == nil then
+        goto novalue
+    end
+
     if data.type == "number" then
         imgui.SetNextItemWidth(100)
         local changed, value = imgui.DragFloat(name, current_value)
@@ -142,6 +154,8 @@ function show_global_window(name, data)
             GlobalsSetValue(name, tostring(value))
         end
     end
+
+    ::novalue::
 
     imgui.End()
 end
