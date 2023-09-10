@@ -236,7 +236,6 @@ function update_ui(paused, current_frame_run)
     if window_open_globals then
         show_globals()
     end
-    show_globals_windows()
 
     if not windows_hidden_component then
         show_component_windows()
