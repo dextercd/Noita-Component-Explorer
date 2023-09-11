@@ -19,13 +19,15 @@ local order_asc = true
 -- (Re)ordering of watched_globals table
 local function order_globals()
     local cmp_fn = function(a, b)
-        return (a[sort_field] < b[sort_field]) == order_asc
+        if order_asc then
+            return a[sort_field] < b[sort_field]
+        end
+        return a[sort_field] > b[sort_field]
     end
     table.sort(watched_globals, cmp_fn)
 end
 
--- TODO: Implement table reordering. Requires new ImGui API binding
-local function set_global_order(sf, oa)
+local function set_global_table_order(sf, oa)
     if sf == sort_field and order_asc == oa then
         return
     end
@@ -158,21 +160,46 @@ local function show_global_input(data)
     end
 end
 
+local function handle_sort_spec()
+    if not imgui.TableGetSortSpecs then return end
+
+    local dirty, sortspec = imgui.TableGetSortSpecs()
+    if dirty and sortspec then
+        assert(#sortspec.Specs == 1)
+        local columnspec = sortspec.Specs[1]
+
+        local field
+        if columnspec.ColumnIndex == 1 then field = "name" end
+        if columnspec.ColumnIndex == 2 then field = "type" end
+        set_global_table_order(field, columnspec.SortDirection == imgui.SortDirection.Ascending)
+
+        imgui.TableSortSpecsMarkClean()
+    end
+
+end
+
 local function show_globals_table_ui()
     local table_flags = imgui.TableFlags.Resizable
+    if imgui.TableGetSortSpecs then
+        table_flags = bit.bor(table_flags, imgui.TableFlags.Sortable)
+    end
+
     if not imgui.BeginTable("Globals", 4, table_flags) then
         return
     end
 
     local close_flags = bit.bor(
         imgui.TableColumnFlags.WidthFixed,
-        imgui.TableColumnFlags.NoResize
+        imgui.TableColumnFlags.NoResize,
+        imgui.TableColumnFlags.NoSort
     )
     imgui.TableSetupColumn("Close", close_flags, 60)
     imgui.TableSetupColumn("Name")
     imgui.TableSetupColumn("Type")
-    imgui.TableSetupColumn("Value")
+    imgui.TableSetupColumn("Value", imgui.TableColumnFlags.NoSort)
     imgui.TableHeadersRow()
+
+    handle_sort_spec()
 
     local delay_unwatch
 
