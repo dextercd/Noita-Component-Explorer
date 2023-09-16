@@ -156,6 +156,10 @@ local function show_entity(entity_id, data)
 
         local filename = EntityGetFilename(entity_id)
         if filename ~= "" then
+            if imgui.Button("Copy") then
+                imgui.SetClipboardText(filename)
+            end
+            imgui.SameLine()
             imgui.Text("File: " .. filename)
         end
 
