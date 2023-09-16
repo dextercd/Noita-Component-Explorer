@@ -197,6 +197,8 @@ local function show_entity(entity_id, data)
 
     if imgui.CollapsingHeader("Tags") then
         local tag_string = EntityGetTags(entity_id)
+        ---@cast tag_string string
+
         local tags = {}
         for tag in string.gmatch(tag_string, "[^,]+") do
             table.insert(tags, tag)
@@ -205,6 +207,10 @@ local function show_entity(entity_id, data)
         local function add_tag(t) EntityAddTag(entity_id, t) end
         local function remove_tag(t) EntityRemoveTag(entity_id, t) end
         tags_gui.show(data.tag_data, tags, add_tag, remove_tag, common_entity_tags)
+
+        if imgui.Button("Copy tag string") then
+            imgui.SetClipboardText(tag_string)
+        end
     end
 
     if imgui.CollapsingHeader("Child Entities") then

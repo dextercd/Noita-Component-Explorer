@@ -123,6 +123,10 @@ local function new_component_tags(component_id, data)
     local function add_tag(t) ComponentAddTag(component_id, t) end
     local function remove_tag(t) ComponentRemoveTag(component_id, t) end
     tags_gui.show(data.tag_data, tags, add_tag, remove_tag, comp_tag_util.special_tags)
+
+    if imgui.Button("Copy tag string") then
+        imgui.SetClipboardText(tag_string)
+    end
 end
 
 local function limited_component_tags(component_id)
@@ -130,7 +134,7 @@ local function limited_component_tags(component_id)
     imgui.SameLine()
     help_marker("In this version of Noita there's no way to get all tags on a component, so only some special tags are listed.")
 
-    for i, tag in ipairs(comp_tag_util.special_tags) do
+    for _, tag in ipairs(comp_tag_util.special_tags) do
         local has_tag = ComponentHasTag(component_id, tag)
         local changed, new_val = imgui.Checkbox(tag, has_tag)
         if changed then
