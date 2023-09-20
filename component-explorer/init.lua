@@ -296,7 +296,7 @@ function keyboard_shortcuts()
     end
 
     if imgui.IsKeyPressed(imgui.Key.W) then
-        local world_entity = 1
+        local world_entity = GameGetWorldStateEntity()
         local world_component = EntityGetFirstComponent(world_entity, "WorldStateComponent")
         toggle_watch_component(world_entity, world_component)
     end
