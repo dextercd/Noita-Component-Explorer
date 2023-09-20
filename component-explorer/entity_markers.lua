@@ -5,7 +5,7 @@ local entities_with_markers = {}
 function entity_markers.has_marker(entity_id)
     local quick_value = entities_with_markers[entity_id]
     if quick_value ~= nil then
-        return quick_value
+        return true
     end
     return entity_markers.really_has_marker(entity_id)
 end
@@ -15,13 +15,13 @@ function entity_markers.really_has_marker(entity_id)
     if EntityGetIsAlive(entity_id) then
         for _, child_id in ipairs(EntityGetAllChildren(entity_id) or {}) do
             if EntityGetName(child_id) == "ce_marker" then
+                entities_with_markers[entity_id] = child_id
                 has_marker = true
                 break
             end
         end
     end
 
-    entities_with_markers[entity_id] = has_marker
     return has_marker
 end
 
