@@ -4,6 +4,7 @@ local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 local wiki_spell_names = dofile_once("mods/component-explorer/utils/wiki_spell_names.lua")
 local wiki = dofile_once("mods/component-explorer/utils/wiki.lua")
 local wand_sprites = dofile_once("mods/component-explorer/wand_sprites.lua")
+local player_util = dofile_once("mods/component-explorer/utils/player_util.lua")
 dofile_once("mods/component-explorer/utils/copy.lua")
 
 dofile_once("data/scripts/gun/procedural/wands.lua")
@@ -256,8 +257,11 @@ local function confirm_wand_card_import(template_data)
     end
 
     if imgui.Button("Create") then
-        local player = EntityGetWithTag("player_unit")[1]
-        local px, py = EntityGetTransform(player)
+        local px, py = 0, 0
+        local player = player_util.get_player()
+        if player then
+            px, py = EntityGetTransform(player)
+        end
         wand = EZWand()
         wand:UpdateSprite()
         wand:PlaceAt(px, py)
@@ -279,8 +283,11 @@ local function confirm_wand_import(template_data)
     for _, preset in ipairs(preset_wands) do
         imgui.SameLine()
         if imgui.Button("New " .. preset.name) then
-            local player = EntityGetWithTag("player_unit")[1]
-            local px, py = EntityGetTransform(player)
+            local px, py = 0, 0
+            local player = player_util.get_player()
+            if player then
+                px, py = EntityGetTransform(player)
+            end
             wand = EZWand(preset.data)
             wand:UpdateSprite()
             wand:PlaceAt(px, py)

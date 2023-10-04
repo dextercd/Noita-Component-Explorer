@@ -3,6 +3,7 @@ local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
 local entity_markers = dofile_once("mods/component-explorer/entity_markers.lua")
 local tags_gui = dofile_once("mods/component-explorer/tags_gui.lua")
+local player_util = dofile_once("mods/component-explorer/utils/player_util.lua")
 
 local common_entity_tags = {
     "card_action",
@@ -170,6 +171,26 @@ local function show_entity(entity_id, data)
             imgui.SetClipboardText(xml_serialise.tostring(entity_xml))
         end
 
+        local x, y, rotation, scale_x, scale_y = EntityGetTransform(entity_id)
+
+        local player = player_util.get_player()
+        if player then
+            imgui.Separator()
+
+            imgui.Text("Teleport:")
+            imgui.SameLine()
+            if imgui.Button("This to player") then
+                local px, py = EntityGetTransform(player)
+                EntityApplyTransform(entity_id, px, py, rotation, scale_x, scale_y)
+            end
+
+            imgui.SameLine()
+            if imgui.Button("Player to this") then
+                local _, _, pr, psx, psy = EntityGetTransform(player)
+                EntityApplyTransform(player, x, y, pr, psx, psy)
+            end
+        end
+
         imgui.Separator()
 
         imgui.PushStyleColor(imgui.Col.Button, 1, 0.4, 0.4)
@@ -178,8 +199,6 @@ local function show_entity(entity_id, data)
         if imgui.Button("Kill") then kill_entity = true end
         imgui.PopStyleColor(3)
 
-
-        local x, y, rotation, scale_x, scale_y = EntityGetTransform(entity_id)
 
         local pos_changed
         pos_changed, x, y = imgui.InputFloat2("Position", x, y)
