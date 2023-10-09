@@ -154,10 +154,8 @@ function show_entity_picker_overlay()
     if io.MouseWheel then
         if io.MouseWheel > 0 then
             list_start_point = list_start_point - 1
-            print(list_start_point)
         elseif io.MouseWheel < 0 then
             list_start_point = list_start_point + 1
-            print(list_start_point)
         end
     end
 
