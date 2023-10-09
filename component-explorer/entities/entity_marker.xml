@@ -11,11 +11,13 @@
         has_special_scale="1"
         special_scale_x="0.5"
         special_scale_y="0.5"
+        emissive="1"
         />
     <SpriteComponent
         image_file="mods/component-explorer/entities/entity_marker/marker.xml"
         never_ragdollify_on_death="1"
         z_index="-10000"
+        emissive="1"
         />
     <LuaComponent
         script_source_file="mods/component-explorer/entities/entity_marker/init.lua"
