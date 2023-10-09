@@ -1,5 +1,8 @@
 local OVERLAY_OFFSET_X = 5
 local OVERLAY_OFFSET_Y = 5
+
+local OVERLAY_MAX_ITEMS = 20
+
 local SELECT_ENTITY_KEYS = {
     imgui.Key._1,
     imgui.Key._2,
@@ -100,6 +103,7 @@ end
 overlay_open_entity_picker = false
 local overlay_entities = {}
 local skip_entities_refresh_once = false
+local list_start_point = 1
 
 function show_entity_picker_overlay()
     if imgui.IsKeyPressed(imgui.Key.Escape) then
@@ -146,7 +150,29 @@ function show_entity_picker_overlay()
     end
     skip_entities_refresh_once = false
 
-    for i, entity_id in ipairs(overlay_entities) do
+    local io = imgui.GetIO()
+    if io.MouseWheel then
+        if io.MouseWheel > 0 then
+            list_start_point = list_start_point - 1
+            print(list_start_point)
+        elseif io.MouseWheel < 0 then
+            list_start_point = list_start_point + 1
+            print(list_start_point)
+        end
+    end
+
+    for i=1,#overlay_entities do
+        if i > OVERLAY_MAX_ITEMS then
+            if io.MouseWheel then
+                imgui.Text("... Use scroll wheel to reveal others")
+            else
+                imgui.Text("... Update to ImGui 1.14 to scroll list")
+            end
+
+            break
+        end
+
+        local entity_id = overlay_entities[index_wrap(i + list_start_point, #overlay_entities)]
         local label = entity_label(entity_id)
 
         local color
