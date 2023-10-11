@@ -93,7 +93,7 @@ function view_menu_items()
 
     local _
     _, console.open            = imgui.MenuItem("Lua Console", sct("CTRL+SHIFT+L"), console.open)
-    _, window_open_entity_list = imgui.MenuItem("Entity List", "", window_open_entity_list)
+    _, window_open_entity_list = imgui.MenuItem("Entity List", sct("CTRL+SHIFT+K"), window_open_entity_list)
     _, window_open_logs        = imgui.MenuItem("Logs Window", "", window_open_logs)
     _, overlay_open_logs       = imgui.MenuItem("Logs Overlay", sct("CTRL+SHIFT+O"), overlay_open_logs)
     _, window_open_wiki_wands  = imgui.MenuItem("Wiki Wands", "", window_open_wiki_wands)
@@ -306,6 +306,10 @@ function keyboard_shortcuts()
         for _, player in ipairs(players) do
             toggle_watch_entity(player)
         end
+    end
+
+    if imgui.IsKeyPressed(imgui.Key.K) then
+        window_open_entity_list = not window_open_entity_list
     end
 
     if imgui.IsKeyPressed(imgui.Key.L) then
