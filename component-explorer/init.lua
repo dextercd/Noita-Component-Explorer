@@ -237,12 +237,12 @@ function update_ui(paused, current_frame_run)
         show_globals()
     end
 
-    if not windows_hidden_component then
-        show_component_windows()
-    end
-
     if not windows_hidden_entity then
         show_entity_windows()
+    end
+
+    if not windows_hidden_component then
+        show_component_windows()
     end
 
     if window_open_entity_list then

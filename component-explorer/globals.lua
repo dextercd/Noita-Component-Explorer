@@ -231,7 +231,7 @@ local function show_globals_table_ui()
 end
 
 function show_globals()
-    imgui.SetNextWindowSize(600, 200, imgui.Cond.Once)
+    imgui.SetNextWindowSize(600, 200, imgui.Cond.FirstUseEver)
     local should_show
     should_show, window_open_globals = imgui.Begin("Globals", window_open_globals)
 

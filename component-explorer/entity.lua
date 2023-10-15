@@ -4,6 +4,7 @@ local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
 local entity_markers = dofile_once("mods/component-explorer/entity_markers.lua")
 local tags_gui = dofile_once("mods/component-explorer/tags_gui.lua")
 local player_util = dofile_once("mods/component-explorer/utils/player_util.lua")
+local stable_id = dofile_once("mods/component-explorer/stable_id.lua")
 
 local common_entity_tags = {
     "card_action",
@@ -115,18 +116,21 @@ local function show_entity(entity_id, data)
     end
 
     local name = EntityGetName(entity_id)
-    if name == "unknown" then name = "" end
+
+    local display_name = name
+    if display_name == "unknown" then display_name = "" end
 
     local title = "Entity: "
-    if name == "" then
+    if display_name == "" then
         title = title .. tostring(entity_id)
     else
-        title = title .. name .. " (" .. tostring(entity_id) .. ")"
+        title = title .. display_name .. " (" .. tostring(entity_id) .. ")"
     end
 
-    imgui.SetNextWindowSize(600, 400, imgui.Cond.Once)
-    local flags = imgui.WindowFlags.NoSavedSettings
-    local should_show, open = imgui.Begin(title .. "###show_entity" .. tostring(entity_id), true, flags)
+    imgui.SetNextWindowSize(600, 400, imgui.Cond.FirstUseEver)
+
+    local sid = stable_id.get("entity", entity_id, name)
+    local should_show, open = imgui.Begin(title .. "###" .. sid, true)
 
     if not open then
         unwatch_entity(entity_id)

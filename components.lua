@@ -6,6 +6,7 @@ local matinv_field = dofile_once("mods/component-explorer/matinv_field.lua")
 local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
 local comp_tag_util = dofile_once("mods/component-explorer/utils/component_tags.lua")
 local tags_gui = dofile_once("mods/component-explorer/tags_gui.lua")
+local stable_id = dofile_once("mods/component-explorer/stable_id.lua")
 
 component_types = {
     {% for component in component_documentation %}
@@ -253,9 +254,12 @@ function show_{{ component.name }}_fields(entity_id, component_id, data)
 end
 
 function show_{{ component.name }}_window(entity_id, component_id, data)
-    imgui.SetNextWindowSize(600, 400, imgui.Cond.Once)
-    local flags = imgui.WindowFlags.NoSavedSettings
-    local should_show, open = imgui.Begin("{{ component.name }}: " .. component_id, true, flags)
+    imgui.SetNextWindowSize(600, 400, imgui.Cond.FirstUseEver)
+
+    local entity_sid = stable_id.get("entity", entity_id, EntityGetName(entity_id))
+    local component_sid = stable_id.get(entity_sid .. "$component", component_id, "{{ component.name }}")
+
+    local should_show, open = imgui.Begin("{{ component.name }}: " .. component_id .. "###" .. component_sid, true)
 
     if not open then
         unwatch_component(component_id)
