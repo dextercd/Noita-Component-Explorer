@@ -2,6 +2,7 @@ dofile_once("mods/component-explorer/utils/stringify.lua")
 dofile_once("mods/component-explorer/field_enums.lua")
 dofile_once("mods/component-explorer/entity.lua")
 dofile_once("mods/component-explorer/utils/settings_util.lua")
+local file_viewer = dofile_once("mods/component-explorer/file_viewer.lua")
 local matutil = dofile_once("mods/component-explorer/utils/matutil.lua")
 
 function show_field_int(name, description, component_id, get, set)
@@ -105,6 +106,27 @@ function show_field_std_string(name, description, component_id, get, set)
 end
 
 show_field_USTRING = show_field_std_string
+
+function show_field_file_single(name, description, component_id, get, set)
+    local value = (get or ComponentGetValue2)(component_id, name)
+
+    imgui.SetNextItemWidth(300)
+    local changed, value = imgui.InputText(name, value)
+    if changed then
+        (set or ComponentSetValue2)(component_id, name, value)
+    end
+
+    imgui.SameLine()
+    file_viewer.open_button(value)
+
+    if description then
+        imgui.SameLine()
+        help_marker(description)
+    end
+end
+
+-- Not supporting this right now
+show_field_file_multi = show_field_std_string
 
 function show_field_vec2(name, description, component_id, get, set)
     local x, y = (get or ComponentGetValue2)(component_id, name)

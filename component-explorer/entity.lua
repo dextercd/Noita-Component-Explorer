@@ -5,6 +5,7 @@ local entity_markers = dofile_once("mods/component-explorer/entity_markers.lua")
 local tags_gui = dofile_once("mods/component-explorer/tags_gui.lua")
 local player_util = dofile_once("mods/component-explorer/utils/player_util.lua")
 local stable_id = dofile_once("mods/component-explorer/stable_id.lua")
+local file_viewer = dofile_once("mods/component-explorer/file_viewer.lua")
 
 local common_entity_tags = {
     "card_action",
@@ -161,9 +162,13 @@ local function show_entity(entity_id, data)
 
         local filename = EntityGetFilename(entity_id)
         if filename ~= "" then
-            if imgui.Button("Copy") then
+            if imgui.Button("Copy path") then
                 imgui.SetClipboardText(filename)
             end
+
+            imgui.SameLine()
+            file_viewer.open_button(filename)
+
             imgui.SameLine()
             imgui.Text("File: " .. filename)
         end

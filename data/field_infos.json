@@ -5,6 +5,9 @@
         },
         "mAggression": {
             "handler": "show_field_float"
+        },
+        "attack_ranged_entity_file": {
+            "handler": "show_field_file_single"
         }
     },
     "CellEaterComponent": {
@@ -61,6 +64,9 @@
         },
         "mCollisionMessageMaterials": {
             "handler": "show_field_material_id_list"
+        },
+        "ragdoll_filenames_file": {
+            "handler": "show_field_file_single"
         }
     },
     "GenomeDataComponent": {
@@ -100,6 +106,12 @@
         },
         "count_max": {
             "handler": "show_field_int"
+        },
+        "image_animation_file": {
+            "handler": "show_field_file_single"
+        },
+        "image_animation_colors_file": {
+            "handler": "show_field_file_single"
         }
     },
     "PathFindingComponent": {
@@ -113,17 +125,6 @@
         }
     },
     "WorldStateComponent": {
-        "gore_multiplier": {
-            "handler": "show_field_int"
-        },
-        "trick_kill_gold_multiplier": {
-            "handler": "show_field_int"
-        },
-        "damage_flash_multiplier": {
-            "handler": "show_field_float"
-        }
-    },
-    "WorldStateComponent": {
         "changed_materials": {
             "handler": "show_field_material_pairs"
         }
@@ -131,6 +132,203 @@
     "WormComponent": {
         "ground_decceleration": {
             "handler": "show_field_float"
+        },
+        "ragdoll_filename": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "AIAttackComponent": {
+        "attack_ranged_entity_file": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "AbilityComponent": {
+        "entity_file": {
+            "handler": "show_field_file_single"
+        },
+        "sprite_file": {
+            "handler": "show_field_file_single"
+        },
+        "base_item_file": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "BossDragonComponent": {
+        "ragdoll_filename": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "DroneLauncherComponent": {
+        "drone_entity_file": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "GameEffectComponent": {
+        "ragdoll_effect_custom_entity_file": {
+            "handler": "show_field_file_single"
+        },
+        "polymorph_target": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "ItemChestComponent": {
+        "other_entities_to_spawn": {
+            "handler": "show_field_file_multi"
+        }
+    },
+    "LightningComponent": {
+        "sprite_lightning_file": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "LoadEntitiesComponent": {
+        "entity_file": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "LuaComponent": {
+        "script_source_file": {
+            "handler": "show_field_file_single"
+        },
+        "script_enabled_changed": {
+            "handler": "show_field_file_single"
+        },
+        "script_damage_received": {
+            "handler": "show_field_file_single"
+        },
+        "script_damage_about_to_be_received": {
+            "handler": "show_field_file_single"
+        },
+        "script_item_picked_up": {
+            "handler": "show_field_file_single"
+        },
+        "script_shot": {
+            "handler": "show_field_file_single"
+        },
+        "script_collision_trigger_hit": {
+            "handler": "show_field_file_single"
+        },
+        "script_collision_trigger_timer_finished": {
+            "handler": "show_field_file_single"
+        },
+        "script_physics_body_modified": {
+            "handler": "show_field_file_single"
+        },
+        "script_pressure_plate_change": {
+            "handler": "show_field_file_single"
+        },
+        "script_inhaled_material": {
+            "handler": "show_field_file_single"
+        },
+        "script_death": {
+            "handler": "show_field_file_single"
+        },
+        "script_throw_item": {
+            "handler": "show_field_file_single"
+        },
+        "script_material_area_checker_failed": {
+            "handler": "show_field_file_single"
+        },
+        "script_material_area_checker_success": {
+            "handler": "show_field_file_single"
+        },
+        "script_electricity_receiver_switched": {
+            "handler": "show_field_file_single"
+        },
+        "script_electricity_receiver_electrified": {
+            "handler": "show_field_file_single"
+        },
+        "script_kick": {
+            "handler": "show_field_file_single"
+        },
+        "script_interacting": {
+            "handler": "show_field_file_single"
+        },
+        "script_audio_event_dead": {
+            "handler": "show_field_file_single"
+        },
+        "script_wand_fired": {
+            "handler": "show_field_file_single"
+        },
+        "script_teleported": {
+            "handler": "show_field_file_single"
+        },
+        "script_portal_teleport_used": {
+            "handler": "show_field_file_single"
+        },
+        "script_polymorphing_to": {
+            "handler": "show_field_file_single"
+        },
+        "script_biome_entered": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "PhysicsImageShapeComponent": {
+        "image_file": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "PhysicsRagdollComponent": {
+        "filename": {
+            "handler": "show_field_file_single"
+        },
+        "filenames": {
+            "handler": "show_field_file_multi"
+        }
+    },
+    "PixelSceneComponent": {
+        "pixel_scene": {
+            "handler": "show_field_file_single"
+        },
+        "pixel_scene_visual": {
+            "handler": "show_field_file_single"
+        },
+        "pixel_scene_background": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "PixelSpriteComponent": {
+        "image_file": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "ProjectileComponent": {
+        "muzzle_flash_file": {
+            "handler": "show_field_file_single"
+        },
+        "bounce_fx_file": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "SpriteComponent": {
+        "image_file": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "SpriteParticleEmitterComponent": {
+        "sprite_file": {
+            "handler": "show_field_file_single"
+        },
+        "entity_file": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "TeleportComponent": {
+        "source_particle_fx_file": {
+            "handler": "show_field_file_single"
+        },
+        "target_particle_fx_file": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "TextLogComponent": {
+        "image_filename": {
+            "handler": "show_field_file_single"
+        }
+    },
+    "UIIconComponent": {
+        "icon_sprite_file": {
+            "handler": "show_field_file_single"
         }
     }
 }

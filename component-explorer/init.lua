@@ -5,7 +5,6 @@ if not load_imgui then
     error("Missing ImGui.")
 end
 
-
 -- Loading imgui early so it's available when other files are loaded
 imgui = load_imgui({version="1.7.0", mod="Component Explorer"})
 
@@ -22,6 +21,7 @@ dofile_once("mods/component-explorer/utils/noita_version.lua")
 dofile_once("mods/component-explorer/wiki_wands.lua")
 local link_ui = dofile_once("mods/component-explorer/link_ui.lua")
 local us = dofile_once("mods/component-explorer/user_scripts.lua")
+local file_viewer = dofile_once("mods/component-explorer/file_viewer.lua")
 
 if is_steam_version() then
     dofile_once("mods/component-explorer/magic_numbers.lua")
@@ -97,6 +97,7 @@ function view_menu_items()
     _, window_open_logs        = imgui.MenuItem("Logs Window", "", window_open_logs)
     _, overlay_open_logs       = imgui.MenuItem("Logs Overlay", sct("CTRL+SHIFT+O"), overlay_open_logs)
     _, window_open_wiki_wands  = imgui.MenuItem("Wiki Wands", "", window_open_wiki_wands)
+    _, file_viewer.open        = imgui.MenuItem("File Viewer", sct("CTRL+SHIFT+F"), file_viewer.open)
 
     local clicked
     clicked, overlay_open_entity_picker = imgui.MenuItem("Entity Picker...", sct("CTRL+SHIFT+E"), overlay_open_entity_picker)
@@ -271,6 +272,10 @@ function update_ui(paused, current_frame_run)
         show_wiki_wands()
     end
 
+    if file_viewer.open then
+        file_viewer.show()
+    end
+
     if is_steam_version() then
         if window_open_magic_numbers then
             show_magic_numbers()
@@ -293,6 +298,10 @@ function keyboard_shortcuts()
 
     if imgui.IsKeyPressed(imgui.Key.E) then
         overlay_open_entity_picker = not overlay_open_entity_picker
+    end
+
+    if imgui.IsKeyPressed(imgui.Key.F) then
+        file_viewer.open = not file_viewer.open
     end
 
     if imgui.IsKeyPressed(imgui.Key.W) then
