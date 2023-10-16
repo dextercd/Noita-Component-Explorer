@@ -14,6 +14,7 @@ local globals = {
     remove_marker = entity_markers.remove_marker,
     ModTextFileSetContent = ModTextFileSetContent,
     ModTextFileGetContent = ModTextFileGetContent,
+    ModTextFileWhoSetContent = ModTextFileWhoSetContent,
 }
 
 function new_console(name)
