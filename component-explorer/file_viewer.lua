@@ -138,8 +138,9 @@ function file_viewer.show_file(path)
                 else
                     show_appends_tree(appends)
                 end
-                imgui.EndChild()
             end
+
+            imgui.EndChild()
         end
     end
 end
@@ -278,6 +279,8 @@ function file_viewer.show()
     if to_close then
         file_viewer.close_file(to_close)
     end
+
+    imgui.End()
 end
 
 -- For use in console
