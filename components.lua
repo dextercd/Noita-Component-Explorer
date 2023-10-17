@@ -244,6 +244,7 @@ function show_{{ component.name }}_fields(entity_id, component_id, data)
         show_field_ro_list("{{ field.name }}", {{ description }}, component_id)
         {% else %}
         -- show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)
+        show_field_unsupported("{{ field.name }}", {{ description }}, component_id, "{{ field.type }}")
         {% endif -%}
 
         {% endfor %}

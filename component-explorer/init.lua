@@ -39,6 +39,11 @@ function help_tooltip(desc)
     end
 end
 
+function exclam_marker(desc)
+    imgui.TextDisabled("(!)")
+    help_tooltip(desc)
+end
+
 function help_marker(desc)
     imgui.TextDisabled("(?)")
     help_tooltip(desc)

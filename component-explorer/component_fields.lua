@@ -417,6 +417,16 @@ function show_field_material_pairs(name, description, component_id)
     imgui.TreePop()
 end
 
+function show_field_unsupported(field_name, description, component_id, field_type)
+    imgui.Text(field_name .. " (" .. field_type .. ")")
+    imgui.SameLine()
+    exclam_marker("Field is unsupported. Let me know if you think this is a mistake")
+    if description then
+        imgui.SameLine()
+        help_marker(description)
+    end
+end
+
 local type_stored_in_vector = {"int", "float", "string"}
 
 function show_field_unknown(name, type, description, component_id)
