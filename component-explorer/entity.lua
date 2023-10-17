@@ -216,15 +216,13 @@ local function show_entity(entity_id, data)
         end
     end
 
-    if imgui.CollapsingHeader("Tags") then
-        local tag_string = EntityGetTags(entity_id)
-        ---@cast tag_string string
+    local tag_string = EntityGetTags(entity_id) --[[@as string]]
+    local tags = {}
+    for tag in string.gmatch(tag_string, "[^,]+") do
+        table.insert(tags, tag)
+    end
 
-        local tags = {}
-        for tag in string.gmatch(tag_string, "[^,]+") do
-            table.insert(tags, tag)
-        end
-
+    if imgui.CollapsingHeader("Tags (" .. #tags .. ")") then
         local function add_tag(t) EntityAddTag(entity_id, t) end
         local function remove_tag(t) EntityRemoveTag(entity_id, t) end
         tags_gui.show(data.tag_data, tags, add_tag, remove_tag, common_entity_tags)
