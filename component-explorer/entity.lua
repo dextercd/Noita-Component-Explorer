@@ -245,7 +245,8 @@ local function show_entity(entity_id, data)
         imgui.EndDisabled()
     end
 
-    if imgui.CollapsingHeader("Components") then
+    local components = EntityGetAllComponents(entity_id)
+    if imgui.CollapsingHeader("Components (" .. #components .. ")") then
         _, data.component_search = imgui.InputText("Type Search", data.component_search)
 
         if imgui.Button("+ Add Component") then
@@ -269,7 +270,6 @@ local function show_entity(entity_id, data)
             imgui.TableSetupColumn("Open", imgui.TableColumnFlags.WidthFixed)
             imgui.TableHeadersRow()
 
-            local components = EntityGetAllComponents(entity_id)
             for _, component_id in ipairs(components) do
                 local type = ComponentGetTypeName(component_id)
 
