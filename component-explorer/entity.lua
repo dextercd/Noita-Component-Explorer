@@ -84,7 +84,7 @@ local function get_entity_label(entity_id)
     return entity_id .. " " .. name .. " [" .. tags .. "]"
 end
 
-function show_entity_sub_children(children)
+function show_entity_children(children)
     for _, child_id in ipairs(children) do
         local sub_children = EntityGetAllChildren(child_id)
         if not sub_children then
@@ -94,20 +94,13 @@ function show_entity_sub_children(children)
         else
             if imgui.TreeNode(get_entity_label(child_id) .. "##" .. tostring(child_id)) then
                 imgui.SameLine() open_entity_small_button(child_id)
-                show_entity_children(child_id)
+                show_entity_children(sub_children)
                 imgui.TreePop()
             else
                 imgui.SameLine() open_entity_small_button(child_id)
             end
         end
     end
-end
-
-function show_entity_children(entity_id)
-    local children = EntityGetAllChildren(entity_id)
-    if not children then return end
-
-    show_entity_sub_children(children)
 end
 
 local function show_entity(entity_id, data)
@@ -241,8 +234,15 @@ local function show_entity(entity_id, data)
         end
     end
 
-    if imgui.CollapsingHeader("Child Entities") then
-        show_entity_children(entity_id)
+    local child_entities = EntityGetAllChildren(entity_id)
+    if child_entities then
+        if imgui.CollapsingHeader("Child Entities") then
+            show_entity_children(child_entities)
+        end
+    else
+        imgui.BeginDisabled()
+        imgui.CollapsingHeader("Child Entities (none)")
+        imgui.EndDisabled()
     end
 
     if imgui.CollapsingHeader("Components") then
