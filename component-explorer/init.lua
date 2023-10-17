@@ -201,7 +201,7 @@ function show_about_window()
     should_show, window_open_about = imgui.Begin("About", window_open_about)
     if should_show then
         imgui.Text("Component explorer version " .. version.version)
-        imgui.Text("Made by dextercd#7326")
+        imgui.Text("Made by dextercd")
         link_ui.button("Homepage", version.homepage)
 
         imgui.End()
