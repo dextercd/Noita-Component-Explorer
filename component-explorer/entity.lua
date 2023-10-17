@@ -285,9 +285,9 @@ local function show_entity(entity_id, data)
                     imgui.TableNextColumn()
 
                     local enabled = ComponentGetIsEnabled(component_id)
-                    local enabled_changed, enabled = imgui.Checkbox("###enabled" .. tostring(component_id), enabled)
+                    local enabled_changed, new_enabled = imgui.Checkbox("###enabled" .. tostring(component_id), enabled)
                     if enabled_changed then
-                        EntitySetComponentIsEnabled(entity_id, component_id, enabled)
+                        EntitySetComponentIsEnabled(entity_id, component_id, new_enabled)
                     end
 
                     imgui.TableNextColumn()
