@@ -234,10 +234,10 @@ local function show_entity(entity_id, data)
         end
     end
 
-    local child_entities = EntityGetAllChildren(entity_id)
-    if child_entities then
-        if imgui.CollapsingHeader("Child Entities") then
-            show_entity_children(child_entities)
+    local children = EntityGetAllChildren(entity_id)
+    if children then
+        if imgui.CollapsingHeader("Child Entities (" .. #children .. ")") then
+            show_entity_children(children)
         end
     else
         imgui.BeginDisabled()
