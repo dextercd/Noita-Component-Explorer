@@ -76,9 +76,9 @@ function matinv_field.show_field_MATERIAL_VEC_DOUBLES(name, description, entity_
     if not can_edit then
         imgui.PushStyleColor(imgui.Col.Text, unpack(style.colour_fail))
         imgui.TextWrapped(
-            "Unfortunately due to Noita API limitations, for every entity " ..
-            "we can change the contents of only one material inventory. This " ..
-            " one can not be changed.")
+            "Unfortunately, due to Noita API limitations, for every entity " ..
+            "we can only change the contents of one material inventory. This " ..
+            "one can not be changed.")
         imgui.PopStyleColor()
     end
 
