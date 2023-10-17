@@ -29,6 +29,7 @@ function new_console(name)
         focus_input = false,
         remove_items = 0,
         user_scripts_open = false,
+        input_lines = 3,
     }
 end
 
@@ -190,10 +191,8 @@ function console_contents_draw(console)
     local style = imgui.GetStyle()
     local line_height = imgui.GetTextLineHeight()
 
-    local input_lines = 3
-
     local footer_height = (
-        input_lines * line_height
+        console.input_lines * line_height
         + 2 * style.FramePadding_y
         + style.ItemSpacing_y
     )
@@ -241,13 +240,21 @@ function console_contents_draw(console)
     local submit_input
     submit_input, console.input = imgui.InputTextMultiline(
         "##Input", console.input,
-        -line_height * 4, line_height * input_lines,
+        -line_height * 4, line_height * console.input_lines,
         imgui.InputTextFlags.EnterReturnsTrue
     )
 
     if console.focus_input then
         console.focus_input = false
         imgui.SetKeyboardFocusHere(-1)
+    end
+
+    -- Right click console input
+    if imgui.BeginPopupContextItem() then
+        local _
+        _, console.input_lines = imgui.SliderInt("Lines", console.input_lines, 3, 10)
+        imgui.Text("Hidden feature :O")
+        imgui.EndPopup()
     end
 
     imgui.SameLine()
