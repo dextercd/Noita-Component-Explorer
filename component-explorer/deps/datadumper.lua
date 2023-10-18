@@ -83,6 +83,8 @@ local function DataDumper(value, varname, fastmode, ident)
   local keycache, strvalcache, out, closure_cnt = {}, {}, {}, 0
   setmetatable(strvalcache, {__index = function(t,value)
     local res = string_format('%q', value)
+    -- Turn backslashes followed by a newline into a \n escape sequence
+    res = res:gsub("\\\n", "\\n")
     t[value] = res
     return res
   end})
