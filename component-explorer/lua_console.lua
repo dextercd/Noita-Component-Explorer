@@ -6,8 +6,6 @@ local us = dofile_once("mods/component-explorer/user_scripts.lua")
 local uswindow = dofile_once("mods/component-explorer/user_scripts_window.lua")
 local entity_markers = dofile_once("mods/component-explorer/entity_markers.lua")
 
-EZWand = dofile_once("mods/component-explorer/deps/EZWand.lua")
-
 local globals = {
     user_script = us.user_script,
     add_marker = entity_markers.add_marker,
@@ -15,6 +13,7 @@ local globals = {
     ModTextFileSetContent = ModTextFileSetContent,
     ModTextFileGetContent = ModTextFileGetContent,
     ModTextFileWhoSetContent = ModTextFileWhoSetContent,
+    EZWand = dofile_once("mods/component-explorer/deps/EZWand.lua"),
 }
 
 function new_console(name)
@@ -103,14 +102,11 @@ function console_run_command(console, command)
 
     print = real_print
 
-    local output
-    if printed ~= "" and value == nil then
-        output = printed
-    else
-        output = printed .. stringify(value, "")
+    if printed == "" or value ~= nil then
+        printed = printed .. stringify(value, "")
     end
 
-    table.insert(console.history, {command, output, status})
+    table.insert(console.history, {command, printed, status})
     console.last_command = command
     console_scroll_to_bottom(console)
 end
@@ -121,7 +117,6 @@ local function console_item_context_menu(str_id, console, index)
     end
 
     local command, output = unpack(console.history[index])
-
 
     if imgui.MenuItem("Copy command") then
         imgui.SetClipboardText(command)
