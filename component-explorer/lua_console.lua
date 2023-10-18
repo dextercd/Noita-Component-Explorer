@@ -1,5 +1,5 @@
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
-dofile_once("mods/component-explorer/utils/stringify.lua")
+local stringify = dofile_once("mods/component-explorer/deps/datadumper.lua")
 dofile_once("mods/component-explorer/utils/eval.lua")
 
 local us = dofile_once("mods/component-explorer/user_scripts.lua")
@@ -107,7 +107,7 @@ function console_run_command(console, command)
     if printed ~= "" and value == nil then
         output = printed
     else
-        output = printed .. stringify(value)
+        output = printed .. stringify(value, "")
     end
 
     table.insert(console.history, {command, output, status})
