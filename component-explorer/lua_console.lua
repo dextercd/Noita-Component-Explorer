@@ -245,7 +245,8 @@ function console_contents_draw(console)
     end
 
     -- Right click console input
-    if imgui.BeginPopupContextItem() then
+    -- NOTE: Crashes if no str_id is given here and item moves offscreen
+    if imgui.BeginPopupContextItem("console_input_context") then
         local _
         _, console.input_lines = imgui.SliderInt("Lines", console.input_lines, 3, 10)
         imgui.Text("Hidden feature :O")
