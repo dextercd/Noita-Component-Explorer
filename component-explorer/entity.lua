@@ -6,6 +6,7 @@ local tags_gui = dofile_once("mods/component-explorer/tags_gui.lua")
 local player_util = dofile_once("mods/component-explorer/utils/player_util.lua")
 local stable_id = dofile_once("mods/component-explorer/stable_id.lua")
 local file_viewer = dofile_once("mods/component-explorer/file_viewer.lua")
+local style = dofile_once("mods/component-explorer/style.lua")
 
 local common_entity_tags = {
     "card_action",
@@ -195,12 +196,7 @@ local function show_entity(entity_id, data)
 
         imgui.Separator()
 
-        imgui.PushStyleColor(imgui.Col.Button, 1, 0.4, 0.4)
-        imgui.PushStyleColor(imgui.Col.ButtonHovered, 1, 0.6, 0.6)
-        imgui.PushStyleColor(imgui.Col.ButtonActive, 0.8, 0.4, 0.4)
-        if imgui.Button("Kill") then kill_entity = true end
-        imgui.PopStyleColor(3)
-
+        kill_entity = style.danger_button("Kill")
 
         local pos_changed
         pos_changed, x, y = imgui.InputFloat2("Position", x, y)
