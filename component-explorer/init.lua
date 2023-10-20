@@ -22,6 +22,8 @@ dofile_once("mods/component-explorer/wiki_wands.lua")
 local link_ui = dofile_once("mods/component-explorer/link_ui.lua")
 local us = dofile_once("mods/component-explorer/user_scripts.lua")
 local file_viewer = dofile_once("mods/component-explorer/file_viewer.lua")
+---@module 'component-explorer.mod_settings'
+local mod_settings = dofile_once("mods/component-explorer/mod_settings.lua")
 
 if is_steam_version() then
     dofile_once("mods/component-explorer/magic_numbers.lua")
@@ -119,6 +121,7 @@ function view_menu_items()
     end
 
     _, window_open_globals  = imgui.MenuItem("Globals", "", window_open_globals)
+    _, mod_settings.open  = imgui.MenuItem("Mod Settings", "", mod_settings.open)
 
     if is_steam_version() then
         imgui.Separator()
@@ -279,6 +282,10 @@ function update_ui(paused, current_frame_run)
 
     if file_viewer.open then
         file_viewer.show()
+    end
+
+    if mod_settings.open then
+        mod_settings.show()
     end
 
     if is_steam_version() then
