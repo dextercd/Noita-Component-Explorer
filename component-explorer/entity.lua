@@ -218,7 +218,7 @@ local function show_entity(entity_id, data)
         table.insert(tags, tag)
     end
 
-    if imgui.CollapsingHeader("Tags (" .. #tags .. ")") then
+    if imgui.CollapsingHeader("Tags (" .. #tags .. ")###entity_tags") then
         local function add_tag(t) EntityAddTag(entity_id, t) end
         local function remove_tag(t) EntityRemoveTag(entity_id, t) end
         tags_gui.show(data.tag_data, tags, add_tag, remove_tag, common_entity_tags)
@@ -230,7 +230,7 @@ local function show_entity(entity_id, data)
 
     local children = EntityGetAllChildren(entity_id)
     if children then
-        if imgui.CollapsingHeader("Child Entities (" .. #children .. ")") then
+        if imgui.CollapsingHeader("Child Entities (" .. #children .. ")###entity_child_entites") then
             show_entity_children(children)
         end
     else
@@ -240,7 +240,7 @@ local function show_entity(entity_id, data)
     end
 
     local components = EntityGetAllComponents(entity_id)
-    if imgui.CollapsingHeader("Components (" .. #components .. ")") then
+    if imgui.CollapsingHeader("Components (" .. #components .. ")###entity_components") then
         _, data.component_search = imgui.InputText("Type Search", data.component_search)
 
         if imgui.Button("+ Add Component") then
