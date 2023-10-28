@@ -26,7 +26,7 @@ local function queue_setting_delete(setting_id)
     table.insert(queued_deletes, setting_id)
 end
 
-function mod_table_item(idx, id, value, next_value)
+local function mod_table_item(idx, id, value, next_value)
     imgui.PushID(idx)
 
     imgui.TableNextColumn()
