@@ -149,17 +149,28 @@ function mod_settings.show()
         local modal_current_next_value = nil
         local modal_setting_exists = false
 
+        local filtered_items = {}
+
         for setting_idx=0,ModSettingGetCount()-1 do
             local id, value, next_value = ModSettingGetAtIndex(setting_idx)
 
             if string_util.ifind(id, search, 1, true) then
-                mod_table_item(setting_idx, id, value, next_value)
+                table.insert(filtered_items, {setting_idx, id, value, next_value})
             end
 
             if modal and modal.setting_id == id then
                 modal_setting_exists = true
                 modal_current_value = value
                 modal_current_next_value = next_value
+            end
+        end
+
+        local clipper = imgui.ListClipper.new()
+        clipper:Begin(#filtered_items)
+        while clipper:Step() do
+            for i=clipper.DisplayStart,clipper.DisplayEnd - 1 do
+                local setting_idx, id, value, next_value = unpack(filtered_items[i + 1])
+                mod_table_item(setting_idx, id, value, next_value)
             end
         end
 
