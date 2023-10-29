@@ -170,7 +170,7 @@ local function DataDumper(value, varname, fastmode, ident)
     fcts['function'] = tostring
   end
   function dumplua(value, ident, path)
-    return fcts[type(value)](value, ident, path)
+    return (fcts[type(value)] or tostring)(value, ident, path)
   end
   if varname == nil then
     varname = "return "
