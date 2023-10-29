@@ -1,8 +1,11 @@
-function shallow_copy(tbl)
-    local copy = {}
-    for k, v in pairs(tbl) do
-        copy[k] = v
-    end
+local copy = {}
 
-    return copy
+function copy.shallow_copy(tbl)
+    local ret = {}
+    for k, v in pairs(tbl) do
+        ret[k] = v
+    end
+    return ret
 end
+
+return copy

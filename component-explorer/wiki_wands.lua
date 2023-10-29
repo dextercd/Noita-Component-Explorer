@@ -1,15 +1,26 @@
+---@module 'component-explorer.style'
 local style = dofile_once("mods/component-explorer/style.lua")
+---@module 'component-explorer.deps.EZWand'
 local EZWand = dofile_once("mods/component-explorer/deps/EZWand.lua")
+---@module 'component-explorer.utils.strings'
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
+---@module 'component-explorer.utils.wiki_spell_names'
 local wiki_spell_names = dofile_once("mods/component-explorer/utils/wiki_spell_names.lua")
+---@module 'component-explorer.utils.wiki'
 local wiki = dofile_once("mods/component-explorer/utils/wiki.lua")
+---@module 'component-explorer.wand_sprites'
 local wand_sprites = dofile_once("mods/component-explorer/wand_sprites.lua")
+---@module 'component-explorer.utils.player_util'
 local player_util = dofile_once("mods/component-explorer/utils/player_util.lua")
-dofile_once("mods/component-explorer/utils/copy.lua")
+---@module 'component-explorer.utils.copy'
+local copy = dofile_once("mods/component-explorer/utils/copy.lua")
+---@module 'component-explorer.preset_wands'
+local preset_wands = dofile_once("mods/component-explorer/preset_wands.lua")
 
 dofile_once("data/scripts/gun/procedural/wands.lua")
 
-local preset_wands = dofile_once("mods/component-explorer/preset_wands.lua")
+local wiki_wands = {}
+wiki_wands.open = false
 
 local _g_parsed_template = nil
 
@@ -240,12 +251,12 @@ local function confirm_wand_card_import(template_data)
         show_range(type, name, template_data.values, range_values)
     end
 
-    local ammended_data = shallow_copy(template_data)
+    local ammended_data = copy.shallow_copy(template_data)
     ammended_data.values = {}
 
     -- Apply ranges and other fixups
     for _, item_ in ipairs(template_data.values) do
-        local item = shallow_copy(item_)
+        local item = copy.shallow_copy(item_)
         local name = item[1]
         if range_values[name] ~= nil then
             item[2] = range_values[name]
@@ -360,7 +371,6 @@ local function import_menu()
     end
 end
 
-window_open_wiki_wands = false
 
 local function needs_wand()
     imgui.PushStyleColor(imgui.Col.Text, unpack(style.colour_warn))
@@ -424,9 +434,9 @@ local function wiki_wands_contents()
     imgui.EndTabBar()
 end
 
-function show_wiki_wands()
+function wiki_wands.show()
     local should_show
-    should_show, window_open_wiki_wands = imgui.Begin("Wiki Wands", window_open_wiki_wands)
+    should_show, wiki_wands.open = imgui.Begin("Wiki Wands", wiki_wands.open)
 
     if not should_show then
         return
@@ -436,3 +446,5 @@ function show_wiki_wands()
 
     imgui.End()
 end
+
+return wiki_wands

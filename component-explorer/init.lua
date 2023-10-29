@@ -10,17 +10,25 @@ imgui = load_imgui({version="1.7.0", mod="Component Explorer"})
 
 dofile_once("mods/component-explorer/utils/settings_util.lua") -- Should be loaded early
 dofile_once("mods/component-explorer/lua_console.lua")
-dofile_once("mods/component-explorer/globals.lua")
+---@module 'component-explorer.globals'
+local globals = dofile_once("mods/component-explorer/globals.lua")
 dofile_once("mods/component-explorer/components.lua")
 dofile_once("mods/component-explorer/entity_list.lua")
 dofile_once("mods/component-explorer/entity.lua")
 local version = dofile_once("mods/component-explorer/version.lua")
+---@module 'component-explorer.logger'
 dofile_once("mods/component-explorer/logger.lua")
+---@module 'component-explorer.entity_picker'
 dofile_once("mods/component-explorer/entity_picker.lua")
+---@module 'component-explorer.utils.noita_version'
 dofile_once("mods/component-explorer/utils/noita_version.lua")
-dofile_once("mods/component-explorer/wiki_wands.lua")
+---@module 'component-explorer.wiki_wands'
+local wiki_wands = dofile_once("mods/component-explorer/wiki_wands.lua")
+---@module 'component-explorer.link_ui'
 local link_ui = dofile_once("mods/component-explorer/link_ui.lua")
+---@module 'component-explorer.user_scripts'
 local us = dofile_once("mods/component-explorer/user_scripts.lua")
+---@module 'component-explorer.file_viewer'
 local file_viewer = dofile_once("mods/component-explorer/file_viewer.lua")
 ---@module 'component-explorer.mod_settings'
 local mod_settings = dofile_once("mods/component-explorer/mod_settings.lua")
@@ -103,7 +111,7 @@ function view_menu_items()
     _, window_open_entity_list = imgui.MenuItem("Entity List", sct("CTRL+SHIFT+K"), window_open_entity_list)
     _, window_open_logs        = imgui.MenuItem("Logs Window", "", window_open_logs)
     _, overlay_open_logs       = imgui.MenuItem("Logs Overlay", sct("CTRL+SHIFT+O"), overlay_open_logs)
-    _, window_open_wiki_wands  = imgui.MenuItem("Wiki Wands", "", window_open_wiki_wands)
+    _, wiki_wands.open         = imgui.MenuItem("Wiki Wands", "", wiki_wands.open)
     _, file_viewer.open        = imgui.MenuItem("File Viewer", sct("CTRL+SHIFT+F"), file_viewer.open)
 
     local clicked
@@ -120,7 +128,7 @@ function view_menu_items()
         }))
     end
 
-    _, window_open_globals  = imgui.MenuItem("Globals", "", window_open_globals)
+    _, globals.open  = imgui.MenuItem("Globals", "", globals.open)
     _, mod_settings.open  = imgui.MenuItem("Mod Settings", "", mod_settings.open)
 
     if is_steam_version() then
@@ -180,7 +188,6 @@ function main_window()
     imgui.SetNextWindowSize(0, 0)
 
     if imgui.Begin("Main Menu", nil, window_flags) then
-
         -- Save actual window width for next positioning
         main_window_width = imgui.GetWindowWidth()
 
@@ -242,8 +249,8 @@ function update_ui(paused, current_frame_run)
         show_about_window()
     end
 
-    if window_open_globals then
-        show_globals()
+    if globals.open then
+        globals.show()
     end
 
     if not windows_hidden_entity then
@@ -276,8 +283,8 @@ function update_ui(paused, current_frame_run)
         show_entity_picker_overlay()
     end
 
-    if window_open_wiki_wands then
-        show_wiki_wands()
+    if wiki_wands.open then
+        wiki_wands.show()
     end
 
     if file_viewer.open then

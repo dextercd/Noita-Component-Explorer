@@ -1,4 +1,6 @@
-window_open_globals = false
+local globals = {}
+
+globals.open = false
 
 local VARIABLE_NOT_SET_VALUE = "COMPONENT_EXPLORER-4433bcc6"
 
@@ -37,8 +39,8 @@ local function set_global_table_order(sf, oa)
     order_globals()
 end
 
-function watch_global(name, datatype)
-    unwatch_global(name)
+function globals.watch(name, datatype)
+    globals.unwatch(name)
     datatype = datatype or "string"
     table.insert(watched_globals, {
         name=name,
@@ -47,7 +49,7 @@ function watch_global(name, datatype)
     order_globals()
 end
 
-function unwatch_global(name)
+function globals.unwatch(name)
     for k, v in ipairs(watched_globals) do
         if v.name == name then
             table.remove(watched_globals, k)
@@ -89,7 +91,7 @@ local function get_value(name, type)
     return text_value
 end
 
-local function create_global_ui()
+local function add_global_ui()
     imgui.SetNextItemWidth(200)
     local flags = imgui.InputTextFlags.EnterReturnsTrue
     local hit_enter
@@ -109,7 +111,7 @@ local function create_global_ui()
     imgui.SameLine()
     if imgui.Button("View") or hit_enter then
         if globals_name ~= "" then
-            watch_global(globals_name, globals_type)
+            globals.watch(globals_name, globals_type)
             globals_name = ""
         end
     end
@@ -225,21 +227,23 @@ local function show_globals_table_ui()
     end
 
     if delay_unwatch then
-        unwatch_global(delay_unwatch)
+        globals.unwatch(delay_unwatch)
     end
 
     imgui.EndTable()
 end
 
-function show_globals()
+function globals.show()
     imgui.SetNextWindowSize(600, 200, imgui.Cond.FirstUseEver)
     local should_show
-    should_show, window_open_globals = imgui.Begin("Globals", window_open_globals)
+    should_show, globals.open = imgui.Begin("Globals / flags", globals.open)
 
     if not should_show then return end
 
-    create_global_ui()
+    add_global_ui()
     show_globals_table_ui()
 
     imgui.End()
 end
+
+return globals

@@ -1,4 +1,4 @@
-CE_PARSE_ERROR = "Couldn't parse expression, check logger.txt"
+local CE_PARSE_ERROR = "Couldn't parse expression, check logger.txt"
 
 local set_content = ModTextFileSetContent
 
@@ -9,12 +9,17 @@ local function loadstring_ish(str)
     return loadfile(filename)
 end
 
-function eval(str)
+---@param str string String to evaluate
+---@return boolean succes
+---@return any result
+local function eval(str)
     local f = loadstring_ish(str)
     if f == nil then
         return false, CE_PARSE_ERROR
     end
 
-    local status, result = pcall(f)
-    return status, result
+    local success, result = pcall(f)
+    return success, result
 end
+
+return eval

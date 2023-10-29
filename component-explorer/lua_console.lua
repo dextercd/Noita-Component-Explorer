@@ -1,12 +1,19 @@
+---@module 'component-explorer.utils.strings'
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
+---@module 'component-explorer.deps.datadumper'
 local stringify = dofile_once("mods/component-explorer/deps/datadumper.lua")
-dofile_once("mods/component-explorer/utils/eval.lua")
-
+---@module 'component-explorer.utils.eval'
+local eval = dofile_once("mods/component-explorer/utils/eval.lua")
+---@module 'component-explorer.user_scripts'
 local us = dofile_once("mods/component-explorer/user_scripts.lua")
+---@module 'component-explorer.user_scripts_window'
 local uswindow = dofile_once("mods/component-explorer/user_scripts_window.lua")
+---@module 'component-explorer.entity_markers'
 local entity_markers = dofile_once("mods/component-explorer/entity_markers.lua")
+---@module 'component-explorer.globals'
+local globals = dofile_once("mods/component-explorer/globals.lua")
 
-local globals = {
+local console_tools = {
     user_script = us.user_script,
     add_marker = entity_markers.add_marker,
     remove_marker = entity_markers.remove_marker,
@@ -14,6 +21,8 @@ local globals = {
     ModTextFileGetContent = ModTextFileGetContent,
     ModTextFileWhoSetContent = ModTextFileWhoSetContent,
     EZWand = dofile_once("mods/component-explorer/deps/EZWand.lua"),
+    watch_global = globals.watch,
+    unwatch_global = globals.unwatch,
 }
 
 function new_console(name)
@@ -94,7 +103,7 @@ function console_run_command(console, command)
         printed = printed .. "\n"
     end
 
-    for k,v in pairs(globals) do
+    for k,v in pairs(console_tools) do
         _G[k] = v
     end
 
