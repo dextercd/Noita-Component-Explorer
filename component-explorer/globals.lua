@@ -188,15 +188,15 @@ local function show_globals_table_ui()
         return
     end
 
+    imgui.TableSetupColumn("Name")
+    imgui.TableSetupColumn("Type")
+    imgui.TableSetupColumn("Value", imgui.TableColumnFlags.NoSort)
     local close_flags = bit.bor(
         imgui.TableColumnFlags.WidthFixed,
         imgui.TableColumnFlags.NoResize,
         imgui.TableColumnFlags.NoSort
     )
     imgui.TableSetupColumn("Close", close_flags, 60)
-    imgui.TableSetupColumn("Name")
-    imgui.TableSetupColumn("Type")
-    imgui.TableSetupColumn("Value", imgui.TableColumnFlags.NoSort)
     imgui.TableHeadersRow()
 
     handle_sort_spec()
@@ -208,11 +208,6 @@ local function show_globals_table_ui()
         imgui.TableNextRow()
 
         imgui.TableNextColumn()
-        if imgui.SmallButton("X") then
-            delay_unwatch = data.name
-        end
-
-        imgui.TableNextColumn()
         imgui.Text(data.name)
 
         imgui.TableNextColumn()
@@ -220,6 +215,12 @@ local function show_globals_table_ui()
 
         imgui.TableNextColumn()
         show_global_input(data)
+
+        imgui.TableNextColumn()
+        if imgui.SmallButton("X") then
+            delay_unwatch = data.name
+        end
+
         imgui.PopID()
     end
 
