@@ -10,6 +10,8 @@ local modal_delete = dofile_once("mods/component-explorer/mod_setting_modals/del
 local modal_create = dofile_once("mods/component-explorer/mod_setting_modals/create.lua")
 ---@module 'component-explorer.mod_setting_modals.edit'
 local modal_edit = dofile_once("mods/component-explorer/mod_setting_modals/edit.lua")
+---@module 'component-explorer.help'
+local help = dofile_once("mods/component-explorer/help.lua")
 
 local mod_settings = {}
 
@@ -51,9 +53,9 @@ local function mod_table_item(idx, id, value, next_value)
     local copy = imgui.SmallButton("Copy")
     if imgui.IsItemHovered() then
         if alternate then
-            help_tooltip("Release shift to copy 'Value'")
+            help.tooltip("Release shift to copy 'Value'")
         else
-            help_tooltip("Hold shift to copy 'Next value'")
+            help.tooltip("Hold shift to copy 'Next value'")
         end
     end
     if copy then
@@ -78,7 +80,7 @@ local function mod_table_item(idx, id, value, next_value)
 
             if imgui.IsItemHovered() then
                 imgui.PushStyleColor(imgui.Col.Text, unpack(style.colour_danger))
-                help_tooltip("NOTE! Clicking this will erase without confirmation dialog!")
+                help.tooltip("NOTE! Clicking this will erase without confirmation dialog!")
                 imgui.PopStyleColor()
             end
         else
@@ -86,7 +88,7 @@ local function mod_table_item(idx, id, value, next_value)
                 modal = modal_delete.Modal.new(id, value, next_value)
             end
             if imgui.IsItemHovered() then
-                help_tooltip("Hold shift to skip confirmation dialog")
+                help.tooltip("Hold shift to skip confirmation dialog")
             end
         end
     end

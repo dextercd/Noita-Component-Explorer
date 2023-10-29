@@ -1,6 +1,8 @@
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 local style = dofile_once("mods/component-explorer/style.lua")
 local matutil = dofile_once("mods/component-explorer/utils/matutil.lua")
+---@module 'component-explorer.help'
+local help = dofile_once("mods/component-explorer/help.lua")
 
 local matinv_field = {}
 
@@ -65,7 +67,7 @@ function matinv_field.show_field_MATERIAL_VEC_DOUBLES(name, description, entity_
     imgui.Text(name)
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 
     local can_edit = (
@@ -115,7 +117,7 @@ function matinv_field.show_field_MATERIAL_VEC_DOUBLES(name, description, entity_
                         imgui.SameLine()
                         imgui.Text(tostring(count))
                         imgui.SameLine()
-                        help_marker(
+                        help.marker(
                             "There's a fractional amount of material in the inventory, " ..
                             "but the Lua API can only write whole numbers.")
                     end

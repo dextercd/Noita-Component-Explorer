@@ -4,6 +4,8 @@ dofile_once("mods/component-explorer/entity.lua")
 dofile_once("mods/component-explorer/utils/settings_util.lua")
 local file_viewer = dofile_once("mods/component-explorer/file_viewer.lua")
 local matutil = dofile_once("mods/component-explorer/utils/matutil.lua")
+---@module 'component-explorer.help'
+local help = dofile_once("mods/component-explorer/help.lua")
 
 function show_field_int(name, description, component_id, get, set)
     local value = (get or ComponentGetValue2)(component_id, name)
@@ -16,7 +18,7 @@ function show_field_int(name, description, component_id, get, set)
 
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 end
 
@@ -57,7 +59,7 @@ function show_field_float(name, description, component_id, get, set)
 
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 end
 
@@ -72,7 +74,7 @@ function show_field_double(name, description, component_id, get, set)
 
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 end
 
@@ -86,7 +88,7 @@ function show_field_bool(name, description, component_id, get, set)
 
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 end
 
@@ -101,7 +103,7 @@ function show_field_std_string(name, description, component_id, get, set)
 
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 end
 
@@ -121,7 +123,7 @@ function show_field_file_single(name, description, component_id, get, set)
 
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 end
 
@@ -139,7 +141,7 @@ function show_field_vec2(name, description, component_id, get, set)
 
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 end
 
@@ -154,7 +156,7 @@ function show_field_ivec2(name, description, component_id, get, set)
 
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 end
 
@@ -162,7 +164,7 @@ function show_field_types_xform(name, description, component_id)
     imgui.Text(name)
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 
     local x, y, scale_x, scale_y, rot = ComponentGetValue2(component_id, name)
@@ -211,7 +213,7 @@ function show_field_abgr(name, description, component_id)
 
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 end
 
@@ -225,7 +227,7 @@ function show_field_types_fcolor(name, description, component_id)
 
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 end
 
@@ -239,7 +241,7 @@ function show_field_LensValue_bool(name, description, component_id)
 
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 end
 
@@ -250,7 +252,7 @@ function show_field_types_aabb(name, description, component_id)
     c1, min_x, min_y = imgui.InputFloat2(name .. " min", min_x, min_y)
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 
     c2, max_x, max_y = imgui.InputFloat2(name .. " max", max_x, max_y)
@@ -270,7 +272,7 @@ function show_field_spread_aabb(prefix, description, component_id)
     changed_min, min_x, min_y = imgui.InputFloat2(prefix .. " min", min_x, min_y)
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 
     changed_max, max_x, max_y = imgui.InputFloat2(prefix .. " max", max_x, max_y)
@@ -299,7 +301,7 @@ function show_field_enum(name, description, component_id, enum_values)
 
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 end
 
@@ -309,7 +311,7 @@ function show_field_static_text(name, description, component_id)
 
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 end
 
@@ -331,7 +333,7 @@ function show_field_EntityID(name, description, component_id, get, set)
 
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 end
 
@@ -346,7 +348,7 @@ function show_field_ro_list(name, description, component_id, display)
     local in_tree = imgui.TreeNode(name .. " (#" .. #values .. ")###" .. name)
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 
     if not in_tree then
@@ -401,7 +403,7 @@ function show_field_material_pairs(name, description, component_id)
     local in_tree = imgui.TreeNode(name .. " (#" .. pair_count .. ")###" .. name)
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 
     if not in_tree then
@@ -420,10 +422,10 @@ end
 function show_field_unsupported(field_name, description, component_id, field_type)
     imgui.Text(field_name .. " (" .. field_type .. ")")
     imgui.SameLine()
-    exclam_marker("Field is unsupported. Let me know if you think this is a mistake")
+    help.exclam_marker("Field is unsupported. Let me know if you think this is a mistake")
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 end
 
@@ -436,7 +438,7 @@ function show_field_unknown(name, type, description, component_id)
 
     if description then
         imgui.SameLine()
-        help_marker(description)
+        help.marker(description)
     end
 
     imgui.Text("ComponentGetValue(component_id, name)                     " .. stringify({ComponentGetValue(component_id, name)}, ""))

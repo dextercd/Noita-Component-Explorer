@@ -32,31 +32,12 @@ local us = dofile_once("mods/component-explorer/user_scripts.lua")
 local file_viewer = dofile_once("mods/component-explorer/file_viewer.lua")
 ---@module 'component-explorer.mod_settings'
 local mod_settings = dofile_once("mods/component-explorer/mod_settings.lua")
+---@module 'component-explorer.help'
+local help = dofile_once("mods/component-explorer/help.lua")
 
 if is_steam_version() then
     dofile_once("mods/component-explorer/magic_numbers.lua")
     dofile_once("mods/component-explorer/debug.lua")
-end
-
-
-function help_tooltip(desc)
-    if imgui.IsItemHovered() then
-        imgui.BeginTooltip()
-        imgui.PushTextWrapPos(400)
-        imgui.Text(desc)
-        imgui.PopTextWrapPos()
-        imgui.EndTooltip()
-    end
-end
-
-function exclam_marker(desc)
-    imgui.TextDisabled("(!)")
-    help_tooltip(desc)
-end
-
-function help_marker(desc)
-    imgui.TextDisabled("(?)")
-    help_tooltip(desc)
 end
 
 local console = new_console()
@@ -121,7 +102,7 @@ function view_menu_items()
     end
 
     if imgui.IsItemHovered() then
-        help_tooltip(table.concat({
+        help.tooltip(table.concat({
             "Allows you to move your mouse over an entity to open a window for it. ",
             "Press the entry number to select the entity. ESC to cancel the action.\n\n",
             "When keyboard shortcuts are enabled, you can hit CTRL+SHIFT+E to open or close the picker.",
@@ -307,13 +288,8 @@ function update_ui(paused, current_frame_run)
 end
 
 function keyboard_shortcuts()
-    if not imgui.IsKeyDown(imgui.Key.LeftCtrl) then
-        return
-    end
-
-    if not imgui.IsKeyDown(imgui.Key.LeftShift) then
-        return
-    end
+    if not imgui.IsKeyDown(imgui.Key.LeftCtrl) then return end
+    if not imgui.IsKeyDown(imgui.Key.LeftShift) then return end
 
     if imgui.IsKeyPressed(imgui.Key.E) then
         overlay_open_entity_picker = not overlay_open_entity_picker

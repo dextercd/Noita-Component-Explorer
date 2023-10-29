@@ -1,3 +1,6 @@
+---@module 'component-explorer.help'
+local help = dofile_once("mods/component-explorer/help.lua")
+
 local globals = {}
 
 globals.open = false
@@ -135,7 +138,7 @@ local function show_global_input(data)
     if data.type == "number" then
         imgui.SetNextItemWidth(100)
         local changed, value = imgui.DragFloat("", current_value)
-        imgui.SameLine() help_marker(drag_help)
+        imgui.SameLine() help.marker(drag_help)
 
         if changed then
             GlobalsSetValue(data.name, tostring(value))
@@ -143,7 +146,7 @@ local function show_global_input(data)
     elseif data.type == "integer" then
         imgui.SetNextItemWidth(100)
         local _, value = imgui.DragInt("", current_value)
-        imgui.SameLine() help_marker(drag_help)
+        imgui.SameLine() help.marker(drag_help)
 
         if value ~= current_value then
             GlobalsSetValue(data.name, ("%.0f"):format(value))

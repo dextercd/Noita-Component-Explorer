@@ -7,6 +7,8 @@ local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
 local comp_tag_util = dofile_once("mods/component-explorer/utils/component_tags.lua")
 local tags_gui = dofile_once("mods/component-explorer/tags_gui.lua")
 local stable_id = dofile_once("mods/component-explorer/stable_id.lua")
+---@module 'component-explorer.help'
+local help = dofile_once("mods/component-explorer/help.lua")
 
 component_types = {
     {% for component in component_documentation %}
@@ -133,7 +135,7 @@ end
 local function limited_component_tags(component_id)
     imgui.Text("Note: Only showing some tags.")
     imgui.SameLine()
-    help_marker("In this version of Noita there's no way to get all tags on a component, so only some special tags are listed.")
+    help.marker("In this version of Noita there's no way to get all tags on a component, so only some special tags are listed.")
 
     for _, tag in ipairs(comp_tag_util.special_tags) do
         local has_tag = ComponentHasTag(component_id, tag)
@@ -211,7 +213,7 @@ function show_{{ component.name }}_fields(entity_id, component_id, data)
         local object_open = imgui.TreeNode("{{ field.name }} {{ field.type }}")
         {% if field.description %}
         imgui.SameLine()
-        help_marker("{{ field.description }}")
+        help.marker("{{ field.description }}")
         {% endif %}
         if object_open then
             show_{{ field_type }}_fields("{{ field.name }}", {{ description }}, component_id)

@@ -12,6 +12,8 @@ local uswindow = dofile_once("mods/component-explorer/user_scripts_window.lua")
 local entity_markers = dofile_once("mods/component-explorer/entity_markers.lua")
 ---@module 'component-explorer.globals'
 local globals = dofile_once("mods/component-explorer/globals.lua")
+---@module 'component-explorer.help'
+local help = dofile_once("mods/component-explorer/help.lua")
 
 local console_tools = {
     user_script = us.user_script,
@@ -266,7 +268,7 @@ function console_contents_draw(console)
     imgui.BeginGroup()
 
     local submit_button = imgui.Button("Submit")
-    help_marker(
+    help.marker(
         "Use CTRL+Enter or the submit button to evaluate the Lua expression.\n\n" ..
 
         'You can use print or return to display values in the console, return displays ' ..
