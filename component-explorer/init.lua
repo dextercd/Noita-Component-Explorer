@@ -13,7 +13,8 @@ dofile_once("mods/component-explorer/lua_console.lua")
 ---@module 'component-explorer.globals'
 local globals = dofile_once("mods/component-explorer/globals.lua")
 dofile_once("mods/component-explorer/components.lua")
-dofile_once("mods/component-explorer/entity_list.lua")
+---@module 'component-explorer.entity_list'
+local entity_list = dofile_once("mods/component-explorer/entity_list.lua")
 dofile_once("mods/component-explorer/entity.lua")
 local version = dofile_once("mods/component-explorer/version.lua")
 ---@module 'component-explorer.logger'
@@ -42,7 +43,6 @@ end
 
 local console = new_console()
 
-window_open_entity_list = setting_get("window_open_entity_list")
 console.open = setting_get("window_open_lua_console")
 console.user_scripts_open = setting_get("window_open_user_scripts")
 window_open_logs = setting_get("window_open_logs")
@@ -89,7 +89,7 @@ function view_menu_items()
 
     local _
     _, console.open            = imgui.MenuItem("Lua Console", sct("CTRL+SHIFT+L"), console.open)
-    _, window_open_entity_list = imgui.MenuItem("Entity List", sct("CTRL+SHIFT+K"), window_open_entity_list)
+    _, entity_list.open = imgui.MenuItem("Entity List", sct("CTRL+SHIFT+K"), entity_list.open)
     _, window_open_logs        = imgui.MenuItem("Logs Window", "", window_open_logs)
     _, overlay_open_logs       = imgui.MenuItem("Logs Overlay", sct("CTRL+SHIFT+O"), overlay_open_logs)
     _, wiki_wands.open         = imgui.MenuItem("Wiki Wands", "", wiki_wands.open)
@@ -242,8 +242,8 @@ function update_ui(paused, current_frame_run)
         show_component_windows()
     end
 
-    if window_open_entity_list then
-        show_entity_list_window()
+    if entity_list.open then
+        entity_list.show()
     end
 
     if console.open then
@@ -313,7 +313,7 @@ function keyboard_shortcuts()
     end
 
     if imgui.IsKeyPressed(imgui.Key.K) then
-        window_open_entity_list = not window_open_entity_list
+        entity_list.open = not entity_list.open
     end
 
     if imgui.IsKeyPressed(imgui.Key.L) then
