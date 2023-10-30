@@ -1,3 +1,5 @@
+local entity_picker = {}
+
 local OVERLAY_OFFSET_X = 5
 local OVERLAY_OFFSET_Y = 5
 
@@ -100,14 +102,15 @@ local function is_released(entity_index)
 end
 
 
-overlay_open_entity_picker = false
 local overlay_entities = {}
 local skip_entities_refresh_once = false
 local list_start_point = 1
 
-function show_entity_picker_overlay()
+entity_picker.open = false
+
+function entity_picker.show()
     if imgui.IsKeyPressed(imgui.Key.Escape) then
-        overlay_open_entity_picker = false
+        entity_picker.open = false
         return
     end
 
@@ -130,9 +133,9 @@ function show_entity_picker_overlay()
     )
 
     local should_show
-    should_show, overlay_open_entity_picker = imgui.Begin(
+    should_show, entity_picker.open = imgui.Begin(
         "Entity picker",
-        overlay_open_entity_picker,
+        entity_picker.open,
         window_flags
     )
 
@@ -204,8 +207,10 @@ function show_entity_picker_overlay()
 
     if selected_entity and not any_pressed then
         watch_entity(selected_entity)
-        overlay_open_entity_picker = false
+        entity_picker.open = false
     end
 
     imgui.End()
 end
+
+return entity_picker

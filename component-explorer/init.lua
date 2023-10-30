@@ -17,12 +17,8 @@ dofile_once("mods/component-explorer/components.lua")
 local entity_list = dofile_once("mods/component-explorer/entity_list.lua")
 dofile_once("mods/component-explorer/entity.lua")
 local version = dofile_once("mods/component-explorer/version.lua")
----@module 'component-explorer.logger'
-dofile_once("mods/component-explorer/logger.lua")
 ---@module 'component-explorer.entity_picker'
-dofile_once("mods/component-explorer/entity_picker.lua")
----@module 'component-explorer.utils.noita_version'
-dofile_once("mods/component-explorer/utils/noita_version.lua")
+local entity_picker = dofile_once("mods/component-explorer/entity_picker.lua")
 ---@module 'component-explorer.wiki_wands'
 local wiki_wands = dofile_once("mods/component-explorer/wiki_wands.lua")
 ---@module 'component-explorer.link_ui'
@@ -36,6 +32,10 @@ local mod_settings = dofile_once("mods/component-explorer/mod_settings.lua")
 ---@module 'component-explorer.help'
 local help = dofile_once("mods/component-explorer/help.lua")
 
+---@module 'component-explorer.logger'
+dofile_once("mods/component-explorer/logger.lua")
+---@module 'component-explorer.utils.noita_version'
+dofile_once("mods/component-explorer/utils/noita_version.lua")
 if is_steam_version() then
     dofile_once("mods/component-explorer/magic_numbers.lua")
     dofile_once("mods/component-explorer/debug.lua")
@@ -82,21 +82,21 @@ function OnPausePreUpdate()
     update_ui(true, GameGetFrameNum())
 end
 
-function view_menu_items()
+function show_view_menu_items()
     local function sct(shortcut_text)
         return setting_get("keyboard_shortcuts") and shortcut_text or ""
     end
 
     local _
-    _, console.open            = imgui.MenuItem("Lua Console", sct("CTRL+SHIFT+L"), console.open)
-    _, entity_list.open = imgui.MenuItem("Entity List", sct("CTRL+SHIFT+K"), entity_list.open)
-    _, window_open_logs        = imgui.MenuItem("Logs Window", "", window_open_logs)
-    _, overlay_open_logs       = imgui.MenuItem("Logs Overlay", sct("CTRL+SHIFT+O"), overlay_open_logs)
-    _, wiki_wands.open         = imgui.MenuItem("Wiki Wands", "", wiki_wands.open)
-    _, file_viewer.open        = imgui.MenuItem("File Viewer", sct("CTRL+SHIFT+F"), file_viewer.open)
+    _, console.open      = imgui.MenuItem("Lua Console", sct("CTRL+SHIFT+L"), console.open)
+    _, entity_list.open  = imgui.MenuItem("Entity List", sct("CTRL+SHIFT+K"), entity_list.open)
+    _, window_open_logs  = imgui.MenuItem("Logs Window", "", window_open_logs)
+    _, overlay_open_logs = imgui.MenuItem("Logs Overlay", sct("CTRL+SHIFT+O"), overlay_open_logs)
+    _, wiki_wands.open   = imgui.MenuItem("Wiki Wands", "", wiki_wands.open)
+    _, file_viewer.open  = imgui.MenuItem("File Viewer", sct("CTRL+SHIFT+F"), file_viewer.open)
 
     local clicked
-    clicked, overlay_open_entity_picker = imgui.MenuItem("Entity Picker...", sct("CTRL+SHIFT+E"), overlay_open_entity_picker)
+    clicked, entity_picker.open = imgui.MenuItem("Entity Picker...", sct("CTRL+SHIFT+E"), entity_picker.open)
     if clicked then
         imgui.SetWindowFocus(nil)
     end
@@ -181,7 +181,7 @@ function main_window()
             end
 
             if imgui.BeginMenu("View") then
-                view_menu_items()
+                show_view_menu_items()
                 imgui.EndMenu()
             end
 
@@ -260,8 +260,8 @@ function update_ui(paused, current_frame_run)
         draw_log_overlay()
     end
 
-    if overlay_open_entity_picker then
-        show_entity_picker_overlay()
+    if entity_picker.open then
+        entity_picker.show()
     end
 
     if wiki_wands.open then
@@ -292,7 +292,7 @@ function keyboard_shortcuts()
     if not imgui.IsKeyDown(imgui.Key.LeftShift) then return end
 
     if imgui.IsKeyPressed(imgui.Key.E) then
-        overlay_open_entity_picker = not overlay_open_entity_picker
+        entity_picker.open = not entity_picker.open
     end
 
     if imgui.IsKeyPressed(imgui.Key.F) then
