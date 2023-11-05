@@ -147,10 +147,6 @@ function mod_settings.show()
         imgui.TableSetupColumn("Actions")
         imgui.TableHeadersRow()
 
-        local modal_current_value = nil
-        local modal_current_next_value = nil
-        local modal_setting_exists = false
-
         local filtered_items = {}
 
         for setting_idx=0,ModSettingGetCount()-1 do
@@ -158,12 +154,6 @@ function mod_settings.show()
 
             if string_util.ifind(id, search, 1, true) then
                 table.insert(filtered_items, {setting_idx, id, value, next_value})
-            end
-
-            if modal and modal.setting_id == id then
-                modal_setting_exists = true
-                modal_current_value = value
-                modal_current_next_value = next_value
             end
         end
 
@@ -177,6 +167,19 @@ function mod_settings.show()
         end
 
         imgui.EndTable()
+
+        local modal_current_value = nil
+        local modal_current_next_value = nil
+        local modal_setting_exists = false
+
+        for setting_idx=0,ModSettingGetCount()-1 do
+            local id, value, next_value = ModSettingGetAtIndex(setting_idx)
+            if modal and modal.setting_id == id then
+                modal_setting_exists = true
+                modal_current_value = value
+                modal_current_next_value = next_value
+            end
+        end
 
         if modal then
             if modal.type == "delete" then
