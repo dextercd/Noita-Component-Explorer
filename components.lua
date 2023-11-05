@@ -161,7 +161,7 @@ end
 {% set supported_fields = [
     "bool", "LensValue_bool",
     "float", "double",
-    "int", "unsignedint", "int16", "uint16", "int32", "uint32", "int64",
+    "int", "unsignedint", "int16", "uint16", "int32", "uint32", "int64", "uint64",
     "AudioSourceHandle",
     "types_vector2", "vec2", "ivec2",
     "types_aabb",

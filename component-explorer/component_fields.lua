@@ -7,6 +7,9 @@ local matutil = dofile_once("mods/component-explorer/utils/matutil.lua")
 ---@module 'component-explorer.help'
 local help = dofile_once("mods/component-explorer/help.lua")
 
+---@module 'component-explorer.utils.math_util'
+local math_util = dofile_once("mods/component-explorer/utils/math_util.lua")
+
 function show_field_int(name, description, component_id, get, set)
     local value = (get or ComponentGetValue2)(component_id, name)
 
@@ -27,9 +30,40 @@ show_field_int16 = show_field_int
 show_field_uint16 = show_field_int
 show_field_int32 = show_field_int
 show_field_uint32 = show_field_int
-show_field_int64 = show_field_int
 show_field_AudioSourceHandle = show_field_int
 show_field_EntityTypeID = show_field_int
+
+function show_field_int64(name, description, component_id, get, set)
+    local value = (get or ComponentGetValue)(component_id, name)
+
+    imgui.SetNextItemWidth(200)
+    local changed
+    changed, value = imgui.InputText(name, value, imgui.InputTextFlags.CharsDecimal)
+    if changed then
+        (set or ComponentSetValue)(component_id, name, math_util.int64_clamp(value))
+    end
+
+    if description then
+        imgui.SameLine()
+        help.marker(description)
+    end
+end
+
+function show_field_uint64(name, description, component_id, get, set)
+    local value = (get or ComponentGetValue)(component_id, name)
+
+    imgui.SetNextItemWidth(200)
+    local changed
+    changed, value = imgui.InputText(name, value, imgui.InputTextFlags.CharsDecimal)
+    if changed then
+        (set or ComponentSetValue)(component_id, name, math_util.uint64_clamp(value))
+    end
+
+    if description then
+        imgui.SameLine()
+        help.marker(description)
+    end
+end
 
 -- float format
 local function ff(type)
