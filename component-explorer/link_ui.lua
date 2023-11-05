@@ -1,6 +1,6 @@
-local win32 = dofile_once("mods/component-explorer/utils/win32.lua")
-
 local link_ui = {}
+
+link_ui.open_link = nil
 
 function link_ui.button(label, url)
     imgui.Text(label .. ": " .. url)
@@ -8,15 +8,22 @@ function link_ui.button(label, url)
     if imgui.SmallButton("Copy") then
         imgui.SetClipboardText(url)
     end
-    imgui.SameLine()
-    if imgui.SmallButton("Open") then
-        win32.open(url)
+
+    if link_ui.open_link then
+        imgui.SameLine()
+        if imgui.SmallButton("Open") then
+            link_ui.open_link(url)
+        end
     end
 end
 
 function link_ui.menu_item(label, extra, url)
     if imgui.MenuItem(label, extra) then
-        win32.open(url)
+        if link_ui.open_link then
+            link_ui.open_link(url)
+        else
+            imgui.SetClipboardText(url)
+        end
     end
 end
 

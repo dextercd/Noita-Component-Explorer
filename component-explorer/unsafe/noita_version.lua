@@ -1,13 +1,13 @@
-local win32 = dofile_once("mods/component-explorer/utils/win32.lua")
+local win32 = dofile_once("mods/component-explorer/unsafe/win32.lua")
 
 -- These are offsets in the exe, not the addresses as they are loaded in memory.
 local steam_identifiers = {
     {
-        location = 0x00a00208,
-        string = "Noita-Build-Mar 11 2023-14:09:24",
+        location = 0x00a013c0,
+        string = "Noita-Build-Aug 29 2023-19:59:58",
     },
     {
-        location = 0x00b3ecba,
+        location = 0x00b3feea,
         string = "steam_api.dll",
     },
 }
@@ -18,6 +18,9 @@ function is_steam_version()
         -- Changed to true if all checks succeed
         steam_version = false
         local nf = io.open(win32.get_exe_path(), "rb")
+        if not nf then
+            return false
+        end
 
         for _, identifier in ipairs(steam_identifiers) do
             nf:seek("set", identifier.location)

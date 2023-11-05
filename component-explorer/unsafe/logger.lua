@@ -1,5 +1,5 @@
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
-local win32 = dofile_once("mods/component-explorer/utils/win32.lua")
+local win32 = dofile_once("mods/component-explorer/unsafe/win32.lua")
 local style = dofile_once("mods/component-explorer/style.lua")
 
 local ffi = require("ffi")
@@ -125,7 +125,10 @@ local window_autoscroll = true
 
 function draw_log_window()
     local should_show
+    local window_open_logs = GlobalsGetValue("ue.logs_window") == "1"
     should_show, window_open_logs = imgui.Begin("logger.txt", window_open_logs)
+
+    GlobalsSetValue("ue.logs_window", window_open_logs and "1" or "0")
 
     if not should_show then
         return

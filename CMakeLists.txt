@@ -143,4 +143,6 @@ install(
     COMPONENT ComponentExplorer
 )
 
+install(DIRECTORY unsafe-explorer DESTINATION "." COMPONENT ComponentExplorer-Unsafe)
+
 include(packaging/CMakeLists.txt)

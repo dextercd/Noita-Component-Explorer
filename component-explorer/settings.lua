@@ -41,13 +41,6 @@ mod_settings = {
                 scope = MOD_SETTING_SCOPE_RUNTIME,
             },
             {
-                id = "window_open_lua_console",
-                ui_name = "Lua Console",
-                ui_description = "Console where you can input Lua expressions",
-                value_default = false,
-                scope = MOD_SETTING_SCOPE_RUNTIME,
-            },
-            {
                 id = "window_open_logs",
                 ui_name = "Logs window",
                 ui_description = "logger.txt monitor window",

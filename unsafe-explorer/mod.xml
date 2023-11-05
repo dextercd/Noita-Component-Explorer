@@ -1,0 +1,6 @@
+<Mod
+    name="Unsafe Explorer"
+    description="Various modding tools that require unsafe mode"
+    request_no_api_restrictions="1"
+    download_link="https://modworkshop.net/mod/39637"
+    />

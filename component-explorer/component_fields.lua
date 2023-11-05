@@ -1,11 +1,14 @@
 local stringify = dofile_once("mods/component-explorer/deps/datadumper.lua")
 dofile_once("mods/component-explorer/field_enums.lua")
 dofile_once("mods/component-explorer/entity.lua")
-dofile_once("mods/component-explorer/utils/settings_util.lua")
 local file_viewer = dofile_once("mods/component-explorer/file_viewer.lua")
 local matutil = dofile_once("mods/component-explorer/utils/matutil.lua")
+
 ---@module 'component-explorer.help'
 local help = dofile_once("mods/component-explorer/help.lua")
+
+---@module 'component-explorer.utils.ce_settings'
+local ce_settings = dofile_once("mods/component-explorer/utils/ce_settings.lua")
 
 ---@module 'component-explorer.utils.math_util'
 local math_util = dofile_once("mods/component-explorer/utils/math_util.lua")
@@ -67,7 +70,7 @@ end
 
 -- float format
 local function ff(type)
-    local configured = setting_get("preferred_decimal_format")
+    local configured = ce_settings.get("preferred_decimal_format")
 
     if
         type == "double" and configured == "double_scientific" or

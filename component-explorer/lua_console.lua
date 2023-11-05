@@ -6,14 +6,17 @@ local stringify = dofile_once("mods/component-explorer/deps/datadumper.lua")
 local eval = dofile_once("mods/component-explorer/utils/eval.lua")
 ---@module 'component-explorer.user_scripts'
 local us = dofile_once("mods/component-explorer/user_scripts.lua")
----@module 'component-explorer.user_scripts_window'
-local uswindow = dofile_once("mods/component-explorer/user_scripts_window.lua")
+
 ---@module 'component-explorer.entity_markers'
 local entity_markers = dofile_once("mods/component-explorer/entity_markers.lua")
 ---@module 'component-explorer.globals'
 local globals = dofile_once("mods/component-explorer/globals.lua")
 ---@module 'component-explorer.help'
 local help = dofile_once("mods/component-explorer/help.lua")
+---@module 'component-explorer.lib.global_flag'
+local global_flag = dofile_once("mods/component-explorer/lib/global_flag.lua")
+
+local lua_console = {}
 
 local console_tools = {
     user_script = us.user_script,
@@ -27,33 +30,23 @@ local console_tools = {
     unwatch_global = globals.unwatch,
 }
 
-function new_console(name)
-    name = name or "Console"
+function new_console()
     return {
-        name = name,
-        open = true,
+        open = global_flag.new("ce.console"),
         history = {},
         input = "",
         last_command = "",
         scroll_to_bottom = false,
         focus_input = false,
         remove_items = 0,
-        user_scripts_open = false,
         input_lines = 3,
     }
 end
 
 function console_draw(console)
-    if console.user_scripts_open then
-        local script = uswindow.draw_user_scripts_window(console)
-        if script then
-            console_run_command(console, us.user_script_call_string(script))
-        end
-    end
-
     local should_show
     imgui.SetNextWindowSize(600, 400, imgui.Cond.FirstUseEver)
-    should_show, console.open = imgui.Begin(console.name, console.open)
+    should_show, console.open.value = imgui.Begin("Console", console.open.value)
     if not should_show then
         return
     end
@@ -152,7 +145,7 @@ local function console_item_context_menu(str_id, console, index)
     imgui.EndPopup()
 end
 
-function console_contents_draw(console)
+function lua_console.header_buttons(console)
     if imgui.SmallButton("Clear") then
         console.history = {}
     end
@@ -185,12 +178,10 @@ function console_contents_draw(console)
 
         imgui.SetClipboardText(all_history)
     end
+end
 
-    imgui.SameLine()
-    local ustext = console.user_scripts_open and "Close user scripts" or "Open user scripts"
-    if imgui.SmallButton(ustext) then
-        console.user_scripts_open = not console.user_scripts_open
-    end
+function console_contents_draw(console)
+    lua_console.header_buttons(console)
 
     imgui.Separator()
 
@@ -292,3 +283,5 @@ function console_contents_draw(console)
         console.remove_items = 0
     end
 end
+
+return lua_console

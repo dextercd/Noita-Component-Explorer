@@ -1,9 +1,12 @@
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 dofile_once("mods/component-explorer/entity.lua")
 
+---@module 'component-explorer.utils.ce_settings'
+local ce_settings = dofile_once("mods/component-explorer/utils/ce_settings.lua")
+
 local entity_list = {}
 
-entity_list.open = setting_get("window_open_entity_list")
+entity_list.open = ce_settings.get("window_open_entity_list")
 
 local entity_search = ""
 local include_child_entities = false

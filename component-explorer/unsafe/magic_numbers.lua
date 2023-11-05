@@ -1,12 +1,12 @@
-local ffi = require("ffi")
-
+---@module 'component-explorer.utils.strings'
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
-local memory_display = dofile_once("mods/component-explorer/memory_display.lua")
 
-dofile_once("mods/component-explorer/memory_type.lua")
-dofile_once("mods/component-explorer/magic_number_items.lua")
+---@module 'component-explorer.unsafe.memory_display'
+local memory_display = dofile_once("mods/component-explorer/unsafe/memory_display.lua")
 
-window_open_magic_numbers = false
+dofile_once("mods/component-explorer/unsafe/memory_type.lua")
+dofile_once("mods/component-explorer/unsafe/magic_number_items.lua")
+
 
 local search = ""
 
@@ -20,7 +20,10 @@ end
 
 function show_magic_numbers()
     local should_show
+    local window_open_magic_numbers = GlobalsGetValue("ue.mn_window") == "1"
     should_show, window_open_magic_numbers = imgui.Begin("Magic Numbers", window_open_magic_numbers)
+
+    GlobalsSetValue("ue.mn_window", window_open_magic_numbers and "1" or "0")
 
     if should_show then
         local search_changed

@@ -239,7 +239,7 @@ end
 function globals.show()
     imgui.SetNextWindowSize(600, 200, imgui.Cond.FirstUseEver)
     local should_show
-    should_show, globals.open = imgui.Begin("Globals / flags", globals.open)
+    should_show, globals.open = imgui.Begin("Globals", globals.open)
 
     if not should_show then return end
 

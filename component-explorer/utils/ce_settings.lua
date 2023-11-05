@@ -1,3 +1,5 @@
+local ce_settings = {}
+
 local mod_id = "component-explorer"
 local settings = {}
 
@@ -13,21 +15,24 @@ local function load_setting_value(key)
     return value
 end
 
-function load_settings()
+function ce_settings.load()
     settings = {}
 end
 
-function setting_get(key)
+function ce_settings.get(key)
+    return load_setting_value(key)
+    --[[
     if settings[key] == nil then
         settings[key] = load_setting_value(key)
     end
 
     return settings[key]
+    --]]
 end
 
-function setting_set(key, value)
-    if setting_get(key) ~= value then
-        ModSettingSet(mod_id .. "." .. key, value)
-        settings[key] = value
-    end
+function ce_settings.set(key, value)
+    ModSettingSet(mod_id .. "." .. key, value)
+    settings[key] = value
 end
+
+return ce_settings

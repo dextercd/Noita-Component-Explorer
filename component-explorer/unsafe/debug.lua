@@ -1,12 +1,10 @@
-dofile_once("mods/component-explorer/memory_type.lua")
-local memory_display = dofile_once("mods/component-explorer/memory_display.lua")
+dofile_once("mods/component-explorer/unsafe/memory_type.lua")
+local memory_display = dofile_once("mods/component-explorer/unsafe/memory_display.lua")
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 
-window_open_debug = false
-
-local debug_base = 0x00ff8c90
-local petri_base = 0x00ff8640
-local olli_base = 0x00ff86b4
+local debug_base = 0x00ff9cc0
+local petri_base = 0x00ff9670
+local olli_base = 0x00ff96e4
 
 local debug_categories = {
     {
@@ -454,16 +452,17 @@ end
 local search = {}
 
 function show_debug()
+    local window_open_debug = GlobalsGetValue("ue.debug_window") == "1"
     local should_show
     should_show, window_open_debug = imgui.Begin("Debug", window_open_debug)
+    GlobalsSetValue("ue.debug_window", window_open_debug and "1" or "0")
+
     if should_show then
         if imgui.BeginTabBar("##debugtabs") then
             for _, category in ipairs(debug_categories) do
                 if imgui.BeginTabItem(category.name) then
-                    local search_changed
-                    search_changed, search[category] = imgui.InputText(
-                        "Search", search[category] or ""
-                    )
+                    local _
+                    _, search[category] = imgui.InputText("Search", search[category] or "")
                     imgui.Separator()
 
                     show_debug_items(category, search[category])
