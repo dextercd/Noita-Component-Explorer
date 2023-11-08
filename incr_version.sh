@@ -68,3 +68,5 @@ git tag "release-$new_version"
 
 echo
 echo git push origin HEAD --tags
+
+./do.sh
