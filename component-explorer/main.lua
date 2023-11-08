@@ -6,25 +6,38 @@ local ce_settings = dofile_once("mods/component-explorer/utils/ce_settings.lua")
 dofile_once("mods/component-explorer/lua_console.lua")
 ---@module 'component-explorer.globals'
 local globals = dofile_once("mods/component-explorer/globals.lua")
+
 dofile_once("mods/component-explorer/components.lua")
+
 ---@module 'component-explorer.entity_list'
 local entity_list = dofile_once("mods/component-explorer/entity_list.lua")
+
 dofile_once("mods/component-explorer/entity.lua")
 local version = dofile_once("mods/component-explorer/version.lua")
+
 ---@module 'component-explorer.entity_picker'
 local entity_picker = dofile_once("mods/component-explorer/entity_picker.lua")
+
 ---@module 'component-explorer.wiki_wands'
 local wiki_wands = dofile_once("mods/component-explorer/wiki_wands.lua")
+
 ---@module 'component-explorer.link_ui'
 local link_ui = dofile_once("mods/component-explorer/link_ui.lua")
+
 ---@module 'component-explorer.user_scripts'
 local us = dofile_once("mods/component-explorer/user_scripts.lua")
+
 ---@module 'component-explorer.file_viewer'
 local file_viewer = dofile_once("mods/component-explorer/file_viewer.lua")
+
 ---@module 'component-explorer.mod_settings'
 local mod_settings = dofile_once("mods/component-explorer/mod_settings.lua")
+
 ---@module 'component-explorer.help'
 local help = dofile_once("mods/component-explorer/help.lua")
+
+---@module 'component-explorer.translations'
+local translations = dofile_once("mods/component-explorer/translations.lua")
 
 local console = new_console()
 
@@ -56,6 +69,7 @@ function show_view_menu_items()
     _, entity_list.open   = imgui.MenuItem("Entity List", sct("CTRL+SHIFT+K"), entity_list.open)
     _, wiki_wands.open    = imgui.MenuItem("Wiki Wands", "", wiki_wands.open)
     _, file_viewer.open   = imgui.MenuItem("File Viewer", sct("CTRL+SHIFT+F"), file_viewer.open)
+    _, translations.open  = imgui.MenuItem("Translations", "", translations.open)
 
     local clicked
     clicked, entity_picker.open = imgui.MenuItem("Entity Picker...", sct("CTRL+SHIFT+E"), entity_picker.open)
@@ -213,6 +227,10 @@ function update_ui(paused, current_frame_run)
 
     if file_viewer.open then
         file_viewer.show()
+    end
+
+    if translations.open then
+        translations.show()
     end
 
     if mod_settings.open then
