@@ -103,7 +103,7 @@ mod_settings = {
                 id = "pause_escape",
                 ui_name = "Run in escape menu",
                 ui_description = "Should component explorer windows be shown in the escape menu?",
-                value_default = false,
+                value_default = true,
                 scope = MOD_SETTING_SCOPE_RUNTIME,
             },
         },
