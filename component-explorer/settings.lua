@@ -42,14 +42,14 @@ mod_settings = {
             },
             {
                 id = "window_open_logs",
-                ui_name = "Logs window",
+                ui_name = "Logs window (requires UnsafeExplorer)",
                 ui_description = "logger.txt monitor window",
                 value_default = false,
                 scope = MOD_SETTING_SCOPE_RUNTIME,
             },
             {
                 id = "overlay_open_logs",
-                ui_name = "Logs Overlay",
+                ui_name = "Logs Overlay (requires UnsafeExplorer)",
                 ui_description = "Overlay displaying the logger.txt file",
                 value_default = true,
                 scope = MOD_SETTING_SCOPE_RUNTIME,
