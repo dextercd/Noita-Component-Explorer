@@ -39,7 +39,43 @@ local help = dofile_once("mods/component-explorer/help.lua")
 ---@module 'component-explorer.translations'
 local translations = dofile_once("mods/component-explorer/translations.lua")
 
-local console = new_console()
+local last_frame_run = -1
+
+local is_escape_paused = false
+local is_inventory_paused = false
+
+function OnPausedChanged(paused, inventory_pause)
+    ce_settings.load()  -- Settings might've changed, reload
+
+    is_escape_paused = paused and not inventory_pause
+    is_inventory_paused = inventory_pause
+
+    if not paused then update_ui(true, GameGetFrameNum()) end
+end
+
+function OnWorldPreUpdate()
+    local current_frame_run = GameGetFrameNum()
+    if last_frame_run >= current_frame_run then
+        return
+    end
+    last_frame_run = current_frame_run
+
+    update_ui(false, current_frame_run)
+end
+
+function OnPausePreUpdate()
+    if is_escape_paused and not ce_settings.get("pause_escape") or
+       is_inventory_paused and not ce_settings.get("pause_wands")
+    then
+        return
+    end
+
+    local current_frame_run = GameGetFrameNum()
+    last_frame_run = current_frame_run
+    update_ui(true, current_frame_run)
+end
+
+console = new_console()
 
 local window_open_about = false
 local windows_hidden_component = false
@@ -56,16 +92,13 @@ function OnMagicNumbersAndWorldSeedInitialized()
     run_us_ifexists("_init.lua")
 end
 
-is_escape_paused = false
-is_inventory_paused = false
-
 function sct(shortcut_text)
     return ce_settings.get("keyboard_shortcuts") and shortcut_text or ""
 end
 
 function show_view_menu_items()
     local _
-    _, console.open.value = imgui.MenuItem("Lua Console", sct("CTRL+SHIFT+L"), console.open.value)
+    _, console.open = imgui.MenuItem("Lua Console", sct("CTRL+SHIFT+L"), console.open)
     _, entity_list.open   = imgui.MenuItem("Entity List", sct("CTRL+SHIFT+K"), entity_list.open)
     _, wiki_wands.open    = imgui.MenuItem("Wiki Wands", "", wiki_wands.open)
     _, file_viewer.open   = imgui.MenuItem("File Viewer", sct("CTRL+SHIFT+F"), file_viewer.open)
@@ -213,7 +246,7 @@ function update_ui(paused, current_frame_run)
         entity_list.show()
     end
 
-    if console.open.value then
+    if console.open then
         console_draw(console)
     end
 
@@ -239,7 +272,6 @@ function update_ui(paused, current_frame_run)
 end
 
 ---Handles the keyboard shortcuts.
----CE:ExtensionPoint
 function keyboard_shortcut_items()
     if imgui.IsKeyPressed(imgui.Key.E) then
         entity_picker.open = not entity_picker.open
@@ -267,12 +299,10 @@ function keyboard_shortcut_items()
     end
 
     if imgui.IsKeyPressed(imgui.Key.L) then
-        console.open.value = not console.open.value
+        console.open = not console.open
     end
 
     if imgui.IsKeyPressed(imgui.Key.U) then
         console.user_scripts_open = not console.user_scripts_open
     end
 end
-
-dofile("mods/component-explorer/lib/ui_callbacks.lua")

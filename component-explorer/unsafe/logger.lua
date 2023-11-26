@@ -1,9 +1,19 @@
+---@module 'component-explorer.utils.strings'
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
+
+---@module 'component-explorer.unsafe.win32'
 local win32 = dofile_once("mods/component-explorer/unsafe/win32.lua")
+
+---@module 'component-explorer.style'
 local style = dofile_once("mods/component-explorer/style.lua")
+
+---@module 'component-explorer.utils.ce_settings'
+local ce_settings = dofile_once("mods/component-explorer/utils/ce_settings.lua")
 
 local ffi = require("ffi")
 local C = ffi.C
+
+local logger = {}
 
 local function open_log_file()
     local log_handle = C.CreateFileA(
@@ -47,7 +57,7 @@ overlapped.hEvent = event.handle
 local read_buffer = ffi.new("char[2048]")
 local async_pending = false
 
-function process_read_response(size)
+local function process_read_response(size)
     local log_text = ffi.string(read_buffer, size)
     local first = nil
     for line in string_util.split_iter(log_text, "\n", true) do
@@ -65,7 +75,7 @@ function process_read_response(size)
     overlapped.DUMMYUNIONNAME.Pointer = ffi.cast("PVOID", new_offset)
 end
 
-function read_overlapped_result()
+local function read_overlapped_result()
     local number_of_bytes = ffi.new("DWORD[1]")
     local result = C.GetOverlappedResult(log_handle(), overlapped, number_of_bytes, false)
     local last_error = C.GetLastError()
@@ -81,7 +91,7 @@ function read_overlapped_result()
     end
 end
 
-function read_logs()
+local function read_logs()
     if not async_pending then
         local result = C.ReadFile(
             log_handle(),
@@ -108,7 +118,7 @@ function read_logs()
     end
 end
 
-function update_logs()
+local function update_logs()
     read_logs()
 
     if remove_log_items then
@@ -121,86 +131,7 @@ function update_logs()
     end
 end
 
-local window_autoscroll = true
-
-function draw_log_window()
-    local should_show
-    local window_open_logs = GlobalsGetValue("ue.logs_window") == "1"
-    should_show, window_open_logs = imgui.Begin("logger.txt", window_open_logs)
-
-    GlobalsSetValue("ue.logs_window", window_open_logs and "1" or "0")
-
-    if not should_show then
-        return
-    end
-
-    update_logs()
-    _, window_autoscroll = imgui.Checkbox("Auto scroll", window_autoscroll)
-    draw_log_text(window_autoscroll)
-    imgui.End()
-end
-
-
-function draw_log_overlay()
-    update_logs()
-
-    local flags = bit.bor(
-        imgui.WindowFlags.NoDecoration,
-        imgui.WindowFlags.NoScrollWithMouse,
-        imgui.WindowFlags.NoInputs,
-        imgui.WindowFlags.NoDocking,
-        imgui.WindowFlags.AlwaysAutoResize,
-        imgui.WindowFlags.NoSavedSettings,
-        imgui.WindowFlags.NoFocusOnAppearing,
-        imgui.WindowFlags.NoNav,
-        imgui.WindowFlags.NoMove
-    )
-
-    local vw, vh = imgui.GetMainViewportSize()
-    local vx, vy = imgui.GetMainViewportWorkPos()
-
-    local reserve_top = vh * 0.12
-    local reserve_bottom = 20
-    local reserve_left = 20
-
-    local width = math.min(.6 * vw, 800)
-    local height = vh - reserve_top - reserve_bottom
-    if height < 30 then
-        return
-    end
-
-    imgui.SetNextWindowPos(vx + reserve_left, vy + reserve_top)
-    imgui.SetNextWindowSize(width, height)
-
-    imgui.SetNextWindowBgAlpha(0.25)
-    imgui.SetNextWindowViewport(imgui.GetMainViewportID())
-    if imgui.Begin("log overlay", nil, flags) then
-        draw_log_text(true, false)
-        imgui.End()
-    end
-end
-
-
-function line_colour(str)
-    if string_util.ifind(str, "erro") or
-       string_util.ifind(str, "problem") or
-       string_util.ifind(str, "fail") or
-       string_util.ifind(str, "OOPSIE WOOPSIE") or
-       string_util.ifind(str, "We made a fucky wucky") or
-       string_util.ifind(str, "critical")
-    then
-        return unpack(style.colour_fail)
-    end
-
-    if string_util.ifind(str, "warn") or
-       string_util.ifind(str, "couldn't") or
-       string_util.ifind(str, "missing")
-    then
-        return unpack(style.colour_warn)
-    end
-end
-
-function get_log_lines(line_nr, around)
+local function get_log_lines(line_nr, around)
     around = around or 0
     local start = line_nr - around
     if start < 1 then start =1 end
@@ -216,11 +147,11 @@ function get_log_lines(line_nr, around)
     return text
 end
 
-function copy_log_lines(line_nr, around)
+local function copy_log_lines(line_nr, around)
     imgui.SetClipboardText(get_log_lines(line_nr, around))
 end
 
-function log_item_context_menu(line_nr, line)
+local function log_item_context_menu(line_nr)
     if not imgui.BeginPopupContextItem(tostring(line_nr)) then
         return
     end
@@ -244,7 +175,26 @@ function log_item_context_menu(line_nr, line)
     imgui.EndPopup()
 end
 
-function draw_log_text(autoscroll, capture_input)
+local function line_colour(str)
+    if string_util.ifind(str, "erro") or
+       string_util.ifind(str, "problem") or
+       string_util.ifind(str, "fail") or
+       string_util.ifind(str, "OOPSIE WOOPSIE") or
+       string_util.ifind(str, "We made a fucky wucky") or
+       string_util.ifind(str, "critical")
+    then
+        return unpack(style.colour_fail)
+    end
+
+    if string_util.ifind(str, "warn") or
+       string_util.ifind(str, "couldn't") or
+       string_util.ifind(str, "missing")
+    then
+        return unpack(style.colour_warn)
+    end
+end
+
+local function draw_log_text(autoscroll, capture_input)
     if capture_input == nil then capture_input = true end
 
     local flags = 0
@@ -299,3 +249,63 @@ function draw_log_text(autoscroll, capture_input)
         imgui.EndChild()
     end
 end
+
+local window_autoscroll = true
+
+logger.window_open = ce_settings.get("window_open_logs") --[[@as boolean]]
+logger.overlay_open = ce_settings.get("overlay_open_logs") --[[@as boolean]]
+
+function logger.show_window()
+    local should_show
+    should_show, logger.window_open = imgui.Begin("logger.txt", logger.window_open)
+
+    if not should_show then
+        return
+    end
+
+    update_logs()
+    _, window_autoscroll = imgui.Checkbox("Auto scroll", window_autoscroll)
+    draw_log_text(window_autoscroll)
+    imgui.End()
+end
+
+function logger.show_overlay()
+    update_logs()
+
+    local flags = bit.bor(
+        imgui.WindowFlags.NoDecoration,
+        imgui.WindowFlags.NoScrollWithMouse,
+        imgui.WindowFlags.NoInputs,
+        imgui.WindowFlags.NoDocking,
+        imgui.WindowFlags.AlwaysAutoResize,
+        imgui.WindowFlags.NoSavedSettings,
+        imgui.WindowFlags.NoFocusOnAppearing,
+        imgui.WindowFlags.NoNav,
+        imgui.WindowFlags.NoMove
+    )
+
+    local vw, vh = imgui.GetMainViewportSize()
+    local vx, vy = imgui.GetMainViewportWorkPos()
+
+    local reserve_top = vh * 0.12
+    local reserve_bottom = 20
+    local reserve_left = 20
+
+    local width = math.min(.6 * vw, 800)
+    local height = vh - reserve_top - reserve_bottom
+    if height < 30 then
+        return
+    end
+
+    imgui.SetNextWindowPos(vx + reserve_left, vy + reserve_top)
+    imgui.SetNextWindowSize(width, height)
+
+    imgui.SetNextWindowBgAlpha(0.25)
+    imgui.SetNextWindowViewport(imgui.GetMainViewportID())
+    if imgui.Begin("log overlay", nil, flags) then
+        draw_log_text(true, false)
+        imgui.End()
+    end
+end
+
+return logger

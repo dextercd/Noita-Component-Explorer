@@ -7,6 +7,7 @@ local memory_display = dofile_once("mods/component-explorer/unsafe/memory_displa
 dofile_once("mods/component-explorer/unsafe/memory_type.lua")
 dofile_once("mods/component-explorer/unsafe/magic_number_items.lua")
 
+magic_numbers = {}
 
 local search = ""
 
@@ -18,16 +19,15 @@ local function show_magic_items()
     end
 end
 
-function show_magic_numbers()
-    local should_show
-    local window_open_magic_numbers = GlobalsGetValue("ue.mn_window") == "1"
-    should_show, window_open_magic_numbers = imgui.Begin("Magic Numbers", window_open_magic_numbers)
+magic_numbers.open = false
 
-    GlobalsSetValue("ue.mn_window", window_open_magic_numbers and "1" or "0")
+function magic_numbers.show()
+    local should_show
+    should_show, magic_numbers.open = imgui.Begin("Magic Numbers", magic_numbers.open)
 
     if should_show then
-        local search_changed
-        search_changed, search = imgui.InputText("Search", search)
+        local _
+        _, search = imgui.InputText("Search", search)
         imgui.Separator()
 
         if imgui.BeginChild("magicinputs") then
@@ -37,3 +37,5 @@ function show_magic_numbers()
         imgui.End()
     end
 end
+
+return magic_numbers

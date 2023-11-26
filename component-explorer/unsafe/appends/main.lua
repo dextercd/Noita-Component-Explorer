@@ -1,58 +1,98 @@
-local _show_view_menu_items = show_view_menu_items
-local _keyboard_shortcut_items = keyboard_shortcut_items
+---@module 'component-explorer.utils.ce_settings'
+local ce_settings = dofile_once("mods/component-explorer/utils/ce_settings.lua")
 
-local function is_steam_version()
-    return GlobalsGetValue("ue.steam") == "1"
+---@module 'component-explorer.unsafe.logger'
+local logger = dofile_once("mods/component-explorer/unsafe/logger.lua")
+
+dofile_once("mods/component-explorer/unsafe/noita_version.lua")
+
+---@module 'component-explorer.unsafe.user_scripts_window'
+local uswindow = dofile_once("mods/component-explorer/unsafe/user_scripts_window.lua")
+
+---@module 'component-explorer.user_scripts'
+local us = dofile_once("mods/component-explorer/user_scripts.lua")
+
+
+local magic_numbers = nil
+local debug = nil
+
+if is_steam_version() then
+    ---@module 'component-explorer.unsafe.magic_numbers'
+    magic_numbers = dofile_once("mods/component-explorer/unsafe/magic_numbers.lua")
+
+    ---@module 'component-explorer.unsafe.debug'
+    debug = dofile_once("mods/component-explorer/unsafe/debug.lua")
 end
 
+
+local _show_view_menu_items = show_view_menu_items
 function show_view_menu_items()
     _show_view_menu_items()
 
     imgui.Separator()
 
     local _
-    local window_open_logs = GlobalsGetValue("ue.logs_window") == "1"
-    local overlay_open_logs = GlobalsGetValue("ue.logs_overlay") == "1"
-
-    _, window_open_logs  = imgui.MenuItem("Logs Window", "", window_open_logs)
-    _, overlay_open_logs = imgui.MenuItem("Logs Overlay", sct("CTRL+SHIFT+O"), overlay_open_logs)
-
-    GlobalsSetValue("ue.logs_window", window_open_logs and "1" or "0")
-    GlobalsSetValue("ue.logs_overlay", overlay_open_logs and "1" or "0")
+    _, logger.window_open  = imgui.MenuItem("Logs Window", "", logger.window_open)
+    _, logger.overlay_open = imgui.MenuItem("Logs Overlay", sct("CTRL+SHIFT+O"), logger.overlay_open)
 
     if is_steam_version() then
         imgui.Separator()
-        local window_open_magic_numbers = GlobalsGetValue("ue.mn_window") == "1"
-        local window_open_debug = GlobalsGetValue("ue.debug_window") == "1"
 
-        _, window_open_magic_numbers = imgui.MenuItem("Magic Numbers", sct("CTRL+SHIFT+M"), window_open_magic_numbers)
-        _, window_open_debug = imgui.MenuItem("Debug", sct("CTRL+SHIFT+D"), window_open_debug)
+        if magic_numbers then
+            _, magic_numbers.open = imgui.MenuItem("Magic Numbers", sct("CTRL+SHIFT+M"), magic_numbers.open)
+        end
 
-        GlobalsSetValue("ue.mn_window", window_open_magic_numbers and "1" or "0")
-        GlobalsSetValue("ue.debug_window", window_open_debug and "1" or "0")
+        if debug then
+            _, debug.open = imgui.MenuItem("Debug", sct("CTRL+SHIFT+D"), debug.open)
+        end
     end
 end
 
+local _keyboard_shortcut_items = keyboard_shortcut_items
 function keyboard_shortcut_items()
     _keyboard_shortcut_items()
 
     if imgui.IsKeyPressed(imgui.Key.O) then
-        local overlay_open_logs = GlobalsGetValue("ue.logs_overlay") == "1"
-        overlay_open_logs = not overlay_open_logs
-        GlobalsSetValue("ue.logs_overlay", overlay_open_logs and "1" or "0")
+        logger.overlay_open = not logger.overlay_open
     end
 
-    if is_steam_version() then
+    if magic_numbers then
         if imgui.IsKeyPressed(imgui.Key.M) then
-            local window_open_magic_numbers = GlobalsGetValue("ue.mn_window") == "1"
-            window_open_magic_numbers = not window_open_magic_numbers
-            GlobalsSetValue("ue.mn_window", window_open_magic_numbers and "1" or "0")
+            magic_numbers.open = not magic_numbers.open
         end
+    end
 
+    if debug then
         if imgui.IsKeyPressed(imgui.Key.D) then
-            local window_open_debug = GlobalsGetValue("ue.debug_window") == "1"
-            window_open_debug = not window_open_debug
-            GlobalsSetValue("ue.debug_window", window_open_debug and "1" or "0")
+            debug.open = not debug.open
         end
+    end
+end
+
+local _update_ui = update_ui
+function update_ui(paused, current_frame_run)
+    _update_ui(paused, current_frame_run)
+
+    if logger.window_open then
+        logger.show_window()
+    end
+
+    if logger.overlay_open then
+        logger.show_overlay()
+    end
+
+    if console.open and ce_settings.get("window_open_user_scripts") then
+        local script = uswindow.draw_user_scripts_window()
+        if script then
+            console_run_command(console, us.user_script_call_string(script))
+        end
+    end
+
+    if magic_numbers and magic_numbers.open then
+        magic_numbers.show()
+    end
+
+    if debug and debug.open then
+        debug.show()
     end
 end

@@ -13,8 +13,6 @@ local entity_markers = dofile_once("mods/component-explorer/entity_markers.lua")
 local globals = dofile_once("mods/component-explorer/globals.lua")
 ---@module 'component-explorer.help'
 local help = dofile_once("mods/component-explorer/help.lua")
----@module 'component-explorer.lib.global_flag'
-local global_flag = dofile_once("mods/component-explorer/lib/global_flag.lua")
 
 local lua_console = {}
 
@@ -32,7 +30,7 @@ local console_tools = {
 
 function new_console()
     return {
-        open = global_flag.new("ce.console"),
+        open = false,
         history = {},
         input = "",
         last_command = "",
@@ -46,7 +44,7 @@ end
 function console_draw(console)
     local should_show
     imgui.SetNextWindowSize(600, 400, imgui.Cond.FirstUseEver)
-    should_show, console.open.value = imgui.Begin("Console", console.open.value)
+    should_show, console.open = imgui.Begin("Console", console.open)
     if not should_show then
         return
     end

@@ -1,6 +1,12 @@
 dofile_once("mods/component-explorer/unsafe/memory_type.lua")
+
+---@module 'component-explorer.unsafe.memory_display'
 local memory_display = dofile_once("mods/component-explorer/unsafe/memory_display.lua")
+
+---@module 'component-explorer.utils.strings'
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
+
+local debug = {}
 
 local debug_base = 0x00ff9cc0
 local petri_base = 0x00ff9670
@@ -451,11 +457,11 @@ end
 
 local search = {}
 
-function show_debug()
-    local window_open_debug = GlobalsGetValue("ue.debug_window") == "1"
+debug.open = false
+
+function debug.show()
     local should_show
-    should_show, window_open_debug = imgui.Begin("Debug", window_open_debug)
-    GlobalsSetValue("ue.debug_window", window_open_debug and "1" or "0")
+    should_show, debug.open = imgui.Begin("Debug", debug.open)
 
     if should_show then
         if imgui.BeginTabBar("##debugtabs") then
@@ -476,3 +482,5 @@ function show_debug()
         imgui.End()
     end
 end
+
+return debug

@@ -1,3 +1,7 @@
+if not is_unsafe_explorer and ModIsEnabled("unsafe-explorer") then
+    return
+end
+
 if not load_imgui then
     function OnWorldInitialized()
         EntityLoad("mods/component-explorer/entities/imgui_warning.xml")
