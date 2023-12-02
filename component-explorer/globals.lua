@@ -174,8 +174,8 @@ local function handle_sort_spec()
         local columnspec = sortspec.Specs[1]
 
         local field
-        if columnspec.ColumnIndex == 1 then field = "name" end
-        if columnspec.ColumnIndex == 2 then field = "type" end
+        if columnspec.ColumnIndex == 0 then field = "name" end
+        if columnspec.ColumnIndex == 1 then field = "type" end
         set_global_table_order(field, columnspec.SortDirection == imgui.SortDirection.Ascending)
 
         imgui.TableSortSpecsMarkClean()
