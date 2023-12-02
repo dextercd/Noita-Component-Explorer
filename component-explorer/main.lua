@@ -39,6 +39,9 @@ local help = dofile_once("mods/component-explorer/help.lua")
 ---@module 'component-explorer.translations'
 local translations = dofile_once("mods/component-explorer/translations.lua")
 
+---@module 'component-explorer.run_flags'
+local run_flags = dofile_once("mods/component-explorer/run_flags.lua")
+
 local last_frame_run = -1
 
 local is_escape_paused = false
@@ -119,6 +122,7 @@ function show_view_menu_items()
     end
 
     _, globals.open  = imgui.MenuItem("Globals", "", globals.open)
+    _, run_flags.open  = imgui.MenuItem("Run Flags", "", run_flags.open)
     _, mod_settings.open  = imgui.MenuItem("Mod Settings", "", mod_settings.open)
 
     imgui.Separator()
@@ -265,6 +269,11 @@ function update_ui(paused, current_frame_run)
     if translations.open then
         translations.show()
     end
+
+    if run_flags.open then
+        run_flags.show()
+    end
+
 
     if mod_settings.open then
         mod_settings.show()
