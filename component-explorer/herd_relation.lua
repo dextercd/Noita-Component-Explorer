@@ -51,7 +51,7 @@ function herd_relation.show()
         "Certain herds are unused in the base game. You can hide columns by right clicking the table.\n\n" ..
         "Higher relation means less chance to attack.\n\n" ..
         "Rows are the attacker and columns are the herd that may be attacked depending on the relation.\n\n" ..
-        "Herds that have a different opposite relation use pink text.")
+        "Herds that have a different opposite relation use orange text.")
 
     local available_herds = {}
     for herd_id=0,1000 do
