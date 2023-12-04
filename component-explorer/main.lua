@@ -42,6 +42,9 @@ local translations = dofile_once("mods/component-explorer/translations.lua")
 ---@module 'component-explorer.run_flags'
 local run_flags = dofile_once("mods/component-explorer/run_flags.lua")
 
+---@module 'component-explorer.herd_relation'
+local herd_relation = dofile_once("mods/component-explorer/herd_relation.lua")
+
 local last_frame_run = -1
 
 local is_escape_paused = false
@@ -103,6 +106,7 @@ function show_view_menu_items()
     local _
     _, console.open = imgui.MenuItem("Lua Console", sct("CTRL+SHIFT+L"), console.open)
     _, entity_list.open   = imgui.MenuItem("Entity List", sct("CTRL+SHIFT+K"), entity_list.open)
+    _, herd_relation.open   = imgui.MenuItem("Herd Relation", "", herd_relation.open)
     _, wiki_wands.open    = imgui.MenuItem("Wiki Wands", "", wiki_wands.open)
     _, file_viewer.open   = imgui.MenuItem("File Viewer", sct("CTRL+SHIFT+F"), file_viewer.open)
     _, translations.open  = imgui.MenuItem("Translations", "", translations.open)
@@ -274,6 +278,9 @@ function update_ui(paused, current_frame_run)
         run_flags.show()
     end
 
+    if herd_relation.open then
+        herd_relation.show()
+    end
 
     if mod_settings.open then
         mod_settings.show()
