@@ -35,6 +35,7 @@ show_field_int32 = show_field_int
 show_field_uint32 = show_field_int
 show_field_AudioSourceHandle = show_field_int
 show_field_EntityTypeID = show_field_int
+show_field_LensValue_int = show_field_int
 
 function show_field_int64(name, description, component_id, get, set)
     local value = (get or ComponentGetValue)(component_id, name)
@@ -99,6 +100,7 @@ function show_field_float(name, description, component_id, get, set)
         help.marker(description)
     end
 end
+show_field_LensValue_float = show_field_float
 
 function show_field_double(name, description, component_id, get, set)
     local value = (get or ComponentGetValue2)(component_id, name)
