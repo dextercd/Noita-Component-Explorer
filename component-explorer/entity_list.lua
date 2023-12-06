@@ -172,6 +172,14 @@ function entity_list.show()
                 imgui.Text(file)
                 imgui.TableNextColumn()
                 open_entity_small_button(entity)
+
+                -- Highlight entities at weird locations
+                local x, y = EntityGetTransform(entity)
+                if x ~= x or y ~= y then
+                    imgui.TableSetBgColor(imgui.TableBgTarget.RowBg1, 0, 0, 0.455, 1)
+                elseif x == 1/0 or y == 1/0 or x == -1/0 or y == -1/0 then
+                    imgui.TableSetBgColor(imgui.TableBgTarget.RowBg1, 0.455, 0, 0, 1)
+                end
             end
         end
 
