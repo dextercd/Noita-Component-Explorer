@@ -182,13 +182,13 @@ local function show_entity(entity_id, data)
 
             imgui.Text("Teleport:")
             imgui.SameLine()
-            if imgui.Button("This to player") then
+            if imgui.SmallButton("This to player") then
                 local px, py = EntityGetTransform(player)
                 EntityApplyTransform(entity_id, px, py, rotation, scale_x, scale_y)
             end
 
             imgui.SameLine()
-            if imgui.Button("Player to this") then
+            if imgui.SmallButton("Player to this") then
                 local _, _, pr, psx, psy = EntityGetTransform(player)
                 EntityApplyTransform(player, x, y, pr, psx, psy)
             end
