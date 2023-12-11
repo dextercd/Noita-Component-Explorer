@@ -3046,6 +3046,71 @@
                 "type": "vec2",
                 "name": "mGamePadCursorInWorld",
                 "description": "where the aiming cursor is in the world, updated by platformshooterplayer_system "
+            },
+            {
+                "type": "uint32_t",
+                "name": "mButtonDownDelayLineFire",
+                "example": "0 [0, 1]",
+                "description": "Used to delay input for some game effects"
+            },
+            {
+                "type": "uint32_t",
+                "name": "mButtonDownDelayLineFire2",
+                "example": "0 [0, 1]",
+                "description": "Used to delay input for some game effects"
+            },
+            {
+                "type": "uint32_t",
+                "name": "mButtonDownDelayLineRight",
+                "example": "0 [0, 1]",
+                "description": "Used to delay input for some game effects"
+            },
+            {
+                "type": "uint32_t",
+                "name": "mButtonDownDelayLineLeft",
+                "example": "0 [0, 1]",
+                "description": "Used to delay input for some game effects"
+            },
+            {
+                "type": "uint32_t",
+                "name": "mButtonDownDelayLineUp",
+                "example": "0 [0, 1]",
+                "description": "Used to delay input for some game effects"
+            },
+            {
+                "type": "uint32_t",
+                "name": "mButtonDownDelayLineDown",
+                "example": "0 [0, 1]",
+                "description": "Used to delay input for some game effects"
+            },
+            {
+                "type": "uint32_t",
+                "name": "mButtonDownDelayLineKick",
+                "example": "0 [0, 1]",
+                "description": "Used to delay input for some game effects"
+            },
+            {
+                "type": "uint32_t",
+                "name": "mButtonDownDelayLineThrow",
+                "example": "0 [0, 1]",
+                "description": "Used to delay input for some game effects"
+            },
+            {
+                "type": "uint32_t",
+                "name": "mButtonDownDelayLineJump",
+                "example": "0 [0, 1]",
+                "description": "Used to delay input for some game effects"
+            },
+            {
+                "type": "uint32_t",
+                "name": "mButtonDownDelayLineFly",
+                "example": "0 [0, 1]",
+                "description": "Used to delay input for some game effects"
+            },
+            {
+                "type": "LensValue<int>",
+                "name": "input_latency_frames",
+                "description": "Adds latency to some inputs. Used by some game effects. Max 31."
             }
         ]
     },
