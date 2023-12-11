@@ -33,6 +33,7 @@ show_field_int16 = show_field_int
 show_field_uint16 = show_field_int
 show_field_int32 = show_field_int
 show_field_uint32 = show_field_int
+show_field_uint32_t = show_field_int
 show_field_AudioSourceHandle = show_field_int
 show_field_EntityTypeID = show_field_int
 show_field_LensValue_int = show_field_int
