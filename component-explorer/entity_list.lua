@@ -1,6 +1,9 @@
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 dofile_once("mods/component-explorer/entity.lua")
 
+---@module 'component-explorer.style'
+local style = dofile_once("mods/component-explorer/style.lua")
+
 ---@module 'component-explorer.utils.ce_settings'
 local ce_settings = dofile_once("mods/component-explorer/utils/ce_settings.lua")
 
@@ -118,6 +121,13 @@ local function get_entities_data()
     return ret
 end
 
+---@class ExtraColumn
+---@field name string
+---@field func fun(entity_id: integer): any
+
+---@type ExtraColumn[]
+entity_list.extra_columns = {}
+
 function entity_list.show()
     local should_show
     should_show, entity_list.open = imgui.Begin("Entities list", entity_list.open)
@@ -136,18 +146,24 @@ function entity_list.show()
         table_flags = bit.bor(table_flags, imgui.TableFlags.Sortable)
     end
 
-    if imgui.BeginTable("entity_table", 5, table_flags) then
+    if imgui.BeginTable("entity_table", 5 + #entity_list.extra_columns, table_flags) then
         imgui.TableSetupColumn("ID", imgui.TableColumnFlags.WidthFixed)
         imgui.TableSetupColumn("Name", imgui.TableColumnFlags.WidthFixed)
         imgui.TableSetupColumn("Tags", imgui.TableColumnFlags.WidthStretch, 6)
         imgui.TableSetupColumn("File", imgui.TableColumnFlags.WidthStretch, 12)
+
+        for _, extra_column in ipairs(entity_list.extra_columns) do
+            local flags =  bit.bor(imgui.TableColumnFlags.WidthFixed, imgui.TableColumnFlags.NoSort)
+            imgui.TableSetupColumn(extra_column.name, flags, 12)
+        end
+
         imgui.TableSetupColumn("Open", bit.bor(imgui.TableColumnFlags.WidthFixed, imgui.TableColumnFlags.NoSort))
         imgui.TableHeadersRow()
 
         handle_sort_spec()
 
         for _, entity_data in ipairs(entities_data) do
-            local entity = entity_data[1]
+            local entity_id = entity_data[1]
 
             local name = entity_data[2]
             local tags = entity_data[3]
@@ -156,25 +172,41 @@ function entity_list.show()
             if (string_util.ifind(name, entity_search, 1, true) or
                 string_util.ifind(tags, entity_search, 1, true) or
                 string_util.ifind(file, entity_search, 1, true)) and
-               (include_child_entities or EntityGetParent(entity) == 0)
+               (include_child_entities or EntityGetParent(entity_id) == 0)
             then
                 if name == "" then name = "<empty string>" end
                 if tags == "" then tags = "<no tags>" end
                 if file == "" then file = "<empty string>" end
 
                 imgui.TableNextColumn()
-                imgui.Text(tostring(entity))
+                imgui.Text(tostring(entity_id))
                 imgui.TableNextColumn()
                 imgui.Text(name)
                 imgui.TableNextColumn()
                 imgui.Text(tags)
                 imgui.TableNextColumn()
                 imgui.Text(file)
+
+                for _, extra_column in ipairs(entity_list.extra_columns) do
+                    imgui.TableNextColumn()
+                    local succ, ret = pcall(extra_column.func, entity_id)
+
+                    if not succ then
+                        imgui.PushStyleColor(imgui.Col.Text, unpack(style.colour_fail))
+                        imgui.Text(ret)
+                        imgui.PopStyleColor()
+                    elseif ret then
+                        -- extra_column.func can use imgui internally, but returning
+                        -- a value is also OK.
+                        imgui.Text(tostring(ret))
+                    end
+                end
+
                 imgui.TableNextColumn()
-                open_entity_small_button(entity)
+                open_entity_small_button(entity_id)
 
                 -- Highlight entities at weird locations
-                local x, y = EntityGetTransform(entity)
+                local x, y = EntityGetTransform(entity_id)
                 if x ~= x or y ~= y then
                     imgui.TableSetBgColor(imgui.TableBgTarget.RowBg1, 0, 0, 0.455, 1)
                 elseif x == 1/0 or y == 1/0 or x == -1/0 or y == -1/0 then
