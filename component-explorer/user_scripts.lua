@@ -5,7 +5,7 @@ local us = {}
 us.directory_path = "user-scripts"
 
 function us.make_path(script_name)
-    return "mods/../" .. us.directory_path .. "/" .. script_name:lower()
+    return us.directory_path .. "/" .. script_name:lower()
 end
 
 ---@param script_name string
