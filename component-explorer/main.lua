@@ -217,6 +217,14 @@ function show_about_window()
         imgui.Text("Made by dextercd")
         link_ui.button("Homepage", version.homepage)
 
+        local wx, wy = imgui.GetWindowSize()
+        if imgui.LoadImage and wy > 300 then
+            local img = imgui.LoadImage("mods/component-explorer/ui/james.png")
+            if img then
+                imgui.Image(img, img.width, img.height)
+            end
+        end
+
         imgui.End()
     end
 end

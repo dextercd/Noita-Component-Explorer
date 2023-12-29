@@ -1,4 +1,7 @@
+---@module 'component-explorer.utils.lua_appends'
 local lua_appends = dofile_once("mods/component-explorer/utils/lua_appends.lua")
+
+---@module 'component-explorer.style'
 local style = dofile_once("mods/component-explorer/style.lua")
 
 local ModTextFileGetContent = ModTextFileGetContent
@@ -29,6 +32,11 @@ local function is_supported_file_type(path)
     if l4 == ".xml" then return true end
     if l4 == ".txt" then return true end
     if l4 == ".csv" then return true end
+
+    if imgui.LoadImage then
+        if l4 == ".png" then return true end
+        if l4 == ".bmp" then return true end
+    end
 
     local l5 = path:sub(-5)
     if #l5 < 5 then return false end
@@ -70,14 +78,24 @@ end
 
 ---@param path string
 function file_viewer.show_file(path)
-    local content = get_content(path)
-    local who_set_content = ModTextFileWhoSetContent(path)
-
     imgui.Text("File: " .. path)
     imgui.SameLine()
     if imgui.SmallButton("Copy path") then
         imgui.SetClipboardText(path)
     end
+
+    local l4 = path:sub(-4)
+    if l4 == ".bmp" or l4 == ".png" then
+        return file_viewer.show_image_file(path)
+    else
+        return file_viewer.show_text_file(path)
+    end
+end
+
+function file_viewer.show_text_file(path)
+    local content = get_content(path)
+    local who_set_content = ModTextFileWhoSetContent(path)
+
     imgui.SameLine()
     if imgui.SmallButton("Copy content") then
         imgui.SetClipboardText(content or "Hi :)")
@@ -145,6 +163,67 @@ function file_viewer.show_file(path)
     end
 end
 
+local hover_zoom = 4
+
+function file_viewer.show_image_file(path)
+    local img = imgui.LoadImage(path)
+    if not img then
+        imgui.PushStyleColor(imgui.Col.Text, unpack(style.colour_fail))
+        imgui.Text("Couldn't load image")
+        imgui.PopStyleColor()
+        return
+    end
+
+    imgui.Text("Size: " .. img.width .. " x " .. img.height)
+
+    imgui.SetNextItemWidth(200)
+    local _
+    _, hover_zoom = imgui.SliderFloat("Hover zoom", hover_zoom, 1, 10)
+
+    local window_width = imgui.GetWindowWidth()
+
+    local ideal_scale_factor = math.max(1, window_width / img.width)
+    local scale_factor = math.floor(ideal_scale_factor)
+
+    local pos_x, pos_y = imgui.GetCursorScreenPos()
+    imgui.Image(img, img.width * scale_factor, img.height * scale_factor)
+
+    if imgui.IsItemHovered() then
+        imgui.BeginTooltip()
+
+        local region_sz = 300
+
+        -- local zoomed_sz_x = img.width / (img.width * scale_factor / region_sz) / hover_zoom
+        local zoomed_sz_x = math.min(region_sz / scale_factor / hover_zoom, img.width)
+        local zoomed_sz_y = math.min(zoomed_sz_x, img.height)
+
+        local mouse_pos_x, mouse_pos_y = imgui.GetMousePos()
+        local tex_x = (mouse_pos_x - pos_x) / scale_factor - zoomed_sz_x * 0.5
+        local tex_y = (mouse_pos_y - pos_y) / scale_factor - zoomed_sz_y * 0.5
+
+        if tex_x < 0 then tex_x = 0 end
+        if tex_y < 0 then tex_y = 0 end
+        if tex_x > img.width - zoomed_sz_x then tex_x = img.width - zoomed_sz_x end
+        if tex_y > img.height - zoomed_sz_y then tex_y = img.height - zoomed_sz_y end
+
+        imgui.Text(("Min: %.2f %.2f"):format(tex_x, tex_y))
+        imgui.Text(("Max: %.2f %.2f"):format(tex_x + zoomed_sz_x, tex_y + zoomed_sz_y))
+
+        local uv_0_x = tex_x / img.width
+        local uv_1_x = (tex_x + zoomed_sz_x) / img.width
+        local uv_0_y = tex_y / img.height
+        local uv_1_y = (tex_y + zoomed_sz_y) / img.height
+
+        imgui.Image(img,
+            region_sz, region_sz * (zoomed_sz_y / zoomed_sz_x),
+            uv_0_x, uv_0_y,
+            uv_1_x, uv_1_y
+        )
+
+        imgui.EndTooltip()
+    end
+end
+
 
 ---@type string?
 local set_this_selected = nil
@@ -156,6 +235,9 @@ local open_files_lookup = {}
 local open_files = {}
 
 function file_viewer.open_file(to_open)
+    if not is_supported_file_type(to_open) then
+        error("Unsupported file type")
+    end
     if not open_files_lookup[to_open] then
         table.insert(open_files, to_open)
         open_files_lookup[to_open] = true
