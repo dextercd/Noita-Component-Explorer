@@ -427,6 +427,12 @@ wiki_spell_names.by_action_id = {
     QUAD_SHOT = "Quplicate Spell",
     PENTA_SHOT = "Peplicate Spell",
     HEXA_SHOT = "Heplicate Spell",
+    WHITE_HOLE = "White hole",
+    WHITE_HOLE_GIGA = "Omega white hole",
+    ANTIHEAL = "Deadly heal",
+    TOUCH_PISS = "Touch of Gold?",
+    MASS_POLYMORPH = "Muodonmuutos",
+    CLUSTERMOD = "Clusterbolt",
 }
 
 local to_action_id = {}
