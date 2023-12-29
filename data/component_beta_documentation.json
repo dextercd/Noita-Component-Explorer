@@ -5436,6 +5436,12 @@
                 "type": "std::string",
                 "name": "name",
                 "description": "this name is called to the on_interacted function on LuaComponents"
+            },
+            {
+                "type": "int",
+                "name": "exclusivity_group",
+                "example": "0 [0, 1]",
+                "description": "If > 0, only 1 instance of this interaction can be display at the same time"
             }
         ]
     },
