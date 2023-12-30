@@ -1541,6 +1541,11 @@
                 "example": "1 [0, 1]"
             },
             {
+                "type": "float",
+                "name": "m_intensity2",
+                "example": "1 [0, 1]"
+            },
+            {
                 "type": "AudioSourceHandle",
                 "name": "m_source",
                 "example": "-1 [0, 1]"
@@ -7561,6 +7566,12 @@
             },
             {
                 "type": "float",
+                "name": "custom_alpha",
+                "example": "-1 [0, 1]",
+                "description": "if >= 0, will use this as particle alpha"
+            },
+            {
+                "type": "float",
                 "name": "x_pos_offset_min",
                 "example": "0 [-20, 20]"
             },
@@ -7770,6 +7781,12 @@
                 "name": "image_animation_use_entity_rotation",
                 "example": "0 [0, 1]",
                 "description": "if 1, image animation emission will be rotated based on entity rotation"
+            },
+            {
+                "type": "bool",
+                "name": "ignore_transform_updated_msg",
+                "example": "0 [0, 1]",
+                "description": "if 1, mExPosition and m_last_emit_position will not be updated when receiving Message_TransformUpdated"
             }
         ],
         "privates": [
@@ -9420,6 +9437,24 @@
                 "type": "bool",
                 "name": "mForceFireOnNextUpdate",
                 "example": "0 [0, 1]"
+            },
+            {
+                "type": "vec2",
+                "name": "mCamErrorSmoothed"
+            },
+            {
+                "type": "vec2",
+                "name": "mCamCorrectionSmoothed"
+            },
+            {
+                "type": "float",
+                "name": "mCamCorrectionAmountTargetPrev",
+                "example": "0 [0, 1]"
+            },
+            {
+                "type": "float",
+                "name": "mFastMovementParticlesAlphaSmoothed",
+                "example": "0 [0, 1]"
             }
         ],
         "custom_data_types": [
@@ -10939,6 +10974,12 @@
                 "type": "int",
                 "name": "actionable_lifetime",
                 "example": "3 [0, 20]"
+            },
+            {
+                "type": "bool",
+                "name": "reset_shooter_y_vel",
+                "example": "1 [0, 1]",
+                "description": "If 1, will set shooter y velocity to 0 on teleport"
             }
         ],
         "privates": [
