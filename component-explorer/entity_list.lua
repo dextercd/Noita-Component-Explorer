@@ -141,16 +141,17 @@ function entity_list.show()
     _, entity_search = imgui.InputText("Search", entity_search)
     _, include_child_entities = imgui.Checkbox("Include child entities", include_child_entities)
 
-    local table_flags = imgui.TableFlags.Resizable
+    local table_flags = bit.bor(imgui.TableFlags.Resizable, imgui.TableFlags.Hideable)
     if imgui.TableGetSortSpecs then
         table_flags = bit.bor(table_flags, imgui.TableFlags.Sortable)
     end
 
-    if imgui.BeginTable("entity_table", 5 + #entity_list.extra_columns, table_flags) then
+    if imgui.BeginTable("entity_table", 6 + #entity_list.extra_columns, table_flags) then
         imgui.TableSetupColumn("ID", imgui.TableColumnFlags.WidthFixed)
         imgui.TableSetupColumn("Name", imgui.TableColumnFlags.WidthFixed)
         imgui.TableSetupColumn("Tags", imgui.TableColumnFlags.WidthStretch, 6)
         imgui.TableSetupColumn("File", imgui.TableColumnFlags.WidthStretch, 12)
+        imgui.TableSetupColumn("Kill", bit.bor(imgui.TableColumnFlags.WidthFixed, imgui.TableColumnFlags.NoSort))
 
         for _, extra_column in ipairs(entity_list.extra_columns) do
             local flags =  bit.bor(imgui.TableColumnFlags.WidthFixed, imgui.TableColumnFlags.NoSort)
@@ -174,6 +175,8 @@ function entity_list.show()
                 string_util.ifind(file, entity_search, 1, true)) and
                (include_child_entities or EntityGetParent(entity_id) == 0)
             then
+                imgui.PushID(entity_id)
+
                 if name == "" then name = "<empty string>" end
                 if tags == "" then tags = "<no tags>" end
                 if file == "" then file = "<empty string>" end
@@ -186,6 +189,8 @@ function entity_list.show()
                 imgui.Text(tags)
                 imgui.TableNextColumn()
                 imgui.Text(file)
+                imgui.TableNextColumn()
+                local kill_entity = style.danger_small_button("Kill")
 
                 for _, extra_column in ipairs(entity_list.extra_columns) do
                     imgui.TableNextColumn()
@@ -211,6 +216,12 @@ function entity_list.show()
                     imgui.TableSetBgColor(imgui.TableBgTarget.RowBg1, 0, 0, 0.455, 1)
                 elseif x == 1/0 or y == 1/0 or x == -1/0 or y == -1/0 then
                     imgui.TableSetBgColor(imgui.TableBgTarget.RowBg1, 0.455, 0, 0, 1)
+                end
+
+                imgui.PopID()
+
+                if kill_entity then
+                    EntityKill(entity_id)
                 end
             end
         end
