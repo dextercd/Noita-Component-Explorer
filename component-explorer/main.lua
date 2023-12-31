@@ -45,6 +45,9 @@ local run_flags = dofile_once("mods/component-explorer/run_flags.lua")
 ---@module 'component-explorer.herd_relation'
 local herd_relation = dofile_once("mods/component-explorer/herd_relation.lua")
 
+---@module 'component-explorer.cursor'
+local cursor = dofile_once("mods/component-explorer/cursor.lua")
+
 local last_frame_run = -1
 
 local is_escape_paused = false
@@ -106,17 +109,14 @@ function show_view_menu_items()
     local _
     _, console.open = imgui.MenuItem("Lua Console", sct("CTRL+SHIFT+L"), console.open)
     _, entity_list.open   = imgui.MenuItem("Entity List", sct("CTRL+SHIFT+K"), entity_list.open)
-    _, herd_relation.open   = imgui.MenuItem("Herd Relation", "", herd_relation.open)
+    _, herd_relation.open = imgui.MenuItem("Herd Relation", "", herd_relation.open)
     _, wiki_wands.open    = imgui.MenuItem("Wiki Wands", "", wiki_wands.open)
     _, file_viewer.open   = imgui.MenuItem("File Viewer", sct("CTRL+SHIFT+F"), file_viewer.open)
     _, translations.open  = imgui.MenuItem("Translations", "", translations.open)
 
     local clicked
     clicked, entity_picker.open = imgui.MenuItem("Entity Picker...", sct("CTRL+SHIFT+E"), entity_picker.open)
-    if clicked then
-        imgui.SetWindowFocus(nil)
-    end
-
+    if clicked then imgui.SetWindowFocus(nil) end
     if imgui.IsItemHovered() then
         help.tooltip(table.concat({
             "Allows you to move your mouse over an entity to open a window for it. ",
@@ -124,6 +124,8 @@ function show_view_menu_items()
             "When keyboard shortcuts are enabled, you can hit CTRL+SHIFT+E to open or close the picker.",
         }))
     end
+
+    _, cursor.config_open = imgui.MenuItem("Cursor Config", "", cursor.config_open)
 
     _, globals.open  = imgui.MenuItem("Globals", "", globals.open)
     _, run_flags.open  = imgui.MenuItem("Run Flags", "", run_flags.open)
@@ -241,6 +243,7 @@ function update_ui(paused, current_frame_run)
     keyboard_shortcuts()
 
     main_window()
+    cursor.update()
 
     if window_open_about then
         show_about_window()
@@ -282,6 +285,10 @@ function update_ui(paused, current_frame_run)
         translations.show()
     end
 
+    if cursor.config_open then
+        cursor.config_show()
+    end
+
     if run_flags.open then
         run_flags.show()
     end
@@ -294,6 +301,24 @@ function update_ui(paused, current_frame_run)
         mod_settings.show()
     end
 end
+
+local function is_imgui_version(major, minor, patch)
+    if not imgui.version_info then
+        return false
+    end
+
+    local parts = imgui.version_info.ndi.parts
+    if parts[1] > major then return true end
+    if parts[1] == major then
+        if parts[2] > minor then return true end
+        if parts[2] == minor then
+            return parts[3] >= patch
+        end
+    end
+    return false
+end
+
+local good_mouse_handling = is_imgui_version(1, 15, 1)
 
 ---Handles the keyboard shortcuts.
 function keyboard_shortcut_items()
@@ -328,5 +353,14 @@ function keyboard_shortcut_items()
 
     if imgui.IsKeyPressed(imgui.Key.U) then
         console.user_scripts_open = not console.user_scripts_open
+    end
+
+    if good_mouse_handling then
+        imgui.SetNextFrameWantCaptureMouse(true)
+    end
+
+    if imgui.IsMouseClicked(imgui.MouseButton.Left) then
+        local cx, cy = DEBUG_GetMouseWorld()
+        cursor.set_pos(cx, cy, true)
     end
 end

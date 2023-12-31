@@ -140,7 +140,33 @@ mod_settings = {
                 scope = MOD_SETTING_SCOPE_RUNTIME,
             }
         }
-    }
+    },
+    {
+        category_id = "cursor",
+        ui_name = "Cursor settings",
+        ui_description = "Default settings for the cursor at launch.",
+        settings = {
+            {
+                id = "keep_visible",
+                ui_name = "Visible outside config",
+                ui_description = "Keep the cursor visible even when the cursor config is closed.",
+                value_default = false,
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            },
+            {
+                id = "parent",
+                ui_name = "Cursor parent",
+                ui_description = "Relative to what should the cursor be positioned?",
+                value_default = "player",
+                values = {
+                    {"camera", "Camera"},
+                    {"world", "World"},
+                    {"player", "Player"},
+                },
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            }
+        },
+    },
 }
 
 function ModSettingsUpdate(init_scope)

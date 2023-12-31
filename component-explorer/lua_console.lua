@@ -24,6 +24,7 @@ local console_tools = {
     ModTextFileGetContent = ModTextFileGetContent,
     ModTextFileWhoSetContent = ModTextFileWhoSetContent,
     EZWand = dofile_once("mods/component-explorer/deps/EZWand.lua"),
+    cursor = dofile_once("mods/component-explorer/cursor.lua"),
     watch_global = globals.watch,
     unwatch_global = globals.unwatch,
 }

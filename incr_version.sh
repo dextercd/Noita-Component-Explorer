@@ -66,7 +66,7 @@ git add CMakeLists.txt
 git commit -m "Release $new_version"
 git tag "release-$new_version"
 
+./do.sh
+
 echo
 echo git push origin HEAD --tags
-
-./do.sh
