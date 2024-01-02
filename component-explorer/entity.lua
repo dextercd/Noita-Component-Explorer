@@ -24,6 +24,9 @@ local file_viewer = dofile_once("mods/component-explorer/file_viewer.lua")
 ---@module 'component-explorer.style'
 local style = dofile_once("mods/component-explorer/style.lua")
 
+---@module 'component-explorer.cursor'
+local cursor = dofile_once("mods/component-explorer/cursor.lua")
+
 local common_entity_tags = {
     "card_action",
     "effect_protection",
@@ -202,6 +205,12 @@ local function show_entity(entity_id, data)
             if imgui.SmallButton("This to player") then
                 local px, py = EntityGetTransform(player)
                 EntityApplyTransform(entity_id, px, py, rotation, scale_x, scale_y)
+            end
+
+            imgui.SameLine()
+            if imgui.SmallButton("This to cursor") then
+                local cx, cy = cursor.pos()
+                EntityApplyTransform(entity_id, cx, cy, rotation, scale_x, scale_y)
             end
 
             imgui.SameLine()
