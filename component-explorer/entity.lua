@@ -49,6 +49,7 @@ local common_entity_tags = {
 }
 
 local entities_watching = {}
+local add_component_filter = ""
 
 function unwatch_entity(entity_id)
     entities_watching[entity_id] = nil
@@ -257,6 +258,7 @@ local function show_entity(entity_id, data)
 
     local components = EntityGetAllComponents(entity_id)
     if imgui.CollapsingHeader("Components (" .. #components .. ")###entity_components") then
+        local _
         _, data.component_search = imgui.InputText("Type Search", data.component_search)
 
         if imgui.Button("+ Add Component") then
@@ -264,9 +266,20 @@ local function show_entity(entity_id, data)
         end
 
         if imgui.BeginPopup("add_component_popup") then
+            local _
+            _, add_component_filter = imgui.InputTextWithHint(
+                "##add_comp_filter", "Filter list", add_component_filter)
+            imgui.SameLine()
+            if imgui.Button("X") then
+                add_component_filter = ""
+            end
+
             for _, component_type in ipairs(component_types) do
-                if imgui.MenuItem(component_type) then
-                    EntityAddComponent(entity_id, component_type)
+                if string_util.ifind(component_type, add_component_filter, 1, true) then
+                    if imgui.MenuItem(component_type) then
+                        EntityAddComponent(entity_id, component_type)
+                        add_component_filter = ""
+                    end
                 end
             end
             imgui.EndPopup()
