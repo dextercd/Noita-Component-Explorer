@@ -1,11 +1,27 @@
 dofile_once("mods/component-explorer/serialise_entity.lua")
+
+---@module 'component-explorer.utils.strings'
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
+
+---@module 'component-explorer.xml_serialise'
 local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
+
+---@module 'component-explorer.entity_markers'
 local entity_markers = dofile_once("mods/component-explorer/entity_markers.lua")
+
+---@module 'component-explorer.tags_gui'
 local tags_gui = dofile_once("mods/component-explorer/tags_gui.lua")
+
+---@module 'component-explorer.utils.player_util'
 local player_util = dofile_once("mods/component-explorer/utils/player_util.lua")
+
+---@module 'component-explorer.stable_id'
 local stable_id = dofile_once("mods/component-explorer/stable_id.lua")
+
+---@module 'component-explorer.file_viewer'
 local file_viewer = dofile_once("mods/component-explorer/file_viewer.lua")
+
+---@module 'component-explorer.style'
 local style = dofile_once("mods/component-explorer/style.lua")
 
 local common_entity_tags = {
