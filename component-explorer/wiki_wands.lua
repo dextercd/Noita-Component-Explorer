@@ -16,6 +16,8 @@ local player_util = dofile_once("mods/component-explorer/utils/player_util.lua")
 local copy = dofile_once("mods/component-explorer/utils/copy.lua")
 ---@module 'component-explorer.preset_wands'
 local preset_wands = dofile_once("mods/component-explorer/preset_wands.lua")
+---@module 'component-explorer.cursor'
+local cursor = dofile_once("mods/component-explorer/cursor.lua")
 
 dofile_once("data/scripts/gun/procedural/wands.lua")
 
@@ -267,18 +269,63 @@ local function confirm_wand_card_import(template_data)
         table.insert(ammended_data.values, item)
     end
 
-    if imgui.Button("Create") then
-        local px, py = 0, 0
-        local player = player_util.get_player()
-        if player then
-            px, py = EntityGetTransform(player)
-        end
+    local create_in_inv = false
+    local create_at_pos = false
+    local x, y = 0, 0
+
+    local player = player_util.get_player()
+
+    if not player then imgui.BeginDisabled() end
+
+    if imgui.Button("Create at player") then
+        assert(player)
+        create_at_pos = true
+        x, y = EntityGetTransform(player)
+    end
+
+    imgui.SameLine()
+    if imgui.Button("Put in inventory") then
+        create_in_inv = true
+    end
+
+    if not player then imgui.EndDisabled() end
+
+    imgui.SameLine()
+    if imgui.Button("Create at cursor") then
+        create_at_pos = true
+        x, y = cursor.pos()
+    end
+
+    local wand
+
+    if create_in_inv or create_at_pos then
         wand = EZWand()
         wand:UpdateSprite()
-        wand:PlaceAt(px, py)
         write_wand_template(wand, ammended_data)
+    end
+
+    if create_in_inv then
+        local success = pcall(function()
+            wand:PutInPlayersInventory()
+        end)
+
+        if success then
+            return true
+        end
+
+        -- Couldn't put in inventory.. maybe the inventory is full or the player
+        -- is polymorphed.. Fall back to placing it at the player's position.
+        assert(player)
+        create_at_pos = true
+        x, y = EntityGetTransform(player)
+    end
+
+    if create_at_pos then
+        wand:PlaceAt(x, y)
         return true
     end
+
+    return false
 end
 
 local function confirm_wand_import(template_data)
@@ -352,6 +399,7 @@ local function import_menu()
 
             if confirm_function(_g_parsed_template) then
                 import_last_error = ""
+                import_text = ""
             end
         end)
 
