@@ -141,7 +141,8 @@ function entity_list.show()
     _, entity_search = imgui.InputText("Search", entity_search)
     _, include_child_entities = imgui.Checkbox("Include child entities", include_child_entities)
 
-    local table_flags = bit.bor(imgui.TableFlags.Resizable, imgui.TableFlags.Hideable)
+    local table_flags = bit.bor(imgui.TableFlags.Resizable, imgui.TableFlags.Hideable, imgui.TableFlags.RowBg)
+
     if imgui.TableGetSortSpecs then
         table_flags = bit.bor(table_flags, imgui.TableFlags.Sortable)
     end

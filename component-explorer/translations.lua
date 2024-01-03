@@ -47,7 +47,8 @@ local function csv_report_table(csv, state)
         imgui.TableFlags.Resizable,
         imgui.TableFlags.Hideable,
         imgui.TableFlags.Borders,
-        imgui.TableFlags.ContextMenuInBody
+        imgui.TableFlags.ContextMenuInBody,
+        imgui.TableFlags.RowBg
     )
 
     if imgui.BeginTable("##direct_input_csv", #csv.langs + 1, flags) then
