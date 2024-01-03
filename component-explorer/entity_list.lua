@@ -27,65 +27,64 @@ local function handle_sort_spec()
     end
 end
 
-local EntitiesGetMaxID = EntitiesGetMaxID
-if EntitiesGetMaxID == nil then
-    EntitiesGetMaxID = function()
-        -- Kind of gross, I know
-        local max_id = EntityCreateNew()
-        EntityKill(max_id)
-        return max_id - 1
-    end
-end
+local get_entity_ids
 
-local last_entity_id_checked = nil
+if EntitiesGetMaxID ~= nil then
+    local last_entity_id_checked = nil
 
-local current_entities = {}
+    local current_entities = {}
 
-local function get_entity_ids()
-    local min_id
-    if last_entity_id_checked == nil then
-        -- First time this is called
+    get_entity_ids = function()
+        local min_id
+        if last_entity_id_checked == nil then
+            -- First time this is called
 
-        min_id = GameGetWorldStateEntity()
+            min_id = GameGetWorldStateEntity()
 
-        -- Other entities could have been created before the WorldState.
-        -- That's buggy but CE must account for that.
-        local check_min_id = min_id - 1
-        while check_min_id > 1 and check_min_id > min_id - 100 do
-            if EntityGetIsAlive(check_min_id) then
-                min_id = check_min_id
+            -- Other entities could have been created before the WorldState.
+            -- That's buggy but CE must account for that.
+            local check_min_id = min_id - 1
+            while check_min_id > 1 and check_min_id > min_id - 100 do
+                if EntityGetIsAlive(check_min_id) then
+                    min_id = check_min_id
+                end
+                check_min_id = check_min_id - 1
             end
-            check_min_id = check_min_id - 1
-        end
-    else
-        min_id = last_entity_id_checked + 1
-    end
-
-    local max_id = EntitiesGetMaxID()
-
-    for e=min_id,max_id do
-        current_entities[e] = true
-    end
-
-    last_entity_id_checked = max_id
-
-    -- Clear out entities that no longer exist and build return table
-    local gone = {}
-    local ret = {}
-    for e, _ in pairs(current_entities) do
-        if EntityGetIsAlive(e) then
-            ret[#ret+1] = e
         else
-            gone[#gone+1] = e
+            min_id = last_entity_id_checked + 1
         end
-    end
 
-    for _, e in ipairs(gone) do
-        current_entities[e] = nil
-    end
+        local max_id = EntitiesGetMaxID()
 
-    return ret
+        for e=min_id,max_id do
+            current_entities[e] = true
+        end
+
+        last_entity_id_checked = max_id
+
+        -- Clear out entities that no longer exist and build return table
+        local gone = {}
+        local ret = {}
+        for e, _ in pairs(current_entities) do
+            if EntityGetIsAlive(e) then
+                ret[#ret+1] = e
+            else
+                gone[#gone+1] = e
+            end
+        end
+
+        for _, e in ipairs(gone) do
+            current_entities[e] = nil
+        end
+
+        return ret
+    end
+else
+    get_entity_ids = function()
+        return EntityGetInRadius(0, 0, math.huge)
+    end
 end
+
 
 local function get_entities_data()
     local entity_ids = get_entity_ids()
