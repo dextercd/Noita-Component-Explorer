@@ -8,9 +8,16 @@ if not load_imgui then
     end
     error("Missing ImGui.")
 else
+    local success, result
     function OnModPostInit()
         -- Delay dofile calls until latter end of mod initialisation, so that other
         -- mods can do ModLuaFileAppend to the component-explorer files.
-        dofile("mods/component-explorer/main.lua")
+        success, result = pcall(dofile, "mods/component-explorer/main.lua")
+    end
+
+    function OnWorldInitialized()
+        if not success then
+            print("CE init error: " .. tostring(result))
+        end
     end
 end
