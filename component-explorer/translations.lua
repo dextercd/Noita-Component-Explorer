@@ -190,6 +190,8 @@ local function show_file_input()
 end
 
 function translations.show()
+    imgui.SetNextWindowSize(480, 200, imgui.Cond.FirstUseEver)
+
     local should_show
     should_show, translations.open = imgui.Begin("Translations", translations.open)
 
