@@ -1,7 +1,16 @@
 local string_util = {}
 
+function string_util.normalise(s)
+    s = string.lower(s)
+    s = s:gsub("ä", "a") s = s:gsub("Ä", "a")
+    s = s:gsub("ö", "o") s = s:gsub("Ö", "o")
+    return s
+end
+
+local nm = string_util.normalise
+
 function string_util.ifind(s, pattern, init, plain)
-    return string.find(s:lower(), pattern:lower(), init, plain)
+    return string.find(nm(s), nm(pattern), init, plain)
 end
 
 function string_util.split_iter(str, sep, plain)
