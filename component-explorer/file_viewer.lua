@@ -12,7 +12,7 @@ local file_viewer = {}
 local cached_content = {}
 local function get_content(path)
     if not cached_content[path] then
-        cached_content[path] = ModTextFileGetContent(path)
+        cached_content[path] = ModTextFileGetContent(path) or ""
     end
 
     return cached_content[path]
