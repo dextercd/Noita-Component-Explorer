@@ -102,8 +102,8 @@ local function register_materials_file(materials_file, origin)
     end
 end
 
-if ModMaterialsFileAdd then
-    -- ModMaterialsFileAdd available, we can use register_materials_file for
+if ModMaterialFilesGet then
+    -- ModMaterialFilesGet available, we can use register_materials_file for
     -- the vanilla materials file and modded ones.
     for _, mat_file in ipairs(ModMaterialFilesGet()) do
         local origin
@@ -115,7 +115,7 @@ if ModMaterialsFileAdd then
         register_materials_file(mat_file, origin or "Unknown")
     end
 else
-    -- ModMaterialsFileAdd not available, use register_materials_file for
+    -- ModMaterialFilesGet not available, use register_materials_file for
     -- vanilla and try to identify and register all modded materials.
     register_materials_file("data/materials.xml", "Vanilla")
 
