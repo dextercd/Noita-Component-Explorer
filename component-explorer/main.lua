@@ -3,7 +3,9 @@ imgui = load_imgui({version="1.7.0", mod="Component Explorer"})
 
 ---@module 'component-explorer.utils.ce_settings'
 local ce_settings = dofile_once("mods/component-explorer/utils/ce_settings.lua")
+
 dofile_once("mods/component-explorer/lua_console.lua")
+
 ---@module 'component-explorer.globals'
 local globals = dofile_once("mods/component-explorer/globals.lua")
 
@@ -47,6 +49,14 @@ local herd_relation = dofile_once("mods/component-explorer/herd_relation.lua")
 
 ---@module 'component-explorer.cursor'
 local cursor = dofile_once("mods/component-explorer/cursor.lua")
+
+---@module 'component-explorer.spawn_stuff'
+local spawn_stuff = dofile_once("mods/component-explorer/spawn_stuff.lua")
+
+-- Not used here right now, but depends on grabbing a function that's only
+-- supposed to be accessible during mod init.
+---@module 'component-explorer.utils.file_util'
+dofile_once("mods/component-explorer/utils/file_util.lua")
 
 local last_frame_run = -1
 
@@ -110,9 +120,6 @@ function show_view_menu_items()
     _, console.open = imgui.MenuItem("Lua Console", sct("CTRL+SHIFT+L"), console.open)
     _, entity_list.open   = imgui.MenuItem("Entity List", sct("CTRL+SHIFT+K"), entity_list.open)
     _, herd_relation.open = imgui.MenuItem("Herd Relation", "", herd_relation.open)
-    _, wiki_wands.open    = imgui.MenuItem("Wiki Wands", "", wiki_wands.open)
-    _, file_viewer.open   = imgui.MenuItem("File Viewer", sct("CTRL+SHIFT+F"), file_viewer.open)
-    _, translations.open  = imgui.MenuItem("Translations", "", translations.open)
 
     local clicked
     clicked, entity_picker.open = imgui.MenuItem("Entity Picker...", sct("CTRL+SHIFT+E"), entity_picker.open)
@@ -124,6 +131,12 @@ function show_view_menu_items()
             "When keyboard shortcuts are enabled, you can hit CTRL+SHIFT+E to open or close the picker.",
         }))
     end
+
+    _, spawn_stuff.open    = imgui.MenuItem("Spawn Stuff", "", spawn_stuff.open)
+
+    _, wiki_wands.open    = imgui.MenuItem("Wiki Wands", "", wiki_wands.open)
+    _, file_viewer.open   = imgui.MenuItem("File Viewer", sct("CTRL+SHIFT+F"), file_viewer.open)
+    _, translations.open  = imgui.MenuItem("Translations", "", translations.open)
 
     _, cursor.config_open = imgui.MenuItem("Cursor Config", "", cursor.config_open)
 
@@ -287,6 +300,10 @@ function update_ui(paused, current_frame_run)
 
     if cursor.config_open then
         cursor.config_show()
+    end
+
+    if spawn_stuff.open then
+        spawn_stuff.show()
     end
 
     if run_flags.open then
