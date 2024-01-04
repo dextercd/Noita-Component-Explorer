@@ -140,6 +140,9 @@ return function()
 
                 imgui.TableNextColumn()
                 imgui.Text(action_type_to_name(action.type))
+                if imgui.IsItemHovered() and imgui.IsMouseReleased(imgui.MouseButton.Right) then
+                    filter_action_type = action_type_to_name(action.type)
+                end
 
                 imgui.TableNextColumn()
                 imgui.Text(action.origin)
