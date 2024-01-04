@@ -4,6 +4,9 @@ local file_util = dofile_once("mods/component-explorer/utils/file_util.lua")
 dofile_once("data/scripts/gun/gun_enums.lua")
 
 local function register_origins(origin)
+    if not actions then
+        return
+    end
     for _, action in ipairs(actions) do
         if action.origin == nil then
             action.origin = origin

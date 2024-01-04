@@ -1,6 +1,9 @@
 dofile_once("data/scripts/perks/perk.lua")
 
 function register_origins(origin)
+    if not perk_list then
+        return
+    end
     for _, perk in ipairs(perk_list) do
         if perk.origin == nil then
             perk.origin = origin
