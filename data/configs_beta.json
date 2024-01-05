@@ -35,25 +35,21 @@
             {
                 "type": "int",
                 "name": "background_edge_priority",
-                "example": "0 [0, 1]",
                 "description": "if both biomes have edges defined, will use the one with higher priority (if priority is same, will compare (>) background_images)"
             },
             {
                 "type": "bool",
                 "name": "background_use_neighbor",
-                "example": "0 [0, 1]",
                 "description": "if set will look for neighboring biomes and use their background image"
             },
             {
                 "type": "float",
                 "name": "background_image_height",
-                "example": "225 [0, 1]",
                 "description": "height were the background image starts"
             },
             {
                 "type": "bool",
                 "name": "limit_background_image",
-                "example": "1 [0, 1]",
                 "description": "Will limit the background image to start at the cave height"
             },
             {
@@ -64,25 +60,21 @@
             {
                 "type": "bool",
                 "name": "noise_biome_edges",
-                "example": "1 [0, 1]",
                 "description": "does the noisy edge for biomes, if either of biomes has this set to 0 will do a straight edge"
             },
             {
                 "type": "bool",
                 "name": "big_noise_biome_edges",
-                "example": "1 [0, 1]",
                 "description": "if true, will leak onto other biomes and not be carveable"
             },
             {
                 "type": "bool",
                 "name": "fat_biome_edges",
-                "example": "0 [0, 1]",
                 "description": "if true, will leak onto other biomes and not be carveable"
             },
             {
                 "type": "bool",
                 "name": "skip_edge_textures",
-                "example": "0 [0, 1]",
                 "description": "skips edge texture generation. Turn of for pixel scenes"
             },
             {
@@ -98,67 +90,61 @@
             {
                 "type": "float",
                 "name": "audio_music_energy_coeff",
-                "example": "-188.237 [0, 1]",
                 "description": "Multiplier for music energy in this biome"
             },
             {
                 "type": "bool",
                 "name": "audio_music_no_forced_quietness",
-                "example": "195 [0, 1]",
                 "description": "If 1, music is not quieted by occasional quietness"
             },
             {
                 "type": "int32",
                 "name": "audio_music_forced_quietness_duration_seconds",
-                "example": "1701869824 [0, 1]",
                 "description": "If > 0, this is the duration of occasional quietness, else the value from magic numbers is used."
+            },
+            {
+                "type": "bool",
+                "name": "audio_music_trigger_without_danger",
+                "description": "If 1, music is triggered in this biome no matter what the danger level is"
             },
             {
                 "type": "std::string",
                 "name": "audio_ambience",
-                "example": "avent [0, 1]",
                 "description": "the ambience event that plays while player is in this biome"
             },
             {
                 "type": "std::string",
                 "name": "audio_ambience_surface",
-                "example": "ills [0, 1]",
                 "description": "the ambience event that plays while player is in this biome and on surface"
             },
             {
                 "type": "float",
                 "name": "color_grading_r",
-                "example": "1 [0, 1]",
                 "description": "post fx color grading"
             },
             {
                 "type": "float",
                 "name": "color_grading_g",
-                "example": "1 [0, 1]",
                 "description": "post fx color grading"
             },
             {
                 "type": "float",
                 "name": "color_grading_b",
-                "example": "1 [0, 1]",
                 "description": "post fx color grading"
             },
             {
                 "type": "float",
                 "name": "color_grading_grayscale",
-                "example": "0 [0, 1]",
                 "description": "post fx color grading. [0.0,1.0], larger value means more grayscale"
             },
             {
                 "type": "bool",
                 "name": "has_rain",
-                "example": "15 [0, 1]",
                 "description": "if 1, rain or snowfall may occur in this biome"
             },
             {
                 "type": "std::string",
                 "name": "bitmap_filename",
-                "example": "[0, 1]",
                 "description": "loads the chunk from this bitmap, the bitmap should be 512x512"
             },
             {
@@ -169,13 +155,11 @@
             {
                 "type": "int",
                 "name": "wang_map_width",
-                "example": "256 [1, 512]",
                 "description": "the size of the wang map"
             },
             {
                 "type": "int",
                 "name": "wang_map_height",
-                "example": "256 [1, 512]",
                 "description": "the size of the wang map"
             },
             {
@@ -186,152 +170,155 @@
             {
                 "type": "bool",
                 "name": "pixel_scene",
-                "example": "15 [0, 1]",
                 "description": "for 'pixel scene' biomes, this forces the loading before hand "
+            },
+            {
+                "type": "bool",
+                "name": "static_tile",
+                "description": "if 1, directly blits wang_template_file without wang randomization, kind of like a pixel scene but at the wang tile resolution"
+            },
+            {
+                "type": "std::string",
+                "name": "static_tile_bg_mask",
+                "description": "if set, and static tile is 1, the background_image will use a special shader and this mask to calculate visiblity. should be same size and resolution as 'wang_template_file'"
+            },
+            {
+                "type": "float",
+                "name": "static_tile_bg_mask_threshold",
+                "description": "threshold used in 'sprite_static_tile_bg.frag' shader in conjuction with 'sprite_static_tile_bg_mask' to determine if a background pixel is visible or not"
             },
             {
                 "type": "float",
                 "name": "game_enemy_hp_scale",
-                "example": "1 [0, 1]",
                 "description": "1.f = default. Will multiply the hp of the camerabounded enemies in the area with hp_scale"
             },
             {
                 "type": "float",
                 "name": "game_enemy_attack_speed",
-                "example": "1 [0, 1]",
                 "description": "1.f = default. This multiplies AnimalAI's attack_ranged_frames_between in camerabounded enemies"
             },
             {
                 "type": "bool",
                 "name": "mInsideNoiseFBM",
-                "example": "15 [0, 1]",
                 "description": "will fbm the mInsideNoise if set true"
             },
             {
                 "type": "double",
                 "name": "mInsidePerlinScaleX",
-                "example": "1 [0, 2]",
                 "description": "the noise inside the stones..."
             },
             {
                 "type": "double",
                 "name": "mInsidePerlinScaleY",
-                "example": "1 [0, 2]",
                 "description": "the noise inside the stones..."
             },
             {
                 "type": "bool",
-                "name": "mInsidePerlinSquared",
-                "example": "0 [0, 1]"
+                "name": "mInsidePerlinSquared"
             },
             {
                 "type": "bool",
-                "name": "mInsidePerlinClamped",
-                "example": "0 [0, 1]"
+                "name": "mInsidePerlinClamped"
             },
             {
                 "type": "bool",
-                "name": "mInsidePerlinScaled",
-                "example": "0 [0, 1]"
+                "name": "mInsidePerlinScaled"
             },
             {
                 "type": "float",
-                "name": "mInsidePerlinScaleMin",
-                "example": "0 [-2, 2]"
+                "name": "mInsidePerlinScaleMin"
             },
             {
                 "type": "float",
-                "name": "mInsidePerlinScaleMax",
-                "example": "0 [-2, 2]"
+                "name": "mInsidePerlinScaleMax"
             },
             {
                 "type": "bool",
                 "name": "mInsidePerlinForceInside",
-                "example": "0 [0, 1]",
                 "description": "if set, will multiply the noise_value with the gradient value "
+            },
+            {
+                "type": "bool",
+                "name": "mInsidePerlinOffsetBySeed",
+                "description": "NOTE( Petri ): 17.8.2023 - if set, will add worldseed as an offset to the noise"
+            },
+            {
+                "type": "double",
+                "name": "mInsidePerlinOffsetX",
+                "description": "NOTE( Petri ): 17.8.2023 - perlin noise offset"
+            },
+            {
+                "type": "double",
+                "name": "mInsidePerlinOffsetY",
+                "description": "NOTE( Petri ): 17.8.2023 - perlin noise offset"
             },
             {
                 "type": "float",
                 "name": "mInsideAddValue",
-                "example": "0 [0, 5]",
                 "description": "added inside the caves the gradient value"
             },
             {
                 "type": "float",
                 "name": "mMultiplierGradient",
-                "example": "1 [0, 1]",
                 "description": "how much of the gradient is applied"
             },
             {
                 "type": "float",
                 "name": "mMultiplierPerlin",
-                "example": "1 [0, 1]",
                 "description": "how much of the inside noise"
             },
             {
                 "type": "float",
-                "name": "mMultiplierExtraPerlin",
-                "example": "1 [0, 1]"
+                "name": "mMultiplierExtraPerlin"
             },
             {
                 "type": "float",
-                "name": "mGradientStartY",
-                "example": "-512 [-1024, 1024]"
+                "name": "mGradientStartY"
             },
             {
                 "type": "float",
-                "name": "mGradientEndY",
-                "example": "512 [-1024, 1024]"
+                "name": "mGradientEndY"
             },
             {
                 "type": "double",
                 "name": "mGradientSlopeStartX",
-                "example": "0 [-1024, 1024]",
                 "description": "if addNoise = 3, will use this to the ( x - mGradientSlopeStartX ) * mGradientSlopeDelta"
             },
             {
                 "type": "double",
                 "name": "mGradientSlopeDelta",
-                "example": "1 [-1024, 1024]",
                 "description": "if addNoise = 3, will use this to the ( x - mGradientSlopeStartX ) * mGradientSlopeDelta"
             },
             {
                 "type": "int",
                 "name": "mGradientAddNoise",
-                "example": "1 [0, 1]",
                 "description": "fake enum 1=standard noise, 2=fbm noise, 3=slope"
             },
             {
                 "type": "double",
-                "name": "mGradientNoiseScale",
-                "example": "0.01 [0, 0.01]"
+                "name": "mGradientNoiseScale"
             },
             {
                 "type": "float",
-                "name": "mGradientLowNoise",
-                "example": "-100 [-1024, 1024]"
+                "name": "mGradientLowNoise"
             },
             {
                 "type": "float",
-                "name": "mGradientHighNoise",
-                "example": "100 [-1024, 1024]"
+                "name": "mGradientHighNoise"
             },
             {
                 "type": "bool",
                 "name": "coarse_map_force_terrain",
-                "example": "0 [0, 1]",
                 "description": "if 1, is initially marked as 'terrain' in the coarse map used for sky light calculations etc"
             },
             {
                 "type": "bool",
                 "name": "coarse_map_not_terrain",
-                "example": "0 [0, 1]",
                 "description": "if 1, is initially never marked as 'terrain' in the coarse map used for sky light calculations etc"
             },
             {
                 "type": "bool",
                 "name": "coarse_map_cell_count_always_zero",
-                "example": "0 [0, 1]",
                 "description": "if 1, areas in this biome always have a 64x64 cell count of 0"
             }
         ],
@@ -411,19 +398,16 @@
             {
                 "type": "float",
                 "name": "dust_amount",
-                "example": "0 [0, 1]",
                 "description": "amount of dust rendered"
             },
             {
                 "type": "float",
                 "name": "projectile_drag_coeff",
-                "example": "1 [0, 1]",
                 "description": "projectile velocity is multiplied with this value every frame"
             },
             {
                 "type": "float",
                 "name": "entity_gravity_y_multiplier",
-                "example": "1 [-1, 2]",
                 "description": "affects the VelocityComponents gravity_y"
             },
             {
@@ -459,7 +443,6 @@
             {
                 "type": "bool",
                 "name": "everything_is_conductive",
-                "example": "0 [0, 1]",
                 "description": "if 1, every static material in this place conduct electricity"
             }
         ]
@@ -475,144 +458,119 @@
             {
                 "type": "int",
                 "name": "size_x",
-                "example": "512 [0, 1]",
                 "description": "How big the image is that we generate these from"
             },
             {
                 "type": "int",
                 "name": "size_y",
-                "example": "256 [0, 1]",
                 "description": "How big the image is that we generate these from"
             },
             {
                 "type": "float",
                 "name": "spawn_percent",
-                "example": "0.05 [0, 1]",
                 "description": "0-1 - with what chance do we add a spawn point to a cave"
             },
             {
                 "type": "int",
                 "name": "cave_count_min",
-                "example": "50 [0, 200]",
                 "description": "generates caves n, where n = random(cave_count_min, cave_count_max)"
             },
             {
                 "type": "int",
                 "name": "cave_count_max",
-                "example": "100 [0, 200]",
                 "description": "generates caves n, where n = random(cave_count_min, cave_count_max)"
             },
             {
                 "type": "bool",
                 "name": "do_beginning_paths",
-                "example": "0 [0, 1]",
                 "description": "if set, will do the paths that go down near the center of the image, used for setting up the caves to coal mines near where player starts"
             },
             {
                 "type": "bool",
                 "name": "do_beginning_down",
-                "example": "0 [0, 1]",
                 "description": "if true, will do a hole straight down"
             },
             {
                 "type": "int",
                 "name": "surface_caves_count_min",
-                "example": "7 [0, 200]",
                 "description": "generates caves n from the surface, where n = random(surface_caves_count_min, surface_caves_count_max)"
             },
             {
                 "type": "int",
                 "name": "surface_caves_count_max",
-                "example": "12 [0, 200]",
                 "description": "generates caves n from the surface, where n = random(surface_caves_count_min, surface_caves_count_max)"
             },
             {
                 "type": "float",
                 "name": "cave_strength_min",
-                "example": "0.2 [0, 1]",
                 "description": "how strongly do we carve the cave"
             },
             {
                 "type": "float",
                 "name": "cave_strength_max",
-                "example": "1 [0, 1]",
                 "description": "how strongly do we carve the cave"
             },
             {
                 "type": "int",
                 "name": "cave_childs_min",
-                "example": "0 [0, 10]",
                 "description": "how many child trails a cave can have"
             },
             {
                 "type": "int",
                 "name": "cave_childs_max",
-                "example": "2 [0, 10]",
                 "description": "how many child trails a cave can have"
             },
             {
                 "type": "int",
                 "name": "surface_cave_childs_min",
-                "example": "2 [0, 10]",
                 "description": "how many child trails a cave can have"
             },
             {
                 "type": "int",
                 "name": "surface_cave_childs_max",
-                "example": "7 [0, 10]",
                 "description": "how many child trails a cave can have"
             },
             {
                 "type": "int",
                 "name": "mountain_count_min",
-                "example": "0 [0, 10]",
                 "description": "how many child trails a cave can have"
             },
             {
                 "type": "int",
                 "name": "mountain_count_max",
-                "example": "15 [0, 10]",
                 "description": "how many child trails a cave can have"
             },
             {
                 "type": "float",
-                "name": "mountain_size_min",
-                "example": "1 [0, 10]"
+                "name": "mountain_size_min"
             },
             {
                 "type": "float",
-                "name": "mountain_size_max",
-                "example": "10 [0, 10]"
+                "name": "mountain_size_max"
             },
             {
                 "type": "int",
-                "name": "blob_caves_count_min",
-                "example": "20 [0, 50]"
+                "name": "blob_caves_count_min"
             },
             {
                 "type": "int",
-                "name": "blob_caves_count_max",
-                "example": "55 [0, 100]"
+                "name": "blob_caves_count_max"
             },
             {
                 "type": "float",
-                "name": "blob_caves_strength_min",
-                "example": "1.5 [0, 50]"
+                "name": "blob_caves_strength_min"
             },
             {
                 "type": "float",
-                "name": "blob_caves_strength_max",
-                "example": "3 [0, 100]"
+                "name": "blob_caves_strength_max"
             },
             {
                 "type": "float",
-                "name": "blob_caves_radius_min",
-                "example": "1 [0, 10]"
+                "name": "blob_caves_radius_min"
             },
             {
                 "type": "float",
-                "name": "blob_caves_radius_max",
-                "example": "10 [0, 10]"
+                "name": "blob_caves_radius_max"
             },
             {
                 "type": "std::string",
@@ -644,43 +602,35 @@
             },
             {
                 "type": "int",
-                "name": "count_min",
-                "example": "50 [0, 200]"
+                "name": "count_min"
             },
             {
                 "type": "int",
-                "name": "count_max",
-                "example": "100 [0, 200]"
+                "name": "count_max"
             },
             {
                 "type": "int",
-                "name": "aabb_min_x",
-                "example": "50 [0, 200]"
+                "name": "aabb_min_x"
             },
             {
                 "type": "int",
-                "name": "aabb_min_y",
-                "example": "100 [0, 200]"
+                "name": "aabb_min_y"
             },
             {
                 "type": "int",
-                "name": "aabb_max_x",
-                "example": "50 [0, 200]"
+                "name": "aabb_max_x"
             },
             {
                 "type": "int",
-                "name": "aabb_max_y",
-                "example": "100 [0, 200]"
+                "name": "aabb_max_y"
             },
             {
                 "type": "float",
-                "name": "strength_min",
-                "example": "1.5 [0, 2]"
+                "name": "strength_min"
             },
             {
                 "type": "float",
-                "name": "strength_max",
-                "example": "1.5 [0, 2]"
+                "name": "strength_max"
             }
         ]
     },
@@ -689,33 +639,27 @@
         "members": [
             {
                 "type": "int32",
-                "name": "x",
-                "example": "0 [0, 1]"
+                "name": "x"
             },
             {
                 "type": "int32",
-                "name": "y_min",
-                "example": "0 [0, 1]"
+                "name": "y_min"
             },
             {
                 "type": "int32",
-                "name": "y_max",
-                "example": "0 [0, 1]"
+                "name": "y_max"
             },
             {
                 "type": "int32",
-                "name": "radius",
-                "example": "0 [0, 1]"
+                "name": "radius"
             },
             {
                 "type": "int32",
-                "name": "edge_darkening_width",
-                "example": "0 [0, 1]"
+                "name": "edge_darkening_width"
             },
             {
                 "type": "uint32",
-                "name": "global_id",
-                "example": "0 [0, 1]"
+                "name": "global_id"
             }
         ]
     },
@@ -725,21 +669,18 @@
             {
                 "type": "int",
                 "name": "chance",
-                "example": "0 [0, 100]",
                 "description": "the chance of a critical hit. ]0-100[ - can be higher than 100% - then will multiply the multiplier by the extra"
             },
             {
                 "type": "float",
                 "name": "damage_multiplier",
-                "example": "1 [0, 10]",
                 "description": "multiplier that is applied to all damage types on a critical hit"
             }
         ],
         "privates": [
             {
                 "type": "bool",
-                "name": "mSucceeded",
-                "example": "0 [0, 1]"
+                "name": "mSucceeded"
             }
         ]
     },
@@ -748,77 +689,68 @@
         "members": [
             {
                 "type": "float",
-                "name": "melee",
-                "example": "1 [0, 1]"
+                "name": "melee"
             },
             {
                 "type": "float",
-                "name": "projectile",
-                "example": "1 [0, 1]"
+                "name": "projectile"
             },
             {
                 "type": "float",
-                "name": "explosion",
-                "example": "1 [0, 1]"
+                "name": "explosion"
             },
             {
                 "type": "float",
                 "name": "electricity",
-                "example": "1 [0, 1]",
                 "description": "electricity stun effect is rand[0-1] < electricity"
             },
             {
                 "type": "float",
-                "name": "fire",
-                "example": "1 [0, 1]"
+                "name": "fire"
             },
             {
                 "type": "float",
-                "name": "drill",
-                "example": "1 [0, 1]"
+                "name": "drill"
             },
             {
                 "type": "float",
-                "name": "slice",
-                "example": "1 [0, 1]"
+                "name": "slice"
             },
             {
                 "type": "float",
                 "name": "ice",
-                "example": "1 [0, 1]",
                 "description": "freezing stun effect is rand[0-1] < ice"
             },
             {
                 "type": "float",
                 "name": "healing",
-                "example": "1 [0, 1]",
                 "description": "healing aka negative damage. this should be given as a negative value."
             },
             {
                 "type": "float",
                 "name": "physics_hit",
-                "example": "1 [0, 1]",
                 "description": "damage from being hit with a physics object"
             },
             {
                 "type": "float",
-                "name": "radioactive",
-                "example": "1 [0, 1]"
+                "name": "radioactive"
             },
             {
                 "type": "float",
-                "name": "poison",
-                "example": "1 [0, 1]"
+                "name": "poison"
             },
             {
                 "type": "float",
-                "name": "overeating",
-                "example": "1 [0, 1]"
+                "name": "overeating"
             },
             {
                 "type": "float",
-                "name": "curse",
-                "example": "1 [0, 1]"
+                "name": "curse"
+            },
+            {
+                "type": "float",
+                "name": "holy",
+                "description": "NOTE( Petri ): Added 18.7.2023. Just an extra type of damage"
             }
         ]
     },
@@ -827,33 +759,27 @@
         "members": [
             {
                 "type": "float",
-                "name": "distortion_amount",
-                "example": "0 [0, 1]"
+                "name": "distortion_amount"
             },
             {
                 "type": "float",
-                "name": "color_amount",
-                "example": "0 [0, 1]"
+                "name": "color_amount"
             },
             {
                 "type": "float",
-                "name": "fractals_amount",
-                "example": "0 [0, 1]"
+                "name": "fractals_amount"
             },
             {
                 "type": "float",
-                "name": "fractals_size",
-                "example": "0 [0, 1]"
+                "name": "fractals_size"
             },
             {
                 "type": "float",
-                "name": "nightvision_amount",
-                "example": "0 [0, 1]"
+                "name": "nightvision_amount"
             },
             {
                 "type": "float",
-                "name": "doublevision_amount",
-                "example": "0 [0, 1]"
+                "name": "doublevision_amount"
             }
         ]
     },
@@ -863,61 +789,51 @@
             {
                 "type": "bool",
                 "name": "never_cache",
-                "example": "1 [0, 1]",
                 "description": "if set, won't ever cache and the explosion happens that frame. Used for projectiles"
             },
             {
                 "type": "float",
                 "name": "explosion_radius",
-                "example": "20 [0, 1]",
                 "description": "Explosion radius, used to find the peasants and physics bodies that are thrown into the air"
             },
             {
                 "type": "std::string",
                 "name": "explosion_sprite",
-                "example": "data/particles/explosion_032.xml [0, 1]",
                 "description": "sprite animation of the explosion that we play"
             },
             {
                 "type": "bool",
                 "name": "explosion_sprite_emissive",
-                "example": "0 [0, 1]",
                 "description": "if 1, sprite is emissive"
             },
             {
                 "type": "bool",
                 "name": "explosion_sprite_additive",
-                "example": "0 [0, 1]",
                 "description": "if 1, sprite is additive"
             },
             {
                 "type": "bool",
                 "name": "explosion_sprite_random_rotation",
-                "example": "1 [0, 1]",
                 "description": "if true, rotates the sprite to random 90 degrees"
             },
             {
                 "type": "float",
                 "name": "explosion_sprite_lifetime",
-                "example": "0 [0, 3.5]",
                 "description": "if 0, finds the lifetime based on the rect animation currently playing. If not 0 it is seconds how long does the explosion sprite stay in the world"
             },
             {
                 "type": "float",
                 "name": "damage",
-                "example": "5 [0, 10]",
                 "description": "how much damage does this do to living entities"
             },
             {
                 "type": "float",
                 "name": "camera_shake",
-                "example": "7.5 [0, 100]",
                 "description": "camera shake - how much we shake the camera"
             },
             {
                 "type": "bool",
                 "name": "particle_effect",
-                "example": "1 [0, 1]",
                 "description": "Should we use the ParticleEffect::DoExplosion()"
             },
             {
@@ -928,289 +844,241 @@
             {
                 "type": "bool",
                 "name": "light_enabled",
-                "example": "1 [0, 1]",
                 "description": "Should the explosion emit light to its surroundings?"
             },
             {
                 "type": "float",
                 "name": "light_fade_time",
-                "example": "0.08 [0, 1]",
                 "description": "The time it takes for the light flash to fade out"
             },
             {
                 "type": "unsignedint",
                 "name": "light_r",
-                "example": "255 [0, 255]",
                 "description": "Color red 0-255"
             },
             {
                 "type": "unsignedint",
                 "name": "light_g",
-                "example": "217 [0, 255]",
                 "description": "Color green 0-255"
             },
             {
                 "type": "unsignedint",
                 "name": "light_b",
-                "example": "180 [0, 255]",
                 "description": "Color blue 0-255"
             },
             {
                 "type": "float",
                 "name": "light_radius_coeff",
-                "example": "8 [0, 1]",
                 "description": "The radius of the light will be explosion_radius * light_radius_coeff"
             },
             {
                 "type": "bool",
                 "name": "hole_enabled",
-                "example": "1 [0, 1]",
                 "description": "Do we remove ground, creata a crater"
             },
             {
                 "type": "bool",
                 "name": "destroy_non_platform_solid_enabled",
-                "example": "1 [0, 1]",
                 "description": "Do we remove solid cells that aren't platforms?"
             },
             {
                 "type": "int",
                 "name": "electricity_count",
-                "example": "0 [0, 1]",
                 "description": "How many electricity entitities should we create?"
             },
             {
                 "type": "int",
                 "name": "min_radius_for_cracks",
-                "example": "10 [0, 1]",
                 "description": "Cracks are created if explosion_radius is larger than this"
             },
             {
                 "type": "int",
                 "name": "crack_count",
-                "example": "10 [0, 1]",
                 "description": "How many crack entitities should we create?"
             },
             {
                 "type": "float",
                 "name": "knockback_force",
-                "example": "1 [0, 1]",
                 "description": "How far do entities get thrown if a knockback occurs? final_knocback = explosion_radius * knockback_force * target.inv_normalized_distance_from_explosion / target.mass"
             },
             {
                 "type": "bool",
                 "name": "hole_destroy_liquid",
-                "example": "0 [0, 1]",
                 "description": "Do we destroy the liquid cells we ran into, or do we just throw them into to the air?"
             },
             {
                 "type": "bool",
                 "name": "hole_destroy_physics_dynamic",
-                "example": "1 [0, 1]",
                 "description": "Do we destroy the dynamic physics cells we encountered?"
             },
             {
                 "type": "std::string",
                 "name": "create_cell_material",
-                "example": "fire [0, 1]",
                 "description": "The material destroyed cells might turn into."
             },
             {
                 "type": "int",
                 "name": "create_cell_probability",
-                "example": "5 [0, 1]",
                 "description": "The probability a destroyed cell is turned into 'create_cell_material'"
             },
             {
                 "type": "int",
                 "name": "background_lightning_count",
-                "example": "0 [0, 1]",
                 "description": "Parallax background lightning count is set to this on explosion"
             },
             {
                 "type": "std::string",
                 "name": "spark_material",
-                "example": "spark [0, 1]",
                 "description": "spark material, TODO moved these to use a special Serializer"
             },
             {
                 "type": "int",
                 "name": "material_sparks_min_hp",
-                "example": "10000 [0, 100]",
                 "description": "How many sparks are we creating (rand max)"
             },
             {
                 "type": "int",
                 "name": "material_sparks_probability",
-                "example": "5 [0, 100]",
                 "description": "How many sparks are we creating (rand max)"
             },
             {
                 "type": "int",
                 "name": "material_sparks_count_min",
-                "example": "7 [0, 100]",
                 "description": "How many sparks are we creating (rand min)"
             },
             {
                 "type": "int",
                 "name": "material_sparks_count_max",
-                "example": "20 [0, 100]",
                 "description": "How many sparks are we creating (rand max)"
             },
             {
                 "type": "bool",
                 "name": "material_sparks_enabled",
-                "example": "0 [0, 1]",
                 "description": "Should we create few fire particles around the explosion"
             },
             {
                 "type": "bool",
                 "name": "material_sparks_real",
-                "example": "0 [0, 1]",
                 "description": "if the spark particles created are real or fake"
             },
             {
                 "type": "bool",
                 "name": "material_sparks_scale_with_hp",
-                "example": "0 [0, 1]",
                 "description": "if true, will create more sparks the harder the material"
             },
             {
                 "type": "bool",
                 "name": "sparks_enabled",
-                "example": "1 [0, 1]",
                 "description": "Should we create few fire particles around the explosion"
             },
             {
                 "type": "int",
                 "name": "sparks_count_min",
-                "example": "7 [0, 100]",
                 "description": "How many sparks are we creating (rand min)"
             },
             {
                 "type": "int",
                 "name": "sparks_count_max",
-                "example": "20 [0, 100]",
                 "description": "How many sparks are we creating (rand max)"
             },
             {
                 "type": "float",
                 "name": "sparks_inner_radius_coeff",
-                "example": "0.333 [0, 1]",
                 "description": "If 'sparks_enabled', Sparks are created in the area between circles defined by 'explosion_radius'*'sparks_inner_radius_coeff' and 'explosion_radius'"
             },
             {
                 "type": "bool",
                 "name": "stains_enabled",
-                "example": "1 [0, 1]",
                 "description": "Should we stain the ground and other particles"
             },
             {
                 "type": "float",
                 "name": "stains_radius",
-                "example": "0 [0, 1]",
                 "description": "The distance from the edge of the hole to the edge of the stained area, 0.0f for default which is 0.3 * explosion_radius"
             },
             {
                 "type": "int",
                 "name": "ray_energy",
-                "example": "20000 [0, 1]",
                 "description": "This is the energy we have per ray. Could be called 'penetration power' or something like that. If cells have a hp of 20 rays with 100 energy can penetrate 5 cells"
             },
             {
                 "type": "int",
                 "name": "max_durability_to_destroy",
-                "example": "10 [0, 1]",
                 "description": "When destroying cells only cells with a durability <= max_durability_to_destroy will be affected"
             },
             {
                 "type": "int",
                 "name": "gore_particle_count",
-                "example": "1 [0, 1]",
                 "description": "How many particles to create in case we do gore stuff?"
             },
             {
                 "type": "bool",
                 "name": "shake_vegetation",
-                "example": "1 [0, 1]",
                 "description": "Should we shake vegetation around the explosion (uses the area of stain_image to find vegetation)"
             },
             {
                 "type": "bool",
                 "name": "damage_mortals",
-                "example": "1 [0, 1]",
                 "description": "Look for peasants and throw them into the air? Remember to enabled physics_throw as well if you want them to actually fly"
             },
             {
                 "type": "bool",
                 "name": "physics_throw_enabled",
-                "example": "1 [0, 1]",
                 "description": "Should we throw physics objects into the air, also peasants"
             },
             {
                 "type": "float",
                 "name": "physics_multiplier_ragdoll_force",
-                "example": "1 [0, 100]",
                 "description": "treat the ragdolls a bit differently from other physics objects, to get them to fly nicely"
             },
             {
                 "type": "float",
                 "name": "cell_explosion_power",
-                "example": "1 [0, 100]",
                 "description": "used when a solid cell explodes as the multiplier to how big the radius is going to be"
             },
             {
                 "type": "float",
                 "name": "cell_explosion_radius_min",
-                "example": "5 [0, 10]",
                 "description": "when cell explodes, this is the minimum radius that explosion is made of"
             },
             {
                 "type": "float",
                 "name": "cell_explosion_radius_max",
-                "example": "150 [0, 10]",
                 "description": "when cell explodes, this is the minimum radius that explosion is made of"
             },
             {
                 "type": "float",
                 "name": "cell_explosion_velocity_min",
-                "example": "0 [0, 10]",
                 "description": "cell explodes only when body velocity is greater than this"
             },
             {
                 "type": "float",
                 "name": "cell_explosion_damage_required",
-                "example": "100 [0, 1024]",
                 "description": "how much fire damage is required before this explodes"
             },
             {
                 "type": "float",
                 "name": "cell_explosion_probability",
-                "example": "0 [0, 1]",
                 "description": "this is used when there's a tiny contact that doesn't cause an explosion, in those cases this is used as a random to check if we should explode or not"
             },
             {
                 "type": "float",
                 "name": "cell_explosion_power_ragdoll_coeff",
-                "example": "0.75 [0, 2]",
                 "description": "ragdoll cells destruction power is multiplied with this"
             },
             {
                 "type": "bool",
                 "name": "pixel_sprites_enabled",
-                "example": "1 [0, 1]",
                 "description": "if enabled will carve out the pixel sprites"
             },
             {
                 "type": "bool",
                 "name": "is_digger",
-                "example": "0 [0, 1]",
                 "description": "if 1, we apply some special digger logic to this explosion"
             },
             {
                 "type": "bool",
                 "name": "audio_enabled",
-                "example": "1 [0, 1]",
                 "description": "Do we play an explosion sound?"
             },
             {
@@ -1221,13 +1089,11 @@
             {
                 "type": "float",
                 "name": "audio_liquid_amount_normalized",
-                "example": "0 [0, 1]",
                 "description": "value of the 'liquid_amount' parameter passed to the explosion's audio event"
             },
             {
                 "type": "int",
                 "name": "explosion_delay_id",
-                "example": "-1 [-1, 1024]",
                 "description": "for delayed barrel explosions... this has to be set and has to be the same for the explosions for there to be a delay"
             }
         ],
@@ -1235,28 +1101,29 @@
             {
                 "type": "EntityID",
                 "name": "who_is_responsible",
-                "example": "0 [0, 1]",
                 "description": "the entity that caused the explosion"
+            },
+            {
+                "type": "bool",
+                "name": "null_damage",
+                "description": "if set, will not call DamageModelSystem::TakeDamage()"
             },
             {
                 "type": "EntityID",
                 "name": "dont_damage_this",
-                "example": "0 [0, 1]",
                 "description": "if set, this entity doesn't receive damage from the explosion"
             },
             {
                 "type": "EntityID",
-                "name": "impl_send_message_to_this",
-                "example": "0 [0, 1]"
+                "name": "impl_send_message_to_this"
             },
             {
-                "type": "types::vector2",
+                "type": "types_vector2",
                 "name": "impl_position"
             },
             {
                 "type": "int32",
-                "name": "impl_delay_frame",
-                "example": "0 [0, 1]"
+                "name": "impl_delay_frame"
             }
         ],
         "objects": [
@@ -1283,332 +1150,288 @@
         "name": "ConfigGunActionInfo",
         "members": [
             {
-                "type": "std_string",
+                "type": "std::string",
                 "name": "action_id"
             },
             {
-                "type": "std_string",
+                "type": "std::string",
                 "name": "action_name"
             },
             {
-                "type": "std_string",
+                "type": "std::string",
                 "name": "action_description"
             },
             {
-                "type": "std_string",
+                "type": "std::string",
                 "name": "action_sprite_filename"
             },
             {
-                "type": "std_string",
-                "name": "action_unidentified_sprite_filename",
-                "example": "data/ui_gfx/gun_actions/unidentified.png [0, 1]"
+                "type": "std::string",
+                "name": "action_unidentified_sprite_filename"
             },
             {
                 "type": "int",
-                "name": "action_type",
-                "example": "0 [0, 1]"
+                "name": "action_type"
             },
             {
-                "type": "std_string",
+                "type": "std::string",
                 "name": "action_spawn_level",
                 "description": "comma separated values should match probabilities"
             },
             {
-                "type": "std_string",
+                "type": "std::string",
                 "name": "action_spawn_probability",
                 "description": "comma separated values should match levels"
             },
             {
-                "type": "std_string",
+                "type": "std::string",
                 "name": "action_spawn_requires_flag",
                 "description": "if set, requires that this persistent flag is set for spawn probablities to be something else than 0"
             },
             {
                 "type": "bool",
                 "name": "action_spawn_manual_unlock",
-                "example": "0 [0, 1]",
                 "description": "if true, will not automatically call AddFlagPersistent( action_spawn_requires_flag ) when this action is spawned. You must do it yourself! "
             },
             {
                 "type": "int",
                 "name": "action_max_uses",
-                "example": "-1 [0, 1]",
                 "description": "-1 = infinite otherwise it's the amount specified"
             },
             {
-                "type": "std_string",
+                "type": "std::string",
                 "name": "custom_xml_file",
                 "description": "if set, this will be used instead of 'action.xml'"
             },
             {
                 "type": "float",
                 "name": "action_mana_drain",
-                "example": "10 [0, 1]",
                 "description": "how much mana does this action drain?"
             },
             {
                 "type": "bool",
                 "name": "action_is_dangerous_blast",
-                "example": "0 [0, 1]",
                 "description": "TODO - is this used anywhere?"
             },
             {
                 "type": "int",
-                "name": "action_draw_many_count",
-                "example": "0 [0, 1]"
+                "name": "action_draw_many_count"
             },
             {
                 "type": "bool",
-                "name": "action_ai_never_uses",
-                "example": "0 [0, 1]"
+                "name": "action_ai_never_uses"
             },
             {
                 "type": "bool",
-                "name": "action_never_unlimited",
-                "example": "0 [0, 1]"
+                "name": "action_never_unlimited"
             },
             {
                 "type": "bool",
-                "name": "state_shuffled",
-                "example": "0 [0, 1]"
+                "name": "state_shuffled"
             },
             {
                 "type": "int",
-                "name": "state_cards_drawn",
-                "example": "0 [0, 1]"
+                "name": "state_cards_drawn"
             },
             {
                 "type": "bool",
-                "name": "state_discarded_action",
-                "example": "0 [0, 1]"
+                "name": "state_discarded_action"
             },
             {
                 "type": "bool",
-                "name": "state_destroyed_action",
-                "example": "0 [0, 1]"
+                "name": "state_destroyed_action"
             },
             {
                 "type": "int",
-                "name": "fire_rate_wait",
-                "example": "0 [0, 1]"
+                "name": "fire_rate_wait"
             },
             {
                 "type": "float",
-                "name": "speed_multiplier",
-                "example": "1 [0, 1]"
+                "name": "speed_multiplier"
             },
             {
                 "type": "float",
-                "name": "child_speed_multiplier",
-                "example": "1 [0, 1]"
+                "name": "child_speed_multiplier"
             },
             {
                 "type": "float",
-                "name": "dampening",
-                "example": "1 [0, 1]"
+                "name": "dampening"
             },
             {
                 "type": "float",
-                "name": "explosion_radius",
-                "example": "0 [0, 1]"
+                "name": "explosion_radius"
             },
             {
                 "type": "float",
                 "name": "spread_degrees",
-                "example": "0 [0, 180]",
                 "description": "in 360 degrees, randomizes the direction of the bullet -spread_degrees to +spread_degrees"
             },
             {
                 "type": "float",
                 "name": "pattern_degrees",
-                "example": "0 [0, 180]",
                 "description": "in 360 degrees, if != 0, distributes the bullets to an even pattern from -pattern_degrees to +pattern_degrees"
             },
             {
                 "type": "float",
-                "name": "screenshake",
-                "example": "0 [0, 1]"
+                "name": "screenshake"
             },
             {
                 "type": "float",
-                "name": "recoil",
-                "example": "0 [0, 1]"
+                "name": "recoil"
             },
             {
                 "type": "float",
                 "name": "damage_melee_add",
-                "example": "0 [0, 1]",
                 "description": "TODO - is this used anywhere?"
             },
             {
                 "type": "float",
                 "name": "damage_projectile_add",
-                "example": "0 [0, 1]",
                 "description": "if change to mul - take into account that default is 0"
             },
             {
                 "type": "float",
-                "name": "damage_electricity_add",
-                "example": "0 [0, 1]"
+                "name": "damage_electricity_add"
             },
             {
                 "type": "float",
                 "name": "damage_fire_add",
-                "example": "0 [0, 1]",
                 "description": "TODO - is this used anywhere?"
             },
             {
                 "type": "float",
-                "name": "damage_explosion_add",
-                "example": "0 [0, 1]"
+                "name": "damage_explosion_add"
             },
             {
                 "type": "float",
-                "name": "damage_ice_add",
-                "example": "0 [0, 1]"
+                "name": "damage_ice_add"
             },
             {
                 "type": "float",
-                "name": "damage_slice_add",
-                "example": "0 [0, 1]"
+                "name": "damage_slice_add"
             },
             {
                 "type": "float",
-                "name": "damage_healing_add",
-                "example": "0 [0, 1]"
+                "name": "damage_healing_add"
             },
             {
                 "type": "float",
-                "name": "damage_curse_add",
-                "example": "0 [0, 1]"
+                "name": "damage_curse_add"
             },
             {
                 "type": "float",
-                "name": "damage_drill_add",
-                "example": "0 [0, 1]"
+                "name": "damage_drill_add"
+            },
+            {
+                "type": "float",
+                "name": "damage_null_all",
+                "description": "if > 0 then will set all damage to 0 and add a NullDamageComponent (that nullss the rest). The value is a percent (0.0-1.0) of what the chance is that everything will be nulled. 1 = always"
             },
             {
                 "type": "int",
                 "name": "damage_critical_chance",
-                "example": "0 [0, 100]",
                 "description": "the chance of a critical hit. ]0-100["
             },
             {
                 "type": "float",
                 "name": "damage_critical_multiplier",
-                "example": "0 [0, 10]",
                 "description": "multiplier that is applied to all damage types on a critical hit"
             },
             {
                 "type": "float",
-                "name": "explosion_damage_to_materials",
-                "example": "0 [0, 1]"
+                "name": "explosion_damage_to_materials"
             },
             {
                 "type": "float",
                 "name": "knockback_force",
-                "example": "0 [0, 1]",
                 "description": "how much knockback it does to enemies"
             },
             {
                 "type": "int",
-                "name": "reload_time",
-                "example": "0 [0, 1]"
+                "name": "reload_time"
             },
             {
                 "type": "int",
-                "name": "lightning_count",
-                "example": "0 [0, 1]"
+                "name": "lightning_count"
             },
             {
-                "type": "std_string",
+                "type": "std::string",
                 "name": "material"
             },
             {
                 "type": "int",
-                "name": "material_amount",
-                "example": "0 [0, 1]"
+                "name": "material_amount"
             },
             {
-                "type": "std_string",
+                "type": "std::string",
                 "name": "trail_material"
             },
             {
                 "type": "int",
-                "name": "trail_material_amount",
-                "example": "0 [0, 1]"
+                "name": "trail_material_amount"
             },
             {
                 "type": "int",
-                "name": "bounces",
-                "example": "0 [0, 1]"
+                "name": "bounces"
             },
             {
                 "type": "float",
-                "name": "gravity",
-                "example": "0 [0, 1]"
+                "name": "gravity"
             },
             {
                 "type": "float",
-                "name": "light",
-                "example": "0 [0, 1]"
+                "name": "light"
             },
             {
                 "type": "float",
                 "name": "blood_count_multiplier",
-                "example": "1 [0, 1]",
                 "description": "ProjectileComponent has blood_count_multiplier, it tells how much blood is generated when this hits an entity. These are multiplied together..."
             },
             {
                 "type": "int",
                 "name": "gore_particles",
-                "example": "0 [0, 1]",
                 "description": "amount of blood particles generated by the explosion"
             },
             {
                 "type": "int",
                 "name": "ragdoll_fx",
-                "example": "0 [0, 1]",
                 "description": "ragdoll_fx of the projectile, selects the highest 1 = normal, 2 = gore"
             },
             {
                 "type": "bool",
                 "name": "friendly_fire",
-                "example": "0 [0, 1]",
                 "description": "if 1, will set friendly fire on to the bullet"
             },
             {
                 "type": "float",
                 "name": "physics_impulse_coeff",
-                "example": "0 [0, 1]",
                 "description": "projectile applies an impulse to physics bodies it hits. Impulse = physics_impulse_coeff * velocity"
             },
             {
                 "type": "int",
-                "name": "lifetime_add",
-                "example": "0 [0, 1]"
+                "name": "lifetime_add"
             },
             {
-                "type": "std_string",
+                "type": "std::string",
                 "name": "sprite"
             },
             {
-                "type": "std_string",
+                "type": "std::string",
                 "name": "extra_entities",
                 "description": "comma separated xml files, that are loaded into the projectile entity. Their components get added but nothing else from the xml files is loaded"
             },
             {
-                "type": "std_string",
+                "type": "std::string",
                 "name": "game_effect_entities",
                 "description": "comma separated xml files, that have the game effects when they hit the entity"
             },
             {
-                "type": "std_string",
+                "type": "std::string",
                 "name": "sound_loop_tag",
                 "description": "If wand has a SoundLoopComponent with this tag it will start playing when this is shot"
             },
             {
-                "type": "std_string",
+                "type": "std::string",
                 "name": "projectile_file"
             }
         ]
@@ -1618,23 +1441,19 @@
         "members": [
             {
                 "type": "int",
-                "name": "actions_per_round",
-                "example": "1 [0, 1]"
+                "name": "actions_per_round"
             },
             {
                 "type": "bool",
-                "name": "shuffle_deck_when_empty",
-                "example": "0 [0, 1]"
+                "name": "shuffle_deck_when_empty"
             },
             {
                 "type": "int",
-                "name": "reload_time",
-                "example": "40 [0, 1]"
+                "name": "reload_time"
             },
             {
                 "type": "int",
                 "name": "deck_capacity",
-                "example": "2 [0, 1]",
                 "description": "e.g. deck size, how many cards can be put into this gun"
             }
         ]
@@ -1644,71 +1463,63 @@
         "members": [
             {
                 "type": "int32",
-                "name": "max_cell_durability_to_destroy",
-                "example": "12 [0, 1]"
+                "name": "max_cell_durability_to_destroy"
             },
             {
                 "type": "uint32",
-                "name": "damage_to_cells",
-                "example": "5000 [0, 1]"
+                "name": "damage_to_cells"
             },
             {
                 "type": "float",
-                "name": "max_length",
-                "example": "512 [0, 1]"
+                "name": "max_length"
             },
             {
                 "type": "float",
-                "name": "beam_radius",
-                "example": "2.5 [0, 1]"
+                "name": "beam_radius"
             },
             {
                 "type": "int32",
-                "name": "beam_particle_chance",
-                "example": "110 [0, 1]"
+                "name": "beam_particle_chance"
             },
             {
                 "type": "float",
-                "name": "beam_particle_fade",
-                "example": "1 [0, 1]"
+                "name": "beam_particle_fade"
             },
             {
                 "type": "bool",
-                "name": "beam_particle_fade_reverse",
-                "example": "0 [0, 1]"
+                "name": "beam_particle_fade_reverse"
             },
             {
                 "type": "int32",
-                "name": "hit_particle_chance",
-                "example": "20 [0, 1]"
+                "name": "hit_particle_chance"
             },
             {
                 "type": "bool",
-                "name": "audio_enabled",
-                "example": "1 [0, 1]"
+                "name": "audio_enabled"
             },
             {
                 "type": "bool",
-                "name": "audio_hit_always_enabled",
-                "example": "0 [0, 1]"
+                "name": "audio_hit_always_enabled"
             },
             {
                 "type": "float",
-                "name": "damage_to_entities",
-                "example": "0.1 [0, 1]"
+                "name": "damage_to_entities"
+            },
+            {
+                "type": "bool",
+                "name": "damage_apply_hitbox_dmg_multiplier",
+                "description": "NOTE( Petri ): 20.6.2023 - laser emitters have by default skipped the HitboxComponent's damage_multiplier. Added this as a way to enable that multiplier. "
             },
             {
                 "type": "bool",
                 "name": "root_entity_is_responsible_for_damage",
-                "example": "0 [0, 1]",
                 "description": "If 1, damage from laser to entities will be treated as if it was caused by the laser emitter's root entity"
             }
         ],
         "custom_data_types": [
             {
                 "type": "int32",
-                "name": "beam_particle_type",
-                "example": "0 [0, 1]"
+                "name": "beam_particle_type"
             }
         ]
     },
@@ -1717,31 +1528,28 @@
         "members": [
             {
                 "type": "bool",
-                "name": "entities_exist",
-                "example": "0 [0, 1]"
+                "name": "entities_exist"
             },
             {
                 "type": "int",
-                "name": "direction",
-                "example": "1 [0, 1]"
+                "name": "direction"
             },
             {
                 "type": "float",
-                "name": "speed",
-                "example": "10 [0, 1]"
+                "name": "speed"
             }
         ],
         "custom_data_types": [
             {
-                "type": "vec2",
+                "type": "types_vector2",
                 "name": "position"
             },
             {
-                "type": "VECTOR_ENTITYID",
+                "type": "std::vector<EntityID>",
                 "name": "member_entities"
             },
             {
-                "type": "VECTOR_STRING",
+                "type": "std::vector<std::string>",
                 "name": "member_files"
             }
         ]
@@ -1751,83 +1559,67 @@
         "members": [
             {
                 "type": "bool",
-                "name": "debug",
-                "example": "0 [0, 1]"
+                "name": "debug"
             },
             {
                 "type": "bool",
-                "name": "init_randomize",
-                "example": "1 [0, 1]"
+                "name": "init_randomize"
             },
             {
                 "type": "float",
-                "name": "storm_clouds_pos_y_0",
-                "example": "130 [-256, 256]"
+                "name": "storm_clouds_pos_y_0"
             },
             {
                 "type": "float",
-                "name": "storm_clouds_pos_y_1",
-                "example": "40 [-256, 256]"
+                "name": "storm_clouds_pos_y_1"
             },
             {
                 "type": "float",
-                "name": "storm_alpha_0",
-                "example": "0 [0, 1]"
+                "name": "storm_alpha_0"
             },
             {
                 "type": "float",
-                "name": "storm_alpha_1",
-                "example": "0.6 [0, 1]"
+                "name": "storm_alpha_1"
             },
             {
                 "type": "float",
-                "name": "parallax_offset_y",
-                "example": "50 [-200, 200]"
+                "name": "parallax_offset_y"
             },
             {
                 "type": "float",
-                "name": "mountains_01_offset_y",
-                "example": "0 [-200, 200]"
+                "name": "mountains_01_offset_y"
             },
             {
                 "type": "float",
-                "name": "mountains_02_offset_y",
-                "example": "0 [-200, 200]"
+                "name": "mountains_02_offset_y"
             },
             {
                 "type": "float",
-                "name": "clouds_01_offset_y_min",
-                "example": "0 [-200, 200]"
+                "name": "clouds_01_offset_y_min"
             },
             {
                 "type": "float",
-                "name": "clouds_01_offset_y_max",
-                "example": "0 [-200, 200]"
+                "name": "clouds_01_offset_y_max"
             },
             {
                 "type": "float",
-                "name": "clouds_02_offset_y_min",
-                "example": "0 [-200, 200]"
+                "name": "clouds_02_offset_y_min"
             },
             {
                 "type": "float",
-                "name": "clouds_02_offset_y_max",
-                "example": "0 [-200, 200]"
+                "name": "clouds_02_offset_y_max"
             },
             {
                 "type": "float",
-                "name": "gradient_sky_alpha",
-                "example": "0 [0, 1]"
+                "name": "gradient_sky_alpha"
             },
             {
                 "type": "float",
-                "name": "sunset_alpha",
-                "example": "1 [0, 1]"
+                "name": "sunset_alpha"
             },
             {
                 "type": "float",
-                "name": "cloud_coeff",
-                "example": "0.00166667 [0, 1]"
+                "name": "cloud_coeff"
             }
         ]
     },
@@ -1836,18 +1628,15 @@
         "members": [
             {
                 "type": "uint32",
-                "name": "id",
-                "example": "0 [0, 1]"
+                "name": "id"
             },
             {
                 "type": "uint32",
-                "name": "target_id",
-                "example": "0 [0, 1]"
+                "name": "target_id"
             },
             {
                 "type": "bool",
-                "name": "is_at_home",
-                "example": "0 [0, 1]"
+                "name": "is_at_home"
             },
             {
                 "type": "std::string",
@@ -1862,11 +1651,11 @@
         ],
         "custom_data_types": [
             {
-                "type": "vec2",
+                "type": "types_vector2",
                 "name": "position"
             },
             {
-                "type": "vec2",
+                "type": "types_vector2",
                 "name": "target_position"
             }
         ]
@@ -1880,48 +1669,39 @@
             },
             {
                 "type": "bool",
-                "name": "stream",
-                "example": "0 [0, 1]"
+                "name": "stream"
             },
             {
                 "type": "bool",
-                "name": "is_3d",
-                "example": "1 [0, 1]"
+                "name": "is_3d"
             },
             {
                 "type": "bool",
-                "name": "loop",
-                "example": "0 [0, 1]"
+                "name": "loop"
             },
             {
                 "type": "float",
-                "name": "random_volume_min",
-                "example": "1 [0, 1]"
+                "name": "random_volume_min"
             },
             {
                 "type": "float",
-                "name": "random_volume_max",
-                "example": "1 [0, 1]"
+                "name": "random_volume_max"
             },
             {
                 "type": "float",
-                "name": "random_pitch_min",
-                "example": "1 [0, 1]"
+                "name": "random_pitch_min"
             },
             {
                 "type": "float",
-                "name": "random_pitch_max",
-                "example": "1 [0, 1]"
+                "name": "random_pitch_max"
             },
             {
                 "type": "float",
-                "name": "min_distance",
-                "example": "0.5 [0, 1]"
+                "name": "min_distance"
             },
             {
                 "type": "float",
-                "name": "max_distance",
-                "example": "100 [0, 1]"
+                "name": "max_distance"
             }
         ],
         "custom_data_types": [
@@ -1936,151 +1716,122 @@
         "members": [
             {
                 "type": "bool",
-                "name": "mDrawPathFindingGrid",
-                "example": "0 [0, 1]"
+                "name": "mDrawPathFindingGrid"
             },
             {
                 "type": "float",
-                "name": "DEBUG_RAGDOLL_EXTRA_FORCE",
-                "example": "1 [0, 1000]"
+                "name": "DEBUG_RAGDOLL_EXTRA_FORCE"
             },
             {
                 "type": "bool",
-                "name": "mRenderPathFinding",
-                "example": "0 [0, 1]"
+                "name": "mRenderPathFinding"
             },
             {
                 "type": "bool",
-                "name": "mPauseSimulation",
-                "example": "0 [0, 1]"
+                "name": "mPauseSimulation"
             },
             {
                 "type": "bool",
-                "name": "mPauseSomeSimulation",
-                "example": "0 [0, 1]"
+                "name": "mPauseSomeSimulation"
             },
             {
                 "type": "bool",
-                "name": "mCameraFreeIsSmoothed",
-                "example": "0 [0, 1]"
+                "name": "mCameraFreeIsSmoothed"
             },
             {
                 "type": "bool",
-                "name": "mCameraIsLockedInGameplay",
-                "example": "0 [0, 1]"
+                "name": "mCameraIsLockedInGameplay"
             },
             {
                 "type": "bool",
-                "name": "camera_light",
-                "example": "0 [0, 1]"
+                "name": "camera_light"
             },
             {
                 "type": "bool",
-                "name": "mAllowCameraMoveWhenLocked",
-                "example": "0 [0, 1]"
+                "name": "mAllowCameraMoveWhenLocked"
             },
             {
                 "type": "bool",
-                "name": "mCameraDisableCameraShake",
-                "example": "0 [0, 1]"
+                "name": "mCameraDisableCameraShake"
             },
             {
                 "type": "float",
-                "name": "mCameraTargetOffsetY",
-                "example": "0 [-200, 200]"
+                "name": "mCameraTargetOffsetY"
             },
             {
                 "type": "float",
-                "name": "mCameraTargetOffsetX",
-                "example": "0 [-200, 200]"
+                "name": "mCameraTargetOffsetX"
             },
             {
                 "type": "bool",
-                "name": "mPostFxDisabled",
-                "example": "0 [0, 1]"
+                "name": "mPostFxDisabled"
             },
             {
                 "type": "bool",
-                "name": "mGuiDisabled",
-                "example": "0 [0, 1]"
+                "name": "mGuiDisabled"
             },
             {
                 "type": "bool",
-                "name": "mGuiHalfSize",
-                "example": "0 [0, 1]"
+                "name": "mGuiHalfSize"
             },
             {
                 "type": "bool",
-                "name": "mFogOfWarOpenEverywhere",
-                "example": "0 [0, 1]"
+                "name": "mFogOfWarOpenEverywhere"
             },
             {
                 "type": "bool",
-                "name": "mTrailerMode",
-                "example": "0 [0, 1]"
+                "name": "mTrailerMode"
             },
             {
                 "type": "bool",
-                "name": "mDayTimeRotationPaused",
-                "example": "0 [0, 1]"
+                "name": "mDayTimeRotationPaused"
             },
             {
                 "type": "bool",
-                "name": "mPlayerNeverDies",
-                "example": "0 [0, 1]"
+                "name": "mPlayerNeverDies"
             },
             {
                 "type": "bool",
-                "name": "mFreezeAI",
-                "example": "0 [0, 1]"
+                "name": "mFreezeAI"
             },
             {
                 "type": "bool",
-                "name": "mGameAudioVisualization",
-                "example": "0 [0, 1]"
+                "name": "mGameAudioVisualization"
             },
             {
                 "type": "bool",
-                "name": "mGameMusicDebug",
-                "example": "0 [0, 1]"
+                "name": "mGameMusicDebug"
             },
             {
                 "type": "bool",
-                "name": "mGameMusicDebugFades",
-                "example": "0 [0, 1]"
+                "name": "mGameMusicDebugFades"
             },
             {
                 "type": "bool",
-                "name": "mAudioPerformanceDebug",
-                "example": "0 [0, 1]"
+                "name": "mAudioPerformanceDebug"
             },
             {
                 "type": "float",
-                "name": "B2_Friction",
-                "example": "0.05 [0, 1.1]"
+                "name": "B2_Friction"
             },
             {
                 "type": "float",
-                "name": "mRecordingCameraStartX",
-                "example": "0 [0, 1]"
+                "name": "mRecordingCameraStartX"
             },
             {
                 "type": "float",
-                "name": "mRecordingCameraStartY",
-                "example": "0 [0, 1]"
+                "name": "mRecordingCameraStartY"
             }
         ],
         "privates": [
             {
                 "type": "bool",
                 "name": "GLOBAL_WE_ARE_DOING_RESET",
-                "example": "0 [0, 1]",
                 "description": "used to track if we're doing the reset. cassert(false) in places "
             },
             {
                 "type": "bool",
-                "name": "mSettingWasChanged",
-                "example": "0 [0, 1]"
+                "name": "mSettingWasChanged"
             }
         ]
     },
@@ -2089,33 +1840,27 @@
         "members": [
             {
                 "type": "float",
-                "name": "airflow_lo_time",
-                "example": "0.001 [0, 1]"
+                "name": "airflow_lo_time"
             },
             {
                 "type": "float",
-                "name": "airflow_lo_scale",
-                "example": "0.0333 [0.001, 0.5]"
+                "name": "airflow_lo_scale"
             },
             {
                 "type": "float",
-                "name": "airflow_lo_force",
-                "example": "1 [0, 10]"
+                "name": "airflow_lo_force"
             },
             {
                 "type": "float",
-                "name": "airflow_hi_time",
-                "example": "0.001 [0, 1]"
+                "name": "airflow_hi_time"
             },
             {
                 "type": "float",
-                "name": "airflow_hi_scale",
-                "example": "0.0333 [0.001, 0.5]"
+                "name": "airflow_hi_scale"
             },
             {
                 "type": "float",
-                "name": "airflow_hi_force",
-                "example": "0 [0, 10]"
+                "name": "airflow_hi_force"
             }
         ]
     },
@@ -2125,25 +1870,21 @@
             {
                 "type": "bool",
                 "name": "LIMIT_VELOCITY",
-                "example": "1 [0, 1]",
                 "description": "if true, will reload wang maps"
             },
             {
                 "type": "bool",
                 "name": "REGEN_WANG_MAPS",
-                "example": "0 [0, 1]",
                 "description": "if true, will reload wang maps"
             },
             {
                 "type": "bool",
                 "name": "DISABLE_GRIDWORLD_RENDERING",
-                "example": "0 [0, 1]",
                 "description": "disables the rendering so you can check the backgrounds in peace"
             },
             {
                 "type": "float",
-                "name": "SWIMMING_FORCE",
-                "example": "5 [0, 20]"
+                "name": "SWIMMING_FORCE"
             },
             {
                 "type": "int8",
@@ -2155,209 +1896,168 @@
             },
             {
                 "type": "bool",
-                "name": "draw_game_stats",
-                "example": "0 [0, 1]"
+                "name": "draw_game_stats"
             },
             {
                 "type": "bool",
                 "name": "DEBUG_LOAD_ALL_ENTITIES",
-                "example": "0 [0, 1]",
                 "description": "CODE WILL TOGGLE THIS OFF AFTER THE EXECUTION! "
             },
             {
                 "type": "bool",
-                "name": "mDrawUpdateRects",
-                "example": "0 [0, 1]"
+                "name": "mDrawUpdateRects"
             },
             {
                 "type": "bool",
-                "name": "mDrawBox2D",
-                "example": "0 [0, 1]"
+                "name": "mDrawBox2D"
             },
             {
                 "type": "bool",
-                "name": "mDrawBox2DAABB",
-                "example": "0 [0, 1]"
+                "name": "mDrawBox2DAABB"
             },
             {
                 "type": "bool",
-                "name": "mDrawBox2DVelocities",
-                "example": "0 [0, 1]"
+                "name": "mDrawBox2DVelocities"
             },
             {
                 "type": "bool",
-                "name": "mDrawBox2DForces",
-                "example": "0 [0, 1]"
+                "name": "mDrawBox2DForces"
             },
             {
                 "type": "bool",
-                "name": "mDrawBox2DMassDensity",
-                "example": "0 [0, 1]"
+                "name": "mDrawBox2DMassDensity"
             },
             {
                 "type": "bool",
-                "name": "mDrawBox2DCollisionGroups",
-                "example": "0 [0, 1]"
+                "name": "mDrawBox2DCollisionGroups"
             },
             {
                 "type": "bool",
-                "name": "mDrawJoints",
-                "example": "0 [0, 1]"
+                "name": "mDrawJoints"
             },
             {
                 "type": "bool",
-                "name": "mBox2DMousePick",
-                "example": "0 [0, 1]"
+                "name": "mBox2DMousePick"
             },
             {
                 "type": "bool",
-                "name": "mDebugEnabled",
-                "example": "0 [0, 1]"
+                "name": "mDebugEnabled"
             },
             {
                 "type": "bool",
-                "name": "mDebugKeysEnabled",
-                "example": "0 [0, 1]"
+                "name": "mDebugKeysEnabled"
             },
             {
                 "type": "bool",
-                "name": "mDrawEntities",
-                "example": "0 [0, 1]"
+                "name": "mDrawEntities"
             },
             {
                 "type": "float",
-                "name": "mEntityScale",
-                "example": "1 [0.001, 1]"
+                "name": "mEntityScale"
             },
             {
                 "type": "bool",
-                "name": "mEntityDrawTags",
-                "example": "1 [0, 1]"
+                "name": "mEntityDrawTags"
             },
             {
                 "type": "bool",
-                "name": "mEntityDrawFilename",
-                "example": "0 [0, 1]"
+                "name": "mEntityDrawFilename"
             },
             {
                 "type": "bool",
-                "name": "mDrawWorldChunks",
-                "example": "0 [0, 1]"
+                "name": "mDrawWorldChunks"
             },
             {
                 "type": "float",
-                "name": "mDrawWorldChunksScale",
-                "example": "0.05 [0.001, 0.3]"
+                "name": "mDrawWorldChunksScale"
             },
             {
                 "type": "float",
-                "name": "mDrawWorldChunksPosX",
-                "example": "0 [-3560, 2560]"
+                "name": "mDrawWorldChunksPosX"
             },
             {
                 "type": "float",
-                "name": "mDrawWorldChunksPosY",
-                "example": "0 [-3560, 2560]"
+                "name": "mDrawWorldChunksPosY"
             },
             {
                 "type": "bool",
-                "name": "mDrawBiomeHeight",
-                "example": "0 [0, 1]"
+                "name": "mDrawBiomeHeight"
             },
             {
                 "type": "bool",
-                "name": "mDraw64x64CellCounts",
-                "example": "0 [0, 1]"
+                "name": "mDraw64x64CellCounts"
             },
             {
                 "type": "bool",
-                "name": "mDrawWangMap",
-                "example": "0 [0, 1]"
+                "name": "mDrawWangMap"
             },
             {
                 "type": "bool",
-                "name": "draw_wang_colors",
-                "example": "0 [0, 1]"
+                "name": "draw_wang_colors"
             },
             {
                 "type": "float",
-                "name": "mWangMapScale",
-                "example": "0.2 [0, 1]"
+                "name": "mWangMapScale"
             },
             {
                 "type": "float",
-                "name": "mWangMapAlpha",
-                "example": "1 [0, 1]"
+                "name": "mWangMapAlpha"
             },
             {
                 "type": "bool",
-                "name": "mDebugSpamRandomEntities",
-                "example": "0 [0, 1]"
+                "name": "mDebugSpamRandomEntities"
             },
             {
                 "type": "bool",
-                "name": "do_edge",
-                "example": "1 [0, 1]"
+                "name": "do_edge"
             },
             {
                 "type": "float",
-                "name": "physics_impulse_limit",
-                "example": "1 [0, 20]"
+                "name": "physics_impulse_limit"
             },
             {
                 "type": "float",
-                "name": "physics_multiplier",
-                "example": "0.2 [-10, 10]"
+                "name": "physics_multiplier"
             },
             {
                 "type": "float",
-                "name": "physics_pos_x",
-                "example": "3.1 [-10, 10]"
+                "name": "physics_pos_x"
             },
             {
                 "type": "float",
-                "name": "physics_pos_y",
-                "example": "-7.1 [-20, 20]"
+                "name": "physics_pos_y"
             },
             {
                 "type": "float",
-                "name": "physics_throw_str",
-                "example": "376 [0, 1000]"
+                "name": "physics_throw_str"
             },
             {
                 "type": "int",
-                "name": "physics_damage_frames",
-                "example": "10 [0, 60]"
+                "name": "physics_damage_frames"
             },
             {
                 "type": "float",
-                "name": "physics_damage_coeff",
-                "example": "0.0333 [0, 1]"
+                "name": "physics_damage_coeff"
             },
             {
                 "type": "int",
-                "name": "player_flying_frames",
-                "example": "44 [0, 60]"
+                "name": "player_flying_frames"
             },
             {
                 "type": "bool",
-                "name": "memory_leak_im_gui",
-                "example": "0 [0, 1]"
+                "name": "memory_leak_im_gui"
             },
             {
                 "type": "bool",
-                "name": "display_cell_velocities",
-                "example": "0 [0, 1]"
+                "name": "display_cell_velocities"
             },
             {
                 "type": "bool",
-                "name": "mDoingVideoCapture",
-                "example": "0 [0, 1]"
+                "name": "mDoingVideoCapture"
             },
             {
                 "type": "bool",
-                "name": "DISABLE_ANIMAL_AI",
-                "example": "0 [0, 1]"
+                "name": "DISABLE_ANIMAL_AI"
             }
         ],
         "privates": [
@@ -2373,25 +2073,21 @@
             {
                 "type": "bool",
                 "name": "dead",
-                "example": "0 [0, 1]",
                 "description": "is player dead?"
             },
             {
                 "type": "int",
                 "name": "death_count",
-                "example": "0 [0, 1]",
                 "description": "for global"
             },
             {
                 "type": "int",
                 "name": "streaks",
-                "example": "0 [0, 1]",
                 "description": "tracks winning streaks"
             },
             {
                 "type": "uint32",
                 "name": "world_seed",
-                "example": "0 [0, 1]",
                 "description": "writes the world seed that is in use"
             },
             {
@@ -2405,7 +2101,6 @@
             {
                 "type": "double",
                 "name": "playtime",
-                "example": "0 [0, 1]",
                 "description": "session playtime in seconds, this does not include time in menus"
             },
             {
@@ -2416,94 +2111,79 @@
             {
                 "type": "int",
                 "name": "places_visited",
-                "example": "0 [0, 1]",
                 "description": "places visited"
             },
             {
                 "type": "int",
-                "name": "enemies_killed",
-                "example": "0 [0, 1]"
+                "name": "enemies_killed"
             },
             {
                 "type": "int",
-                "name": "heart_containers",
-                "example": "0 [0, 1]"
+                "name": "heart_containers"
             },
             {
                 "type": "int64",
                 "name": "hp",
-                "example": "100 [0, 1]",
                 "description": "max hp"
             },
             {
                 "type": "int64",
-                "name": "gold",
-                "example": "0 [0, 1]"
+                "name": "gold"
             },
             {
                 "type": "int64",
                 "name": "gold_all",
-                "example": "0 [0, 1]",
                 "description": "all gold, not just what's currently in players inventory"
             },
             {
                 "type": "bool",
                 "name": "gold_infinite",
-                "example": "0 [0, 1]",
                 "description": "will be set to true if all of the money is unlocked "
             },
             {
                 "type": "int",
                 "name": "items",
-                "example": "0 [0, 1]",
                 "description": "wands,potions,actions"
             },
             {
                 "type": "int",
                 "name": "projectiles_shot",
-                "example": "0 [0, 1]",
                 "description": "player, how many projectiles shot?"
             },
             {
                 "type": "int",
                 "name": "kicks",
-                "example": "0 [0, 1]",
                 "description": "player, kick count"
             },
             {
                 "type": "double",
                 "name": "damage_taken",
-                "example": "0 [0, 1]",
                 "description": "total damage taken"
             },
             {
                 "type": "double",
                 "name": "healed",
-                "example": "0 [0, 1]",
                 "description": "when player is healed (by healer, or some other thing, it's tracked here, BUG: Healing liquid isn't tracked here"
             },
             {
                 "type": "int",
                 "name": "teleports",
-                "example": "0 [0, 1]",
                 "description": "how many times have we teleported, this is bugged out right now, teleport projectiles are not counted"
             },
             {
                 "type": "int",
                 "name": "wands_edited",
-                "example": "0 [0, 1]",
                 "description": "how many wands player has edited"
             },
             {
                 "type": "int",
                 "name": "biomes_visited_with_wands",
-                "example": "0 [0, 1]",
                 "description": "used to figure out if a player played a no-wands-run, tracks how many biomes has player entered with wands. Hills doesn't fire Message_VisitedNewBiome so it doesn't count."
             }
         ],
         "custom_data_types": [
             {
-                "type": "vec2",
+                "type": "types_vector2",
                 "name": "death_pos"
             }
         ]
@@ -2514,25 +2194,21 @@
             {
                 "type": "int",
                 "name": "STATS_VERSION",
-                "example": "4 [0, 1]",
                 "description": "used to help with stats parsing"
             },
             {
                 "type": "int",
                 "name": "DEBUG_HOW_MANY_RESETS",
-                "example": "0 [0, 1]",
                 "description": "how many times have reset this?"
             },
             {
                 "type": "bool",
                 "name": "DEBUG_FIXED_STATS",
-                "example": "0 [0, 1]",
                 "description": "this gets set true, if -fix_stats has been used"
             },
             {
                 "type": "bool",
                 "name": "session_dead",
-                "example": "0 [0, 1]",
                 "description": "is player dead?"
             }
         ],
@@ -2540,13 +2216,11 @@
             {
                 "type": "int",
                 "name": "DEBUG_HOW_MANY_TIMES_DONE",
-                "example": "0 [0, 1]",
                 "description": "debug tracker"
             },
             {
                 "type": "bool",
                 "name": "DEBUG_IS_ON",
-                "example": "0 [0, 1]",
                 "description": "is debug on"
             }
         ],
@@ -2585,63 +2259,52 @@
         "members": [
             {
                 "type": "int",
-                "name": "m_material_id",
-                "example": "1 [0, 100]"
+                "name": "m_material_id"
             },
             {
                 "type": "bool",
-                "name": "cosmetic_force_create",
-                "example": "0 [0, 1]"
+                "name": "cosmetic_force_create"
             },
             {
                 "type": "bool",
-                "name": "render_back",
-                "example": "0 [0, 1]"
+                "name": "render_back"
             },
             {
                 "type": "bool",
-                "name": "render_on_grid",
-                "example": "0 [0, 1]"
+                "name": "render_on_grid"
             },
             {
                 "type": "bool",
-                "name": "draw_as_long",
-                "example": "0 [0, 1]"
+                "name": "draw_as_long"
             },
             {
                 "type": "float",
-                "name": "airflow_force",
-                "example": "0 [-10, 10]"
+                "name": "airflow_force"
             },
             {
                 "type": "float",
-                "name": "airflow_scale",
-                "example": "0 [-10, 10]"
+                "name": "airflow_scale"
             },
             {
                 "type": "float",
-                "name": "friction",
-                "example": "0 [-10, 10]"
+                "name": "friction"
             },
             {
                 "type": "float",
-                "name": "probability",
-                "example": "1 [0, 1]"
+                "name": "probability"
             },
             {
                 "type": "bool",
-                "name": "particle_single_width",
-                "example": "1 [0, 1]"
+                "name": "particle_single_width"
             },
             {
                 "type": "bool",
-                "name": "fade_based_on_lifetime",
-                "example": "1 [0, 1]"
+                "name": "fade_based_on_lifetime"
             }
         ],
         "custom_data_types": [
             {
-                "type": "vec2",
+                "type": "types_vector2",
                 "name": "vel"
             },
             {
@@ -2651,7 +2314,6 @@
             {
                 "type": "uint32",
                 "name": "color",
-                "example": "0 [0, 1]",
                 "description": "if something else than 0 will use this color"
             },
             {
@@ -2659,7 +2321,7 @@
                 "name": "lifetime"
             },
             {
-                "type": "vec2",
+                "type": "types_vector2",
                 "name": "gravity"
             },
             {
@@ -2677,13 +2339,12 @@
             },
             {
                 "type": "bool",
-                "name": "count_as_item_pickup",
-                "example": "0 [0, 1]"
+                "name": "count_as_item_pickup"
             }
         ],
         "custom_data_types": [
             {
-                "type": "vec2",
+                "type": "types_vector2",
                 "name": "pos"
             }
         ]
@@ -2694,7 +2355,6 @@
             {
                 "type": "std::string",
                 "name": "BUILD_NAME",
-                "example": "Noita-Build-Apr 23 2021-18:44:24 [0, 1]",
                 "description": "build name from the macro"
             }
         ],
@@ -2729,25 +2389,21 @@
             {
                 "type": "int",
                 "name": "deaths",
-                "example": "0 [0, 1]",
                 "description": "total deaths (by whom ever)"
             },
             {
                 "type": "int",
                 "name": "player_kills",
-                "example": "0 [0, 1]",
                 "description": "how many times has killed player"
             },
             {
                 "type": "int",
                 "name": "player_projectile_count",
-                "example": "0 [0, 1]",
                 "description": "how many times has projectiles been fired"
             },
             {
                 "type": "int",
                 "name": "kills",
-                "example": "0 [0, 1]",
                 "description": "how many kills to we have all together"
             }
         ],

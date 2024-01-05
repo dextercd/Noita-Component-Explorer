@@ -99,18 +99,27 @@ foreach(FILE_VERSION main beta)
             ${CMAKE_CURRENT_SOURCE_DIR}/data/component_${FILE_VERSION}_documentation.json@component_documentation
             ${CMAKE_CURRENT_SOURCE_DIR}/data/field_infos.json
     )
-    add_custom_target(components_${FILE_VERSION}_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/components_${FILE_VERSION}.lua)
 
     render_jinja_template(OUTPUT serialise_component_${FILE_VERSION}.lua
         TEMPLATE serialise_component.lua
         JSON ${CMAKE_CURRENT_SOURCE_DIR}/data/component_${FILE_VERSION}_documentation.json@component_documentation
     )
+
+    render_jinja_template(OUTPUT configs_${FILE_VERSION}.lua
+        TEMPLATE configs.lua
+        JSON
+            ${CMAKE_CURRENT_SOURCE_DIR}/data/configs_${FILE_VERSION}.json@configs
+    )
+
+    add_custom_target(components_${FILE_VERSION}_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/components_${FILE_VERSION}.lua)
     add_custom_target(serialise_component_${FILE_VERSION}_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/serialise_component_${FILE_VERSION}.lua)
+    add_custom_target(configs_${FILE_VERSION}_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/configs_${FILE_VERSION}.lua)
 
     install(
         FILES
             ${CMAKE_CURRENT_BINARY_DIR}/serialise_component_${FILE_VERSION}.lua
             ${CMAKE_CURRENT_BINARY_DIR}/components_${FILE_VERSION}.lua
+            ${CMAKE_CURRENT_BINARY_DIR}/configs_${FILE_VERSION}.lua
         DESTINATION "component-explorer"
         COMPONENT ComponentExplorer
     )
@@ -121,13 +130,6 @@ render_jinja_template(OUTPUT version.lua
 )
 add_custom_target(version_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/version.lua)
 
-render_jinja_template(OUTPUT configs.lua
-    TEMPLATE configs.lua
-    JSON
-        ${CMAKE_CURRENT_SOURCE_DIR}/data/configs.json
-)
-add_custom_target(configs_lua ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/configs.lua)
-
 
 configure_file(mod.xml.in mod.xml @ONLY)
 
@@ -137,7 +139,6 @@ install(DIRECTORY component-explorer DESTINATION "." COMPONENT ComponentExplorer
 install(
     FILES
         ${CMAKE_CURRENT_BINARY_DIR}/version.lua
-        ${CMAKE_CURRENT_BINARY_DIR}/configs.lua
         ${CMAKE_CURRENT_BINARY_DIR}/mod.xml
     DESTINATION "component-explorer"
     COMPONENT ComponentExplorer
