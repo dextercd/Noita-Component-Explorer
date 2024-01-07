@@ -201,7 +201,7 @@ local function about_content()
     local example = "local x, y = cursor.pos()"
     imgui.TextWrapped(table.concat({
         "Component Explorer defines its own cursor that you can place in the world. ",
-        "CE will use this in the future when it needs a location, for instance, when spawning in items.\n\n",
+        "CE uses this in some places when it needs a location, for instance, when spawning in enemies/items.\n\n",
         "You can use the cursors yourself from the Lua console and user scripts.\n",
         "Do `" .. example .. "` to get the position of the cursor in the world and use it in the console! :)\n\n",
     }))
