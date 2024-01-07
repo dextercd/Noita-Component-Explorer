@@ -10,7 +10,7 @@ local procedural_wands = {}
 for _, wand in ipairs(wands) do
     local sprite_path = string_util.split(wand.file, "/", true)
     local sprite_filename = sprite_path[#sprite_path]
-    local wiki_name = wiki.normalise_name(sprite_filename)
+    local wiki_name = wiki.normalise_page_name(sprite_filename)
     procedural_wands[wiki_name] = {
         offset_x = wand.grip_x,
         offset_y = wand.grip_y,
@@ -22,7 +22,7 @@ for _, wand in ipairs(wands) do
 end
 
 function wand_sprites.from_wiki_name(name)
-    name = wiki.normalise_name(name)
+    name = wiki.normalise_page_name(name)
 
     local procedural = procedural_wands[name]
     if procedural then return procedural end
@@ -65,7 +65,7 @@ function wand_sprites.wiki_sprite_filename(wand)
     if string_util.ends_with(sprite1, ".png") then
         local path = string_util.split(sprite1, "/", true)
         local filename = path[#path]
-        return wiki.normalise_name(filename)
+        return wiki.normalise_page_name(filename)
     end
 
     return nil

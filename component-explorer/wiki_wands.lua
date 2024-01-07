@@ -1,23 +1,29 @@
 ---@module 'component-explorer.style'
 local style = dofile_once("mods/component-explorer/style.lua")
+
 ---@module 'component-explorer.deps.EZWand'
 local EZWand = dofile_once("mods/component-explorer/deps/EZWand.lua")
+
 ---@module 'component-explorer.utils.strings'
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
----@module 'component-explorer.utils.wiki_spell_names'
-local wiki_spell_names = dofile_once("mods/component-explorer/utils/wiki_spell_names.lua")
+
 ---@module 'component-explorer.utils.wiki'
 local wiki = dofile_once("mods/component-explorer/utils/wiki.lua")
----@module 'component-explorer.wand_sprites'
-local wand_sprites = dofile_once("mods/component-explorer/wand_sprites.lua")
+
 ---@module 'component-explorer.utils.player_util'
 local player_util = dofile_once("mods/component-explorer/utils/player_util.lua")
+
 ---@module 'component-explorer.utils.copy'
 local copy = dofile_once("mods/component-explorer/utils/copy.lua")
+
 ---@module 'component-explorer.preset_wands'
 local preset_wands = dofile_once("mods/component-explorer/preset_wands.lua")
+
 ---@module 'component-explorer.cursor'
 local cursor = dofile_once("mods/component-explorer/cursor.lua")
+
+---@module 'component-explorer.utils.wiki_wand'
+local wiki_wand_util = dofile_once("mods/component-explorer/utils/wiki_wand.lua")
 
 dofile_once("data/scripts/gun/procedural/wands.lua")
 
@@ -32,171 +38,9 @@ local function error_text(str)
     imgui.PopStyleColor()
 end
 
-local function get_wand_values(wand, wand_card)
-    local values = {}
-    local wiki_file_name = wand_sprites.wiki_sprite_filename(wand)
-
-    if wand_card then
-        local item_name = nil
-
-        local item_comp = EntityGetFirstComponentIncludingDisabled(wand.entity_id, "ItemComponent")
-        if item_comp then
-            if ComponentGetValue2(item_comp, "always_use_item_name_in_ui") then
-                item_name = ComponentGetValue2(item_comp, "item_name")
-            end
-        end
-
-        if item_name then
-            table.insert(values, {"wandName", GameTextGetTranslatedOrNot(item_name)})
-        end
-    end
-
-    if wiki_file_name then
-        table.insert(values, {"wandPic", wiki_file_name})
-    end
-
-    if wand.shuffle then
-        table.insert(values, {"shuffle", "Yes"})
-    end
-
-    if wand.spellsPerCast ~= 1 then
-        table.insert(values, {"spellsCast", wand.spellsPerCast})
-    end
-
-    if wand_card then
-        table.insert(values, {"castDelay", ("%.2f"):format(wand.castDelay / 60)})
-        table.insert(values, {"rechargeTime", ("%.2f"):format(wand.rechargeTime / 60)})
-        table.insert(values, {"manaMax", ("%.2f"):format(wand.manaMax)})
-        table.insert(values, {"manaCharge", ("%.2f"):format(wand.manaChargeSpeed)})
-    end
-
-    local spells, attached_spells = wand:GetSpells()
-
-    if wand_card then
-        table.insert(values, {"capacity", wand.capacity})
-    else
-        table.insert(values, {"capacity", #spells})
-    end
-
-    if wand_card then
-        table.insert(values, {"spread", wand.spread})
-        table.insert(values, {"speed", ("%.2f"):format(wand.speedMultiplier)})
-    end
-
-    for _, spell in ipairs(attached_spells) do
-        local wiki_name = wiki_spell_names.by_action_id[spell.action_id]
-        table.insert(values, {"alwaysCasts", wiki_name})
-    end
-
-    local spell_nr = 1
-    for _, spell in ipairs(spells) do
-        local wiki_name = wiki_spell_names.by_action_id[spell.action_id]
-        table.insert(values, {"spell" .. spell_nr, wiki_name})
-        spell_nr = spell_nr + 1
-    end
-
-    return values
-end
-
-local function wand_get_wiki_text(wand, wand_card)
-    local wand_values = get_wand_values(wand, wand_card)
-
-    if wand_card then
-        return wiki.format_template("Wand Card", wand_values, 12)
-    else
-        return wiki.format_template("Wand", wand_values, 11)
-    end
-end
-
-local function set_sprite_by_filename(wand, filename)
-    local data = wand_sprites.from_wiki_name(filename)
-    if data == nil then return false end
-
-    wand:SetSprite(
-        data.sprite_file or data.image_file,
-        data.offset_x, data.offset_y,
-        data.tip_x, data.tip_y)
-
-    return true
-end
-
-local function write_wand_template(wand, template_data)
-    map = {}
-    for _, v in ipairs(template_data.values) do
-        map[v[1]] = v[2]
-    end
-
-    if map.wandPic then
-        set_sprite_by_filename(wand, map.wandPic)
-    end
-
-    if map.wandName then
-        local item_comp = EntityGetFirstComponentIncludingDisabled(wand.entity_id, "ItemComponent")
-        ComponentSetValue2(item_comp, "always_use_item_name_in_ui", true)
-        ComponentSetValue2(item_comp, "item_name", map.wandName)
-    end
-
-    wand.shuffle = map.shuffle == "true"
-    wand.spellsPerCast = map.spellsCast and tonumber(map.spellsCast) or 1
-
-    if map.castDelay then
-        wand.castDelay = tonumber(map.castDelay) * 60
-    end
-
-    if map.rechargeTime then
-        wand.rechargeTime = tonumber(map.rechargeTime) * 60
-    end
-
-    if map.manaMax then
-        wand.manaMax = tonumber(map.manaMax)
-    end
-
-    if map.manaCharge then
-        wand.manaChargeSpeed = tonumber(map.manaCharge)
-    end
-
-    wand.capacity = tonumber(map.capacity)
-
-    if map.spread then
-        wand.spread = tonumber(map.spread)
-    end
-
-    if map.speed then
-        wand.speedMultiplier = tonumber(map.speed)
-    end
-
-    wand:DetachSpells()
-    for _, item in ipairs(template_data.values) do
-        if item[1] == "alwaysCasts" then
-            local action_id = wiki_spell_names.to_action_id(item[2])
-            wand:AttachSpells(action_id)
-        end
-    end
-
-    wand:RemoveSpells()
-    for spell_nr=1, tonumber(map.capacity) do
-        local spell_name = map["spell" .. spell_nr]
-        if spell_name ~= nil then
-            local action_id = wiki_spell_names.to_action_id(spell_name)
-            wand:AddSpells(action_id)
-        end
-    end
-end
-
-local FIELD_RANGES = {
-    {"i", "spellsCast"},
-    {"f", "castDelay"},
-    {"f", "rechargeTime"},
-    {"i", "manaMax"},
-    {"i", "manaCharge"},
-    {"i", "capacity"},
-    {"f", "spread"},
-    {"f", "speed"},
-}
-
 local function show_range(type, field_name, template_values, range_values)
     local item
-    for idx, v in ipairs(template_values) do
+    for _, v in ipairs(template_values) do
         if v[1] == field_name then
             item = v
             break
@@ -205,25 +49,10 @@ local function show_range(type, field_name, template_values, range_values)
     if item == nil then return end
 
     local text_value = item[2]
-    text_value = string_util.remove_prefix(text_value, "x ") -- speed = x 1.25
+    local min, max = wiki_wand_util.field_range_value(text_value)
 
-    if text_value:sub(1, 1) ~= "(" then return end
-
-    local min, max
-    local success, err = pcall(function()
-
-        -- Value could be something like:
-        -- (-3.0 - -1.0)
-        local dash_pos = text_value:find("-", 3, true)
-        min = tonumber(text_value:sub(2, dash_pos - 1))
-        max = tonumber(text_value:sub(dash_pos + 1, #text_value - 1))
-
-        if min == nil or max == nil then
-            error({error="Range extents for '" .. field_name .. "' not a number?"})
-        end
-    end)
-    if not success then
-        error({error="Error number range for argument '" .. field_name .. "'"})
+    if min == max then
+        return
     end
 
     local value = range_values[field_name] or min
@@ -248,25 +77,9 @@ local function confirm_wand_card_import(template_data)
         range_values = {}
     end
 
-    for _, field in ipairs(FIELD_RANGES) do
+    for _, field in ipairs(wiki_wand_util.FIELD_RANGES) do
         local type, name = unpack(field)
         show_range(type, name, template_data.values, range_values)
-    end
-
-    local ammended_data = copy.shallow_copy(template_data)
-    ammended_data.values = {}
-
-    -- Apply ranges and other fixups
-    for _, item_ in ipairs(template_data.values) do
-        local item = copy.shallow_copy(item_)
-        local name = item[1]
-        if range_values[name] ~= nil then
-            item[2] = range_values[name]
-        elseif name == "speed" then
-            item[2] = string_util.remove_prefix(item[2], "x ")
-        end
-
-        table.insert(ammended_data.values, item)
     end
 
     local create_in_inv = false
@@ -296,12 +109,35 @@ local function confirm_wand_card_import(template_data)
         x, y = cursor.pos()
     end
 
+    if not create_in_inv and not create_at_pos then
+        return false
+    end
+
+    local ammended_data = copy.shallow_copy(template_data)
+    ammended_data.values = {}
+
+    -- Apply ranges and other fixups
+    for _, item_ in ipairs(template_data.values) do
+        local item = copy.shallow_copy(item_)
+        local name = item[1]
+
+        if wiki_wand_util.SUPPORTS_FIELD_RANGE[name] then
+            if range_values[name] then
+                item[2] = range_values[name]
+            elseif name == "speed" then
+                item[2] = wiki_wand_util.field_range_value(item[2])
+            end
+        end
+
+        table.insert(ammended_data.values, item)
+    end
+
     local wand
 
     if create_in_inv or create_at_pos then
         wand = EZWand()
         wand:UpdateSprite()
-        write_wand_template(wand, ammended_data)
+        wiki_wand_util.load_data_to_wand(wand, ammended_data)
     end
 
     if create_in_inv then
@@ -324,8 +160,6 @@ local function confirm_wand_card_import(template_data)
         wand:PlaceAt(x, y)
         return true
     end
-
-    return false
 end
 
 local function confirm_wand_import(template_data)
@@ -353,7 +187,7 @@ local function confirm_wand_import(template_data)
     end
 
     if wand then
-        write_wand_template(wand, template_data)
+        wiki_wand_util.load_data_to_wand(wand, template_data)
         return true
     end
 end
@@ -409,13 +243,7 @@ local function import_menu()
     end
 
     if import_last_error ~= "" then
-        if type(import_last_error) == "table" then
-            if type(import_last_error.error) == "string" then
-                error_text(import_last_error.error)
-            end
-        else
-            error_text(import_last_error)
-        end
+        error_text(import_last_error)
     end
 end
 
@@ -437,7 +265,7 @@ local function wiki_wands_contents()
         if not wand then
             needs_wand()
         else
-            local wand_text = wand_get_wiki_text(wand, false)
+            local wand_text = wiki_wand_util.wand_to_wiki_text(wand, false)
             if imgui.Button("Copy") then
                 imgui.SetClipboardText(wand_text)
             end
@@ -451,7 +279,7 @@ local function wiki_wands_contents()
         if not wand then
             needs_wand()
         else
-            local wand_text = wand_get_wiki_text(wand, true)
+            local wand_text = wiki_wand_util.wand_to_wiki_text(wand, true)
             if imgui.Button("Copy") then
                 imgui.SetClipboardText(wand_text)
             end

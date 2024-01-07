@@ -67,4 +67,10 @@ function string_util.remove_suffix(s, ending)
     return s:sub(1, #s - #ending)
 end
 
+---@param s string
+---@return string
+function string_util.strip(s)
+    return s:match("^%s*(.-)%s*$")
+end
+
 return string_util
