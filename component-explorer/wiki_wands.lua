@@ -243,7 +243,11 @@ local function import_menu()
     end
 
     if import_last_error ~= "" then
-        error_text(import_last_error)
+        if type(import_last_error) == "table" and import_last_error.error then
+            error_text(import_last_error.error)
+        else
+            error_text(tostring(import_last_error))
+        end
     end
 end
 
