@@ -11,10 +11,22 @@ end
 local simple_field_types = as_set({
     "int", "unsignedint", "int16", "uint16", "int32", "uint32", "int64",
     "uint64", "float", "double", "bool", "std::string", "std_string",
+    "USTRING",
 })
 
 local skip_field_types = as_set({
     "EntityID", "LuaManager*", "b2Body*", "b2ObjectID", "types::iaabb",
+})
+
+local int_material_field_names = as_set({
+    "material", "material2", "ragdoll_material",
+    "material_make_always_cast", "material_remove_shuffle", "material_animate_wand", "material_animate_wand_alt", "material_increase_uses_remaining", "material_sacrifice",
+    "chunk_material",
+    "from_material", "to_material",
+    "good_fx_material", "neutral_fx_material", "evil_fx_material",
+    "food_material",
+    "food_particle_effect_material",
+    "ignored_material",
 })
 
 local simple_object_types = as_set({
@@ -28,9 +40,13 @@ local simple_object_types = as_set({
 function add_field(component_id, component, field_type, field_name)
     if skip_field_types[field_type] then
         return
+    elseif field_type == "int" and int_material_field_names[field_name] then
+        component.attr[field_name] = CellFactory_GetName(ComponentGetValue2(component_id, field_name))
     elseif simple_field_types[field_type] or string.find(field_type, "::Enum", 1, true) then
         component.attr[field_name] = ComponentGetValue2(component_id, field_name)
     elseif string.find(field_type, "LensValue<", 1, true) then
+        component.attr[field_name] = ComponentGetMetaCustom(component_id, field_name)
+    elseif field_type == "StatusEffectType" then
         component.attr[field_name] = ComponentGetMetaCustom(component_id, field_name)
     elseif field_type == "vec2" or field_type == "ivec2" then
         local x, y = ComponentGetValue2(component_id, field_name)
