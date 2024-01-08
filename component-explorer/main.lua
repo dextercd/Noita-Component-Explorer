@@ -339,25 +339,18 @@ local good_mouse_handling = is_imgui_version(1, 15, 1)
 
 ---Handles the keyboard shortcuts.
 function keyboard_shortcut_items()
+    if good_mouse_handling then
+        imgui.SetNextFrameWantCaptureMouse(true)
+    end
+
+    -- Keyboard shortcuts
+
     if imgui.IsKeyPressed(imgui.Key.E) then
         entity_picker.open = not entity_picker.open
     end
 
     if imgui.IsKeyPressed(imgui.Key.F) then
         file_viewer.open = not file_viewer.open
-    end
-
-    if imgui.IsKeyPressed(imgui.Key.W) then
-        local world_entity = GameGetWorldStateEntity()
-        local world_component = EntityGetFirstComponent(world_entity, "WorldStateComponent")
-        toggle_watch_component(world_entity, world_component)
-    end
-
-    if imgui.IsKeyPressed(imgui.Key.P) then
-        local players = EntityGetWithTag("player_unit")
-        for _, player in ipairs(players) do
-            toggle_watch_entity(player)
-        end
     end
 
     if imgui.IsKeyPressed(imgui.Key.K) then
@@ -368,13 +361,24 @@ function keyboard_shortcut_items()
         console.open = not console.open
     end
 
+    if imgui.IsKeyPressed(imgui.Key.P) then
+        local players = EntityGetWithTag("player_unit")
+        for _, player in ipairs(players) do
+            toggle_watch_entity(player)
+        end
+    end
+
     if imgui.IsKeyPressed(imgui.Key.U) then
         console.user_scripts_open = not console.user_scripts_open
     end
 
-    if good_mouse_handling then
-        imgui.SetNextFrameWantCaptureMouse(true)
+    if imgui.IsKeyPressed(imgui.Key.W) then
+        local world_entity = GameGetWorldStateEntity()
+        local world_component = EntityGetFirstComponent(world_entity, "WorldStateComponent")
+        toggle_watch_component(world_entity, world_component)
     end
+
+    -- Mouse shortcuts
 
     if imgui.IsMouseClicked(imgui.MouseButton.Left) then
         local cx, cy = DEBUG_GetMouseWorld()
