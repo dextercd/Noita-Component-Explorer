@@ -132,13 +132,13 @@ function show_view_menu_items()
         }))
     end
 
-    _, spawn_stuff.open    = imgui.MenuItem("Spawn Stuff", "", spawn_stuff.open)
+    _, spawn_stuff.open    = imgui.MenuItem("Spawn Stuff", sct("CTRL+SHIFT+S"), spawn_stuff.open)
 
     _, wiki_wands.open    = imgui.MenuItem("Wiki Wands", "", wiki_wands.open)
     _, file_viewer.open   = imgui.MenuItem("File Viewer", sct("CTRL+SHIFT+F"), file_viewer.open)
     _, translations.open  = imgui.MenuItem("Translations", "", translations.open)
 
-    _, cursor.config_open = imgui.MenuItem("Cursor Config", "", cursor.config_open)
+    _, cursor.config_open = imgui.MenuItem("Cursor Config", sct("CTRL+SHIFT+C"), cursor.config_open)
 
     _, globals.open  = imgui.MenuItem("Globals", "", globals.open)
     _, run_flags.open  = imgui.MenuItem("Run Flags", "", run_flags.open)
@@ -345,6 +345,10 @@ function keyboard_shortcut_items()
 
     -- Keyboard shortcuts
 
+    if imgui.IsKeyPressed(imgui.Key.C) then
+        cursor.config_open = not cursor.config_open
+    end
+
     if imgui.IsKeyPressed(imgui.Key.E) then
         entity_picker.open = not entity_picker.open
     end
@@ -366,6 +370,10 @@ function keyboard_shortcut_items()
         for _, player in ipairs(players) do
             toggle_watch_entity(player)
         end
+    end
+
+    if imgui.IsKeyPressed(imgui.Key.S) then
+        spawn_stuff.open = not spawn_stuff.open
     end
 
     if imgui.IsKeyPressed(imgui.Key.U) then
