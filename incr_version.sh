@@ -53,7 +53,6 @@ todo() {
 
 todo "Check ImGui version number & release"
 todo "Check that this version is actually working"
-todo "New spells to add?"
 todo "Beta components file up to date?"
 todo "Main components file up to date?"
 
