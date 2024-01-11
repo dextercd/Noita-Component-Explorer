@@ -1,6 +1,9 @@
 ---@module 'component-explorer.style'
 local style = dofile_once("mods/component-explorer/style.lua")
 
+---@module 'component-explorer.link_ui'
+local link_ui = dofile_once("mods/component-explorer/link_ui.lua")
+
 ---@module 'component-explorer.deps.EZWand'
 local EZWand = dofile_once("mods/component-explorer/deps/EZWand.lua")
 
@@ -306,8 +309,21 @@ local function wiki_wands_contents()
             "In most cases the spells are the most important thing and the exact wand stats aren't that important, ",
             "so you should prefer the 'Wand' template over the 'Wand Card' template usually.",
             "\n\n",
-            "If you need help with something, you can visit the #noita-wiki channel in the Noita Discord server."
+            "If you need help with something, you can visit the #noita-wiki channel in the Noita Discord server.",
+            "\n\n",
+            "To easily copy wands off of the Noita wiki, you can add the following line to your personal common.js file:",
         }))
+
+        local cjs_line = "importScript('User:DexterCD/wandCopy.js');"
+        imgui.BeginDisabled()
+        imgui.InputText("##cjs", cjs_line)
+        imgui.EndDisabled()
+        imgui.SameLine()
+        if imgui.Button("Copy") then
+            imgui.SetClipboardText(cjs_line)
+        end
+        link_ui.button("Open Common.js", "https://noita.wiki.gg/wiki/Special:MyPage/common.js")
+
         imgui.EndTabItem()
     end
 
