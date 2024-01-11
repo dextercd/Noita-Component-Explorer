@@ -1,8 +1,8 @@
 ---@module 'component-explorer.utils.strings'
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 
----@module 'component-explorer.ui.ui_combo'
-local ui_combo = dofile_once("mods/component-explorer/ui/ui_combo.lua")
+---@module 'component-explorer.ui.combo'
+local combo = dofile_once("mods/component-explorer/ui/combo.lua")
 
 ---@module 'component-explorer.utils.player_util'
 local player_util = dofile_once("mods/component-explorer/utils/player_util.lua")
@@ -43,12 +43,12 @@ return function()
 
     imgui.SameLine()
     imgui.SetNextItemWidth(150)
-    _, filter_action_type = ui_combo.optional("Type", unique_action_types, filter_action_type)
+    _, filter_action_type = combo.optional("Type", unique_action_types, filter_action_type)
 
     if #unique_origins > 1 then
         imgui.SameLine()
         imgui.SetNextItemWidth(150)
-        _, filter_origin = ui_combo.optional("Origin", unique_origins, filter_origin)
+        _, filter_origin = combo.optional("Origin", unique_origins, filter_origin)
     end
 
     local filtered_actions

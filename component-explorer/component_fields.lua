@@ -4,8 +4,8 @@ dofile_once("mods/component-explorer/entity.lua")
 local file_viewer = dofile_once("mods/component-explorer/file_viewer.lua")
 local matutil = dofile_once("mods/component-explorer/utils/matutil.lua")
 
----@module 'component-explorer.help'
-local help = dofile_once("mods/component-explorer/help.lua")
+---@module 'component-explorer.ui.help'
+local help = dofile_once("mods/component-explorer/ui/help.lua")
 
 ---@module 'component-explorer.utils.ce_settings'
 local ce_settings = dofile_once("mods/component-explorer/utils/ce_settings.lua")

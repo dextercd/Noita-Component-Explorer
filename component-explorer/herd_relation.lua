@@ -1,11 +1,11 @@
 ---@module 'component-explorer.utils.strings'
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 
----@module 'component-explorer.help'
-local help = dofile_once("mods/component-explorer/help.lua")
+---@module 'component-explorer.ui.help'
+local help = dofile_once("mods/component-explorer/ui/help.lua")
 
----@module 'component-explorer.link_ui'
-local link_ui = dofile_once("mods/component-explorer/link_ui.lua")
+---@module 'component-explorer.ui.link'
+local link = dofile_once("mods/component-explorer/ui/link.lua")
 
 ---@module 'component-explorer.style'
 local style = dofile_once("mods/component-explorer/style.lua")
@@ -34,7 +34,7 @@ function herd_relation.show()
         return
     end
 
-    link_ui.button("See the wiki for more info", "https://noita.wiki.gg/wiki/Factions")
+    link.button("See the wiki for more info", "https://noita.wiki.gg/wiki/Factions")
 
     local _
     imgui.SetNextItemWidth(200)

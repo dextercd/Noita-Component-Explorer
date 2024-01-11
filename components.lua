@@ -7,8 +7,8 @@ local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
 local comp_tag_util = dofile_once("mods/component-explorer/utils/component_tags.lua")
 local tags_gui = dofile_once("mods/component-explorer/tags_gui.lua")
 local stable_id = dofile_once("mods/component-explorer/stable_id.lua")
----@module 'component-explorer.help'
-local help = dofile_once("mods/component-explorer/help.lua")
+---@module 'component-explorer.ui.help'
+local help = dofile_once("mods/component-explorer/ui/help.lua")
 
 component_types = {
     {% for component in component_documentation %}

@@ -1,8 +1,8 @@
 ---@module 'component-explorer.utils.strings'
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 
----@module 'component-explorer.ui.ui_combo'
-local ui_combo = dofile_once("mods/component-explorer/ui/ui_combo.lua")
+---@module 'component-explorer.ui.combo'
+local combo = dofile_once("mods/component-explorer/ui/combo.lua")
 
 ---@module 'component-explorer.utils.player_util'
 local player_util = dofile_once("mods/component-explorer/utils/player_util.lua")
@@ -40,7 +40,7 @@ return function()
     if #unique_origins > 1 then
         imgui.SameLine()
         imgui.SetNextItemWidth(150)
-        _, filter_origin = ui_combo.optional("Origin", unique_origins, filter_origin)
+        _, filter_origin = combo.optional("Origin", unique_origins, filter_origin)
     end
 
     local filtered_perks

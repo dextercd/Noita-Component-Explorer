@@ -23,8 +23,8 @@ local entity_picker = dofile_once("mods/component-explorer/entity_picker.lua")
 ---@module 'component-explorer.wiki_wands'
 local wiki_wands = dofile_once("mods/component-explorer/wiki_wands.lua")
 
----@module 'component-explorer.link_ui'
-local link_ui = dofile_once("mods/component-explorer/link_ui.lua")
+---@module 'component-explorer.ui.link'
+local link = dofile_once("mods/component-explorer/ui/link.lua")
 
 ---@module 'component-explorer.user_scripts'
 local us = dofile_once("mods/component-explorer/user_scripts.lua")
@@ -35,8 +35,8 @@ local file_viewer = dofile_once("mods/component-explorer/file_viewer.lua")
 ---@module 'component-explorer.mod_settings'
 local mod_settings = dofile_once("mods/component-explorer/mod_settings.lua")
 
----@module 'component-explorer.help'
-local help = dofile_once("mods/component-explorer/help.lua")
+---@module 'component-explorer.ui.help'
+local help = dofile_once("mods/component-explorer/ui/help.lua")
 
 ---@module 'component-explorer.translations'
 local translations = dofile_once("mods/component-explorer/translations.lua")
@@ -204,10 +204,10 @@ function main_window()
                 _, window_open_about = imgui.MenuItem("About", "", window_open_about)
 
                 local docs_description = "Copies web link"
-                if link_ui.open_link then
+                if link.open_link then
                     docs_description = "Opens noita.wiki.gg"
                 end
-                link_ui.menu_item("Docs", docs_description, version.wiki)
+                link.menu_item("Docs", docs_description, version.wiki)
 
                 imgui.EndMenu()
             end
@@ -230,7 +230,7 @@ function show_about_window()
     if should_show then
         imgui.Text("Component explorer version " .. version.version)
         imgui.Text("Made by dextercd")
-        link_ui.button("Homepage", version.homepage)
+        link.button("Homepage", version.homepage)
 
         local wx, wy = imgui.GetWindowSize()
         if imgui.LoadImage and wy > 300 then

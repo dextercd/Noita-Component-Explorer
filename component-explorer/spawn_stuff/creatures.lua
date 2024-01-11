@@ -10,8 +10,8 @@ local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 ---@module 'component-explorer.cursor'
 local cursor = dofile_once("mods/component-explorer/cursor.lua")
 
----@module 'component-explorer.ui.ui_combo'
-local ui_combo = dofile_once("mods/component-explorer/ui/ui_combo.lua")
+---@module 'component-explorer.ui.combo'
+local combo = dofile_once("mods/component-explorer/ui/combo.lua")
 
 ---@module 'component-explorer.utils.file_util'
 local file_util = dofile_once("mods/component-explorer/utils/file_util.lua")
@@ -85,12 +85,12 @@ return function()
 
     imgui.SameLine()
     imgui.SetNextItemWidth(150)
-    _, filter_herd = ui_combo.optional("Herd", unique_herds, filter_herd)
+    _, filter_herd = combo.optional("Herd", unique_herds, filter_herd)
 
     if #unique_origins > 1 then
         imgui.SameLine()
         imgui.SetNextItemWidth(150)
-        _, filter_origin = ui_combo.optional("Origin", unique_origins, filter_origin)
+        _, filter_origin = combo.optional("Origin", unique_origins, filter_origin)
     end
 
     local filtered_creatures

@@ -10,8 +10,8 @@ local modal_delete = dofile_once("mods/component-explorer/mod_setting_modals/del
 local modal_create = dofile_once("mods/component-explorer/mod_setting_modals/create.lua")
 ---@module 'component-explorer.mod_setting_modals.edit'
 local modal_edit = dofile_once("mods/component-explorer/mod_setting_modals/edit.lua")
----@module 'component-explorer.help'
-local help = dofile_once("mods/component-explorer/help.lua")
+---@module 'component-explorer.ui.help'
+local help = dofile_once("mods/component-explorer/ui/help.lua")
 
 local mod_settings = {}
 

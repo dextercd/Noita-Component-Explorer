@@ -11,8 +11,8 @@ local us = dofile_once("mods/component-explorer/user_scripts.lua")
 local entity_markers = dofile_once("mods/component-explorer/entity_markers.lua")
 ---@module 'component-explorer.globals'
 local globals = dofile_once("mods/component-explorer/globals.lua")
----@module 'component-explorer.help'
-local help = dofile_once("mods/component-explorer/help.lua")
+---@module 'component-explorer.ui.help'
+local help = dofile_once("mods/component-explorer/ui/help.lua")
 
 local lua_console = {}
 

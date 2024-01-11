@@ -1,8 +1,8 @@
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 local style = dofile_once("mods/component-explorer/style.lua")
 local matutil = dofile_once("mods/component-explorer/utils/matutil.lua")
----@module 'component-explorer.help'
-local help = dofile_once("mods/component-explorer/help.lua")
+---@module 'component-explorer.ui.help'
+local help = dofile_once("mods/component-explorer/ui/help.lua")
 
 local matinv_field = {}
 
