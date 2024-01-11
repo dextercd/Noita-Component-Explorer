@@ -322,7 +322,7 @@ local function wiki_wands_contents()
         if imgui.Button("Copy") then
             imgui.SetClipboardText(cjs_line)
         end
-        link.button("Open Common.js", "https://noita.wiki.gg/wiki/Special:MyPage/common.js")
+        link.button("Common.js", "https://noita.wiki.gg/wiki/Special:MyPage/common.js")
 
         imgui.EndTabItem()
     end
