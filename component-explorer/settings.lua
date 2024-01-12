@@ -51,7 +51,7 @@ mod_settings = {
                 id = "overlay_open_logs",
                 ui_name = "Logs Overlay (requires UnsafeExplorer)",
                 ui_description = "Overlay displaying the logger.txt file",
-                value_default = true,
+                value_default = false,
                 scope = MOD_SETTING_SCOPE_RUNTIME,
             },
         },
