@@ -2346,6 +2346,11 @@
                 "name": "precision_jumping_max_duration_frames",
                 "example": "-1 [0, 1]",
                 "description": "maximum duration of precision jump or knockback. -1 = infinite"
+            },
+            {
+                "type": "float",
+                "name": "audio_liquid_splash_intensity",
+                "example": "1 [0, 1]"
             }
         ],
         "privates": [
@@ -5226,6 +5231,12 @@
         ],
         "custom_data_types": [
             {
+                "type": "int",
+                "name": "ray_skip_material",
+                "example": "0 [0, 1]",
+                "description": "String name of material to not cast rays against. Defaults to 'aluminium'"
+            },
+            {
                 "type": "vec2",
                 "name": "mTarget"
             },
@@ -5292,6 +5303,12 @@
             }
         ],
         "custom_data_types": [
+            {
+                "type": "int",
+                "name": "ray_skip_material",
+                "example": "0 [0, 1]",
+                "description": "String name of material to not cast rays against. Defaults to 'aluminium'"
+            },
             {
                 "type": "vec2",
                 "name": "mPrevBodyPosition"
@@ -8215,6 +8232,16 @@
                 "example": "50 [0, 1]"
             },
             {
+                "type": "float",
+                "name": "torque_damaged_max",
+                "example": "100 [0, 1]"
+            },
+            {
+                "type": "float",
+                "name": "torque_jump_random",
+                "example": "0 [0, 1]"
+            },
+            {
                 "type": "int",
                 "name": "damage_deactivation_probability",
                 "example": "80 [0, 1]"
@@ -8238,6 +8265,36 @@
                 "type": "bool",
                 "name": "levitate",
                 "example": "1 [0, 1]"
+            },
+            {
+                "type": "bool",
+                "name": "v0_jump_logic",
+                "example": "1 [0, 1]"
+            },
+            {
+                "type": "bool",
+                "name": "v0_swim_logic",
+                "example": "1 [0, 1]"
+            },
+            {
+                "type": "int",
+                "name": "swim_check_y_min",
+                "example": "-2 [0, 1]"
+            },
+            {
+                "type": "int",
+                "name": "swim_check_y_max",
+                "example": "2 [0, 1]"
+            },
+            {
+                "type": "int",
+                "name": "swim_check_side_x",
+                "example": "4 [0, 1]"
+            },
+            {
+                "type": "int",
+                "name": "swim_check_side_y",
+                "example": "-2 [0, 1]"
             },
             {
                 "type": "bool",
@@ -9439,22 +9496,31 @@
                 "example": "0 [0, 1]"
             },
             {
-                "type": "vec2",
-                "name": "mCamErrorSmoothed"
-            },
-            {
-                "type": "vec2",
-                "name": "mCamCorrectionSmoothed"
-            },
-            {
-                "type": "float",
-                "name": "mCamCorrectionAmountTargetPrev",
-                "example": "0 [0, 1]"
-            },
-            {
                 "type": "float",
                 "name": "mFastMovementParticlesAlphaSmoothed",
                 "example": "0 [0, 1]"
+            },
+            {
+                "type": "uint64",
+                "name": "mTeleBoltFramesDuringLastSecond",
+                "example": "0 [0, 1]"
+            },
+            {
+                "type": "float",
+                "name": "mCamCorrectionTeleSmoothed",
+                "example": "0 [0, 1]"
+            },
+            {
+                "type": "vec2",
+                "name": "mCamCorrectionGainSmoothed"
+            },
+            {
+                "type": "Vec2ArrayInline",
+                "name": "mCameraErrorPrev"
+            },
+            {
+                "type": "vec2",
+                "name": "mCamErrorAveraged"
             }
         ],
         "custom_data_types": [
