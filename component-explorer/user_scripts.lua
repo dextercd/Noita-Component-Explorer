@@ -1,3 +1,4 @@
+local ModDoesFileExist = ModDoesFileExist
 local ModTextFileGetContent = ModTextFileGetContent
 
 local us = {}
@@ -11,15 +12,15 @@ end
 ---@param script_name string
 ---@return any
 function us.user_script(script_name)
-    -- mods/../ prevents the game from complaining about wrong script paths.
-    return loadfile(us.make_path(script_name))()
+    -- Overwritten by unsafe appends
+    print("Get unsafe-explorer to make user scripts work")
 end
 
 ---@param script_name string
 ---@return boolean
 function us.exists(script_name)
-    local content = ModTextFileGetContent(script_name)
-    return content ~= nil and content ~= ""
+    -- Overwritten by unsafe appends
+    return false
 end
 
 ---@param script_name string
