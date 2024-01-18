@@ -10,6 +10,9 @@ local player_util = dofile_once("mods/component-explorer/utils/player_util.lua")
 ---@module 'component-explorer.spawn_data.perks'
 local perk_list = dofile_once("mods/component-explorer/spawn_data/perks.lua")
 
+---@module 'component-explorer.cursor'
+local cursor = dofile_once("mods/component-explorer/cursor.lua")
+
 local function get_unique_attrs(attr)
     local set = {}
     for _, perk in ipairs(perk_list) do
@@ -25,6 +28,26 @@ local function get_unique_attrs(attr)
     return ret
 end
 local unique_origins = get_unique_attrs("origin")
+
+local function spawn_perk_at_cursor(perk)
+    local x, y = cursor.pos()
+    perk_spawn(x, y, perk.id)
+end
+
+local function player_equip_perk(perk)
+    local player = player_util.get_player()
+    if player then
+        local success, result = pcall(function()
+            local x, y = EntityGetTransform(player)
+            local perk_entity = perk_spawn(x, y - 8, perk.id)
+            perk_pickup(perk_entity, player, nil, true, false)
+        end)
+
+        if not success then
+            print_error("CE give perk error: " .. tostring(result))
+        end
+    end
+end
 
 
 local filter_search = ""
@@ -102,6 +125,8 @@ return function()
             end
         end
 
+        local spawn_at_cursor = imgui.IsKeyDown(imgui.Key.LeftShift)
+
         local clipper = imgui.ListClipper.new()
         clipper:Begin(#filtered_perks)
 
@@ -135,19 +160,11 @@ return function()
                 end
 
                 imgui.TableNextColumn()
-                if imgui.SmallButton("Equip") then
-                    local player = player_util.get_player()
-                    if player then
-                        local success, result = pcall(function()
-                            local x, y = EntityGetTransform(player)
-                            local perk_entity = perk_spawn(x, y - 8, perk.id)
-                            perk_pickup(perk_entity, player, nil, true, false)
-                        end)
 
-                        if not success then
-                            print_error("CE give perk error: " .. tostring(result))
-                        end
-                    end
+                if spawn_at_cursor then
+                    if imgui.SmallButton("Spawn") then spawn_perk_at_cursor(perk) end
+                else
+                    if imgui.SmallButton("Equip") then player_equip_perk(perk) end
                 end
 
                 imgui.PopID()

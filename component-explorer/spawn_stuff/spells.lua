@@ -9,6 +9,10 @@ local player_util = dofile_once("mods/component-explorer/utils/player_util.lua")
 
 ---@module 'component-explorer.spawn_data.actions'
 local actions_data = dofile_once("mods/component-explorer/spawn_data/actions.lua")
+
+---@module 'component-explorer.cursor'
+local cursor = dofile_once("mods/component-explorer/cursor.lua")
+
 local actions = actions_data.actions
 local unique_action_types = actions_data.unique_action_types
 local action_type_to_name = actions_data.action_type_to_name
@@ -112,6 +116,8 @@ return function()
             end
         end
 
+        local spawn_at_cursor = imgui.IsKeyDown(imgui.Key.LeftShift)
+
         local clipper = imgui.ListClipper.new()
         clipper:Begin(#filtered_actions)
 
@@ -152,17 +158,15 @@ return function()
 
                 imgui.TableNextColumn()
                 if imgui.SmallButton("Spawn") then
-                    local player = player_util.get_player()
-                    if player then
-                        local success, result = pcall(function()
-                            local x, y = EntityGetTransform(player)
-                            CreateItemActionEntity(action.id, x, y)
-                        end)
-
-                        if not success then
-                            print_error("CE give action error: " .. tostring(result))
+                    local x, y = cursor.pos()
+                    if not spawn_at_cursor then
+                        local player = player_util.get_player()
+                        if player then
+                            x, y = EntityGetTransform(player)
                         end
                     end
+
+                    CreateItemActionEntity(action.id, x, y)
                 end
 
                 imgui.PopID()
