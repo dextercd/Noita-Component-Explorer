@@ -116,7 +116,7 @@ return {
     herd="zombie",
     name="$animal_bigzombie",
     origin="Vanilla",
-    tags="mortal,teleportable_NOT,enemy,human,hittable,homing_target,destruction_target,zombie,flying"
+    tags="mortal,teleportable_NOT,enemy,human,hittable,homing_target,destruction_target,flying,zombie"
   },
   {
     file="data/entities/animals/bigzombietorso.xml",
@@ -2069,6 +2069,12 @@ return {
     tags="mortal,hittable"
   },
   {
+    file="data/entities/buildings/racing_cart.xml",
+    herd="karl",
+    origin="Vanilla",
+    tags="moon_energy,racing_cart"
+  },
+  {
     file="data/entities/buildings/snowcrystal.xml",
     herd="ghost",
     name="$animal_snowcrystal",
@@ -2189,5 +2195,26 @@ return {
     name="$animal_worm_big",
     origin="Vanilla",
     tags="mortal,teleportable_NOT,enemy,hittable,homing_target,glue_NOT,worm"
+  },
+  {
+    file="data/entities/player.xml",
+    herd="player",
+    name="DEBUG_NAME:player",
+    origin="Vanilla",
+    tags="mortal,human,hittable,peasant,prey,player_unit,teleportable"
+  },
+  {
+    file="data/entities/player_base.xml",
+    herd="player",
+    name="DEBUG_NAME:player",
+    origin="Vanilla",
+    tags="mortal,human,hittable,peasant,prey,player_unit,teleportable"
+  },
+  {
+    file="data/entities/player_rng_items.xml",
+    herd="player",
+    name="DEBUG_NAME:player",
+    origin="Vanilla",
+    tags="mortal,human,hittable,peasant,prey,player_unit,teleportable"
   }
 }
