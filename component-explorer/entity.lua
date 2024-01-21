@@ -294,7 +294,7 @@ local function show_entity(entity_id, data)
             imgui.EndPopup()
         end
 
-        local table_flags = imgui.TableFlags.Resizable
+        local table_flags = bit.bor(imgui.TableFlags.Resizable, imgui.TableFlags.RowBg)
         if imgui.BeginTable("EntityComponents", 4, table_flags) then
             imgui.TableSetupColumn("ID", imgui.TableColumnFlags.WidthFixed)
             imgui.TableSetupColumn("Type", imgui.TableColumnFlags.WidthStretch, 6)
@@ -315,9 +315,8 @@ local function show_entity(entity_id, data)
                     imgui.Text(type)
 
                     imgui.TableNextColumn()
-
                     local enabled = ComponentGetIsEnabled(component_id)
-                    local enabled_changed, new_enabled = imgui.Checkbox("###enabled" .. tostring(component_id), enabled)
+                    local enabled_changed, new_enabled = imgui.Checkbox("", enabled)
                     if enabled_changed then
                         EntitySetComponentIsEnabled(entity_id, component_id, new_enabled)
                     end
