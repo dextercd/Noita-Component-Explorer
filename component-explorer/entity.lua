@@ -236,6 +236,20 @@ local function show_entity(entity_id, data)
         if pos_changed or rot_changed or scale_changed then
             EntitySetTransform(entity_id, x, y, rotation, scale_x, scale_y)
         end
+
+        local parent = EntityGetParent(entity_id)
+        if parent ~= 0 then
+            imgui.Text("Parent: " .. parent)
+            imgui.SameLine()
+            open_entity_small_button(parent)
+
+            local root = EntityGetRootEntity(parent)
+            if root ~= parent then
+                imgui.Text("Root: " .. root)
+                imgui.SameLine()
+                open_entity_small_button(root)
+            end
+        end
     end
 
     local tag_string = EntityGetTags(entity_id) --[[@as string]]
