@@ -354,7 +354,14 @@ local function show_entity(entity_id, data)
 end
 
 function show_entity_windows()
+    -- entities_watching can change within show_entity, so make a copy to
+    -- guard against this causing iteration bugs.
+    local _copy = {}
     for entity_id, data in pairs(entities_watching) do
-        show_entity(entity_id, data)
+        _copy[#_copy+1] = {entity_id, data}
+    end
+
+    for _, v in ipairs(_copy) do
+        show_entity(v[1], v[2])
     end
 end
