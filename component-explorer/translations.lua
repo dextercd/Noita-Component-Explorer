@@ -100,9 +100,10 @@ local function csv_report_table(csv, state)
                     imgui.Text(val:gsub("\n", "\\n"))
 
                     if imgui.IsItemHovered() then
-                        imgui.BeginTooltip()
-                        imgui.Text(val)
-                        imgui.EndTooltip()
+                        if imgui.BeginTooltip() ~= false then
+                            imgui.Text(val)
+                            imgui.EndTooltip()
+                        end
                     end
                 end
             end

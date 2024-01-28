@@ -189,38 +189,38 @@ function file_viewer.show_image_file(path)
     imgui.Image(img, img.width * scale_factor, img.height * scale_factor)
 
     if imgui.IsItemHovered() then
-        imgui.BeginTooltip()
+        if imgui.BeginTooltip() ~= false then
+            local region_sz = 300
 
-        local region_sz = 300
+            -- local zoomed_sz_x = img.width / (img.width * scale_factor / region_sz) / hover_zoom
+            local zoomed_sz_x = math.min(region_sz / scale_factor / hover_zoom, img.width)
+            local zoomed_sz_y = math.min(zoomed_sz_x, img.height)
 
-        -- local zoomed_sz_x = img.width / (img.width * scale_factor / region_sz) / hover_zoom
-        local zoomed_sz_x = math.min(region_sz / scale_factor / hover_zoom, img.width)
-        local zoomed_sz_y = math.min(zoomed_sz_x, img.height)
+            local mouse_pos_x, mouse_pos_y = imgui.GetMousePos()
+            local tex_x = (mouse_pos_x - pos_x) / scale_factor - zoomed_sz_x * 0.5
+            local tex_y = (mouse_pos_y - pos_y) / scale_factor - zoomed_sz_y * 0.5
 
-        local mouse_pos_x, mouse_pos_y = imgui.GetMousePos()
-        local tex_x = (mouse_pos_x - pos_x) / scale_factor - zoomed_sz_x * 0.5
-        local tex_y = (mouse_pos_y - pos_y) / scale_factor - zoomed_sz_y * 0.5
+            if tex_x < 0 then tex_x = 0 end
+            if tex_y < 0 then tex_y = 0 end
+            if tex_x > img.width - zoomed_sz_x then tex_x = img.width - zoomed_sz_x end
+            if tex_y > img.height - zoomed_sz_y then tex_y = img.height - zoomed_sz_y end
 
-        if tex_x < 0 then tex_x = 0 end
-        if tex_y < 0 then tex_y = 0 end
-        if tex_x > img.width - zoomed_sz_x then tex_x = img.width - zoomed_sz_x end
-        if tex_y > img.height - zoomed_sz_y then tex_y = img.height - zoomed_sz_y end
+            imgui.Text(("Min: %.2f %.2f"):format(tex_x, tex_y))
+            imgui.Text(("Max: %.2f %.2f"):format(tex_x + zoomed_sz_x, tex_y + zoomed_sz_y))
 
-        imgui.Text(("Min: %.2f %.2f"):format(tex_x, tex_y))
-        imgui.Text(("Max: %.2f %.2f"):format(tex_x + zoomed_sz_x, tex_y + zoomed_sz_y))
+            local uv_0_x = tex_x / img.width
+            local uv_1_x = (tex_x + zoomed_sz_x) / img.width
+            local uv_0_y = tex_y / img.height
+            local uv_1_y = (tex_y + zoomed_sz_y) / img.height
 
-        local uv_0_x = tex_x / img.width
-        local uv_1_x = (tex_x + zoomed_sz_x) / img.width
-        local uv_0_y = tex_y / img.height
-        local uv_1_y = (tex_y + zoomed_sz_y) / img.height
+            imgui.Image(img,
+                region_sz, region_sz * (zoomed_sz_y / zoomed_sz_x),
+                uv_0_x, uv_0_y,
+                uv_1_x, uv_1_y
+            )
 
-        imgui.Image(img,
-            region_sz, region_sz * (zoomed_sz_y / zoomed_sz_x),
-            uv_0_x, uv_0_y,
-            uv_1_x, uv_1_y
-        )
-
-        imgui.EndTooltip()
+            imgui.EndTooltip()
+        end
     end
 end
 

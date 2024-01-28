@@ -113,12 +113,13 @@ function herd_relation.show()
                     end
 
                     if imgui.IsItemHovered() then
-                        imgui.BeginTooltip()
-                        imgui.Text("Attacker: " .. attacker_name)
-                        imgui.Text("Target: " .. target_name)
-                        imgui.Text("Relation: " .. relation)
-                        imgui.Text("Opposite relation: " .. reverse_relation)
-                        imgui.EndTooltip()
+                        if imgui.BeginTooltip() ~= false then
+                            imgui.Text("Attacker: " .. attacker_name)
+                            imgui.Text("Target: " .. target_name)
+                            imgui.Text("Relation: " .. relation)
+                            imgui.Text("Opposite relation: " .. reverse_relation)
+                            imgui.EndTooltip()
+                        end
                     end
                 end
             end

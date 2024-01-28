@@ -3,11 +3,12 @@ local help = {}
 ---@param desc string
 function help.tooltip(desc)
     if imgui.IsItemHovered() then
-        imgui.BeginTooltip()
-        imgui.PushTextWrapPos(400)
-        imgui.Text(desc)
-        imgui.PopTextWrapPos()
-        imgui.EndTooltip()
+        if imgui.BeginTooltip() ~= false then
+            imgui.PushTextWrapPos(400)
+            imgui.Text(desc)
+            imgui.PopTextWrapPos()
+            imgui.EndTooltip()
+        end
     end
 end
 
