@@ -2161,6 +2161,12 @@
                 "description": "if 1, will send Message_TransformUpdated to updated entities and their children when the component is processed by PlayerCollisionSystem or CharacterCollisionSystem"
             },
             {
+                "type": "bool",
+                "name": "dont_update_velocity_and_xform",
+                "example": "0 [0, 1]",
+                "description": "might be useful if you want to use CharacterCollisionSystem to only update on_ground status"
+            },
+            {
                 "type": "float",
                 "name": "mFlyingTimeLeft",
                 "example": "1000 [0, 1]",
