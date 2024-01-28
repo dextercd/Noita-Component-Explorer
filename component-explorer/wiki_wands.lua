@@ -229,6 +229,8 @@ local function import_menu()
                 confirm_function = confirm_wand_card_import
             elseif _g_parsed_template.template_name == "Wand" then
                 confirm_function = confirm_wand_import
+            elseif _g_parsed_template.template_name == "Wand2" then
+                confirm_function = confirm_wand_card_import
             else
                 error_text("Unknown template: '" .. _g_parsed_template.template_name .. "'")
                 return
@@ -261,6 +263,8 @@ local function needs_wand()
     imgui.PopStyleColor()
 end
 
+local wand2_wand_card = false
+
 local function wiki_wands_contents()
     local wand = EZWand.GetHeldWand()
 
@@ -287,6 +291,22 @@ local function wiki_wands_contents()
             needs_wand()
         else
             local wand_text = wiki_wand_util.wand_to_wiki_text(wand, true)
+            if imgui.Button("Copy") then
+                imgui.SetClipboardText(wand_text)
+            end
+
+            imgui.Text(wand_text)
+        end
+        imgui.EndTabItem()
+    end
+
+    if imgui.BeginTabItem("Wand2") then
+        if not wand then
+            needs_wand()
+        else
+            local _
+            _, wand2_wand_card = imgui.Checkbox("Wand Card", wand2_wand_card)
+            local wand_text = wiki_wand_util.wand_to_wiki_text(wand, wand2_wand_card, true)
             if imgui.Button("Copy") then
                 imgui.SetClipboardText(wand_text)
             end

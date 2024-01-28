@@ -15,10 +15,14 @@ local wiki_wand = {}
 ---Turn an EZWand object into a list of values used in Wand/Wand Card templates
 ---@param ezwand table
 ---@param to_wand_card boolean
+---@param is_wand2 boolean
 ---@return table
-function wiki_wand.get_wand_values(ezwand, to_wand_card)
+function wiki_wand.get_wand_values(ezwand, to_wand_card, is_wand2)
     local values = {}
-    local wiki_file_name = wand_sprites.wiki_sprite_filename(ezwand)
+
+    if is_wand2 and to_wand_card then
+        table.insert(values, {"wandCard", "Yes"})
+    end
 
     if to_wand_card then
         local item_name = nil
@@ -35,6 +39,7 @@ function wiki_wand.get_wand_values(ezwand, to_wand_card)
         end
     end
 
+    local wiki_file_name = wand_sprites.wiki_sprite_filename(ezwand)
     if wiki_file_name then
         table.insert(values, {"wandPic", wiki_file_name})
     end
@@ -67,16 +72,32 @@ function wiki_wand.get_wand_values(ezwand, to_wand_card)
         table.insert(values, {"speed", ("%.2f"):format(ezwand.speedMultiplier)})
     end
 
-    for _, spell in ipairs(attached_spells) do
-        local wiki_name = wiki_spell_names.by_action_id[spell.action_id]
-        table.insert(values, {"alwaysCasts", wiki_name})
-    end
+    if is_wand2 then
+        if #attached_spells > 0 then
+            local ac_actions = {}
+            for _, ac in ipairs(attached_spells) do
+                ac_actions[#ac_actions+1] = ac.action_id
+            end
+            table.insert(values, {"alwaysCasts", table.concat(ac_actions, ",")})
+        end
 
-    local spell_nr = 1
-    for _, spell in ipairs(spells) do
-        local wiki_name = wiki_spell_names.by_action_id[spell.action_id]
-        table.insert(values, {"spell" .. spell_nr, wiki_name})
-        spell_nr = spell_nr + 1
+        local spell_actions = {}
+        for _, spell in ipairs(spells) do
+            spell_actions[#spell_actions+1] = spell.action_id
+        end
+        table.insert(values, {"spells", table.concat(spell_actions, ",")})
+    else
+        for _, spell in ipairs(attached_spells) do
+            local wiki_name = wiki_spell_names.by_action_id[spell.action_id]
+            table.insert(values, {"alwaysCasts", wiki_name})
+        end
+
+        local spell_nr = 1
+        for _, spell in ipairs(spells) do
+            local wiki_name = wiki_spell_names.by_action_id[spell.action_id]
+            table.insert(values, {"spell" .. spell_nr, wiki_name})
+            spell_nr = spell_nr + 1
+        end
     end
 
     return values
@@ -86,14 +107,18 @@ end
 ---@param ezwand table
 ---@param to_wand_card boolean
 ---@return string
-function wiki_wand.wand_to_wiki_text(ezwand, to_wand_card)
-    local wand_values = wiki_wand.get_wand_values(ezwand, to_wand_card)
+function wiki_wand.wand_to_wiki_text(ezwand, to_wand_card, is_wand2)
+    local wand_values = wiki_wand.get_wand_values(ezwand, to_wand_card, is_wand2)
+
+    if is_wand2 then
+        return wiki.format_template("Wand2", wand_values, 12)
+    end
 
     if to_wand_card then
         return wiki.format_template("Wand Card", wand_values, 12)
-    else
-        return wiki.format_template("Wand", wand_values, 11)
     end
+
+    return wiki.format_template("Wand", wand_values, 11)
 end
 
 ---Turn range text like "(3 - 8.5)" to values 3, 8.5. Also parses a single value successfully.
@@ -163,6 +188,21 @@ local function set_sprite_by_filename(ezwand, filename)
     return true
 end
 
+---@param spell_list string
+---@return string[]
+local function split_spell_list(spell_list)
+    local actions = string_util.split(spell_list, ",", true)
+    local ret = {}
+    for _, action in ipairs(actions) do
+        action = string_util.trim(action)
+        if action ~= "" then
+            ret[#ret+1] = action
+        end
+    end
+
+    return ret
+end
+
 function wiki_wand.load_data_to_wand(wand, template_data)
     map = {}
     for _, v in ipairs(template_data.values) do
@@ -221,19 +261,29 @@ function wiki_wand.load_data_to_wand(wand, template_data)
     end
 
     wand:DetachSpells()
-    for _, item in ipairs(template_data.values) do
-        if item[1] == "alwaysCasts" then
-            local action_id = wiki_spell_names.to_action_id(item[2])
-            wand:AttachSpells(action_id)
-        end
-    end
-
     wand:RemoveSpells()
-    for spell_nr=1, map.capacity do
-        local spell_name = map["spell" .. spell_nr]
-        if spell_name ~= nil then
-            local action_id = wiki_spell_names.to_action_id(spell_name)
-            wand:AddSpells(action_id)
+
+    if template_data.template_name == "Wand2" then
+        if map.alwaysCasts then
+             wand:AttachSpells(split_spell_list(map.alwaysCasts))
+        end
+        if map.spells then
+             wand:AddSpells(split_spell_list(map.spells))
+        end
+    else
+        for _, item in ipairs(template_data.values) do
+            if item[1] == "alwaysCasts" then
+                local action_id = wiki_spell_names.to_action_id(item[2])
+                wand:AttachSpells(action_id)
+            end
+        end
+
+        for spell_nr=1, map.capacity do
+            local spell_name = map["spell" .. spell_nr]
+            if spell_name ~= nil then
+                local action_id = wiki_spell_names.to_action_id(spell_name)
+                wand:AddSpells(action_id)
+            end
         end
     end
 end
