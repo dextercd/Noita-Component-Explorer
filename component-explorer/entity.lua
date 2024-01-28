@@ -15,9 +15,6 @@ local tags_gui = dofile_once("mods/component-explorer/tags_gui.lua")
 ---@module 'component-explorer.utils.player_util'
 local player_util = dofile_once("mods/component-explorer/utils/player_util.lua")
 
----@module 'component-explorer.stable_id'
-local stable_id = dofile_once("mods/component-explorer/stable_id.lua")
-
 ---@module 'component-explorer.file_viewer'
 local file_viewer = dofile_once("mods/component-explorer/file_viewer.lua")
 
@@ -26,6 +23,9 @@ local style = dofile_once("mods/component-explorer/style.lua")
 
 ---@module 'component-explorer.cursor'
 local cursor = dofile_once("mods/component-explorer/cursor.lua")
+
+---@module 'component-explorer.ui.im'
+local im = dofile_once("mods/component-explorer/ui/im.lua")
 
 local common_entity_tags = {
     "card_action",
@@ -54,47 +54,76 @@ local common_entity_tags = {
 local entities_watching = {}
 local add_component_filter = ""
 
-function unwatch_entity(entity_id)
-    entities_watching[entity_id] = nil
+local function window_id(entity_id)
+    return "###entity" .. entity_id
 end
 
-function watch_entity(entity_id)
-    entities_watching[entity_id] = {
-        component_search = "",
-        tag_data = {},
-    }
+local function is_open(entity_id)
+    local entry = entities_watching[entity_id]
+    if entry and entry.window.open then
+        return entry
+    end
+    return nil
+end
+
+function unwatch_entity(entity_id)
+    local entry = is_open(entity_id)
+    if entry then
+        entry.window.open = false
+    end
+end
+
+---@param entity_id integer
+---@param open_data OpenData?
+function watch_entity(entity_id, open_data)
+    local config = entities_watching[entity_id]
+    if not config then
+        config = {}
+        config.component_search = ""
+        config.tag_data = {}
+        config.window = im.Window(
+            window_id(entity_id),
+            true,
+            imgui.WindowFlags.NoSavedSettings
+        )
+    end
+
+    if open_data then
+        config.window.open_data = open_data
+    end
+    config.window.open = true
+
+    entities_watching[entity_id] = config
 end
 
 function toggle_watch_entity(entity_id)
-    if entities_watching[entity_id] then
+    if is_open(entity_id) then
         unwatch_entity(entity_id)
     else
         watch_entity(entity_id)
     end
 end
 
-function open_entity_small_button(entity_id)
-    if entities_watching[entity_id] then
-        if imgui.SmallButton("Close###open_entity_small_button" .. entity_id) then
+local function _make_entity_button(entity_id, button_fn)
+    local id = "###open_entity_small_button" .. entity_id
+    if is_open(entity_id) then
+        if button_fn("Close" .. id) then
             unwatch_entity(entity_id)
         end
     else
-        if imgui.SmallButton("Open###open_entity_small_button" .. entity_id) then
-            watch_entity(entity_id)
+        if button_fn("Open" .. id) then
+            local open_data = im.GetOpenData()
+            watch_entity(entity_id, open_data)
         end
     end
 end
 
+function open_entity_small_button(entity_id)
+    return _make_entity_button(entity_id, imgui.SmallButton)
+end
+
 function open_entity_button(entity_id)
-    if entities_watching[entity_id] then
-        if imgui.Button("Close###open_entity_small_button" .. entity_id) then
-            unwatch_entity(entity_id)
-        end
-    else
-        if imgui.Button("Open###open_entity_small_button" .. entity_id) then
-            watch_entity(entity_id)
-        end
-    end
+    return _make_entity_button(entity_id, imgui.Button)
 end
 
 local function get_entity_label(entity_id)
@@ -105,7 +134,7 @@ local function get_entity_label(entity_id)
     return entity_id .. " " .. name .. " [" .. tags .. "]"
 end
 
-function show_entity_children(children)
+local function show_entity_children(children)
     for _, child_id in ipairs(children) do
         local sub_children = EntityGetAllChildren(child_id)
         if not sub_children then
@@ -142,16 +171,7 @@ local function show_entity(entity_id, data)
         title = title .. display_name .. " (" .. tostring(entity_id) .. ")"
     end
 
-    imgui.SetNextWindowSize(600, 400, imgui.Cond.FirstUseEver)
-
-    local sid = stable_id.get("entity", entity_id, name)
-    local should_show, open = imgui.Begin(title .. "###" .. sid, true)
-
-    if not open then
-        unwatch_entity(entity_id)
-    end
-
-    if not should_show then
+    if not im.Begin(data.window, title) then
         return
     end
 
@@ -346,7 +366,7 @@ local function show_entity(entity_id, data)
         end
     end
 
-    imgui.End()
+    im.End(data.window)
 
     if kill_entity then
         EntityKill(entity_id)

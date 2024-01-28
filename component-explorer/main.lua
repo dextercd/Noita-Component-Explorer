@@ -9,7 +9,7 @@ dofile_once("mods/component-explorer/lua_console.lua")
 ---@module 'component-explorer.globals'
 local globals = dofile_once("mods/component-explorer/globals.lua")
 
-dofile_once("mods/component-explorer/components.lua")
+dofile_once("mods/component-explorer/component_windows.lua")
 
 ---@module 'component-explorer.entity_list'
 local entity_list = dofile_once("mods/component-explorer/entity_list.lua")

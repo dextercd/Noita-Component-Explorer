@@ -3,160 +3,12 @@ dofile_once("mods/component-explorer/component_fields.lua")
 dofile_once("mods/component-explorer/configs.lua")
 local matinv_field = dofile_once("mods/component-explorer/matinv_field.lua")
 
-local xml_serialise = dofile_once("mods/component-explorer/xml_serialise.lua")
-local comp_tag_util = dofile_once("mods/component-explorer/utils/component_tags.lua")
-local tags_gui = dofile_once("mods/component-explorer/tags_gui.lua")
-local stable_id = dofile_once("mods/component-explorer/stable_id.lua")
----@module 'component-explorer.ui.help'
-local help = dofile_once("mods/component-explorer/ui/help.lua")
-
 component_types = {
     {% for component in component_documentation %}
     "{{ component.name }}",
     {% endfor %}
 }
 
-local components_watching = {}
-local components_to_remove = {}
-
-function unwatch_component(component_id)
-    components_watching[component_id] = nil
-end
-
-function watch_component(entity_id, component_id)
-    local type = ComponentGetTypeName(component_id)
-    components_watching[component_id] = {
-        entity_id,
-        component_type_functions[type].show_window,
-        --[[ data --]] {
-            tag_data = {}
-        },
-    }
-end
-
-function toggle_watch_component(entity_id, component_id)
-    if components_watching[component_id] then
-        unwatch_component(component_id)
-    else
-        watch_component(entity_id, component_id)
-    end
-end
-
-function open_component_small_button(entity_id, component_id)
-    if components_watching[component_id] then
-        if imgui.SmallButton("Close###open_component_small_button" .. component_id) then
-            unwatch_component(component_id)
-        end
-    else
-        if imgui.SmallButton("Open###open_component_small_button" .. component_id) then
-            watch_component(entity_id, component_id)
-        end
-    end
-end
-
-function show_component_windows()
-    local known_components = {}
-    for component, entry in pairs(components_watching) do
-        local entity, show, data = unpack(entry)
-
-        if known_components[entity] == nil then
-            if not EntityGetIsAlive(entity) then
-                known_components[entity] = false
-            else
-                known_components[entity] = {}
-                local entity_components = known_components[entity]
-                local all_comps = EntityGetAllComponents(entity)
-                for _, comp in ipairs(all_comps) do
-                    entity_components[comp] = true
-                end
-            end
-        end
-
-        if known_components[entity] and known_components[entity][component] then
-            show(entity, component, data)
-        else
-            unwatch_component(component)
-        end
-    end
-
-    for _, pair in ipairs(components_to_remove) do
-        local entity_id, component_id = unpack(pair)
-        EntityRemoveComponent(entity_id, component_id)
-    end
-    components_to_remove = {}
-end
-
-function component_attributes(entity_id, component_id)
-    if xml_serialise.button() then
-        local component_xml = serialise_component(component_id, xml_serialise.include_privates)
-        imgui.SetClipboardText(xml_serialise.tostring(component_xml))
-    end
-
-    imgui.Separator()
-
-    local enabled = ComponentGetIsEnabled(component_id)
-    local enabled_changed
-    enabled_changed, enabled = imgui.Checkbox("Enabled", enabled)
-    if enabled_changed then
-        EntitySetComponentIsEnabled(entity_id, component_id, enabled)
-    end
-
-    imgui.SameLine()
-
-    imgui.PushStyleColor(imgui.Col.Button, 1, 0.4, 0.4)
-    imgui.PushStyleColor(imgui.Col.ButtonHovered, 1, 0.6, 0.6)
-    imgui.PushStyleColor(imgui.Col.ButtonActive, 0.8, 0.4, 0.4)
-    if imgui.Button("Remove") then
-        table.insert(components_to_remove, {entity_id, component_id})
-    end
-    imgui.PopStyleColor(3)
-
-    imgui.Text("Entity:")
-    imgui.SameLine()
-    open_entity_small_button(entity_id)
-end
-
-local function new_component_tags(component_id, data)
-    local tag_string = ComponentGetTags(component_id)
-    local tags = {}
-    for tag in string.gmatch(tag_string, "[^,]+") do
-        table.insert(tags, tag)
-    end
-
-    local function add_tag(t) ComponentAddTag(component_id, t) end
-    local function remove_tag(t) ComponentRemoveTag(component_id, t) end
-    tags_gui.show(data.tag_data, tags, add_tag, remove_tag, comp_tag_util.special_tags)
-
-    if imgui.Button("Copy tag string") then
-        imgui.SetClipboardText(tag_string)
-    end
-end
-
-local function limited_component_tags(component_id)
-    imgui.Text("Note: Only showing some tags.")
-    imgui.SameLine()
-    help.marker("In this version of Noita there's no way to get all tags on a component, so only some special tags are listed.")
-
-    for _, tag in ipairs(comp_tag_util.special_tags) do
-        local has_tag = ComponentHasTag(component_id, tag)
-        local changed, new_val = imgui.Checkbox(tag, has_tag)
-        if changed then
-            if new_val then
-                ComponentAddTag(component_id, tag)
-            else
-                ComponentRemoveTag(component_id, tag)
-            end
-        end
-    end
-end
-
-local function component_tags(component_id, data)
-    if ComponentGetTags then
-        new_component_tags(component_id, data)
-    else
-        limited_component_tags(component_id)
-    end
-end
 
 {% set supported_fields = [
     "bool", "LensValue_bool",
@@ -256,42 +108,12 @@ function show_{{ component.name }}_fields(entity_id, component_id, data)
     {%- endfor %}
 end
 
-function show_{{ component.name }}_window(entity_id, component_id, data)
-    imgui.SetNextWindowSize(600, 400, imgui.Cond.FirstUseEver)
-
-    local entity_sid = stable_id.get("entity", entity_id, EntityGetName(entity_id))
-    local component_sid = stable_id.get(entity_sid .. "$component", component_id, "{{ component.name }}")
-
-    local should_show, open = imgui.Begin("{{ component.name }}: " .. component_id .. "###" .. component_sid, true)
-
-    if not open then
-        unwatch_component(component_id)
-    end
-
-    if not should_show then
-        return
-    end
-
-    if imgui.CollapsingHeader("Attributes") then
-        component_attributes(entity_id, component_id)
-    end
-
-    if imgui.CollapsingHeader("Tags") then
-        component_tags(component_id, data)
-    end
-
-    show_{{ component.name }}_fields(entity_id, component_id, data)
-
-    imgui.End()
-end
-
 {% endfor %}
 
 component_type_functions = {
 {% for component in component_documentation %}
     {{ component.name }} = {
         show_fields = show_{{ component.name }}_fields,
-        show_window = show_{{ component.name }}_window,
     },
 {% endfor %}
 }
