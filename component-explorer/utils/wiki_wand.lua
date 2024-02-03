@@ -121,7 +121,9 @@ function wiki_wand.wand_to_wiki_text(ezwand, to_wand_card, is_wand2)
     return wiki.format_template("Wand", wand_values, 11)
 end
 
----Turn range text like "(3 - 8.5)" to values 3, 8.5. Also parses a single value successfully.
+---Turn range text like "3, 8.5" into values 3, 8.5. If the given string is a
+---single value then it returns it as a range with the same start and end. The
+---function also parses old-style "(3 - 8.5)" ranges.
 ---@param range string|number
 ---@return number
 ---@return number
@@ -134,18 +136,21 @@ function wiki_wand.field_range_value(range)
     range = string_util.remove_prefix(range, "x") -- speed = x 1.25
     range = string_util.strip(range)
 
-    if range:sub(1, 1) ~= "(" then
-        local value = tonumber(range)
-        if value == nil then
-            error("Couldn't parse range/value")
-        end
-        return value, value
-    end
     local min, max
-    local dash_pos = range:find("-", 3, true)
-    if dash_pos then
-        min = tonumber(range:sub(2, dash_pos - 1))
-        max = tonumber(range:sub(dash_pos + 1, #range - 1))
+
+    local comma = range:find(",", 1, true)
+    if comma then
+        min = tonumber(range:sub(1, comma - 1))
+        max = tonumber(range:sub(comma + 1))
+    elseif range:sub(1, 1) == "(" and range:sub(-1, -1) == ")" then
+        local dash_pos = range:find("-", 3, true)
+        if dash_pos then
+            min = tonumber(range:sub(2, dash_pos - 1))
+            max = tonumber(range:sub(dash_pos + 1, #range - 1))
+        end
+    else
+        min = tonumber(range)
+        max = min
     end
 
     if min == nil or max == nil then
