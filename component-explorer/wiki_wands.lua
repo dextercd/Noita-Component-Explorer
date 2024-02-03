@@ -329,7 +329,7 @@ local function wiki_wands_contents()
             "In most cases the spells are the most important thing and the exact wand stats aren't that important, ",
             "so you should prefer the 'Wand' template over the 'Wand Card' template usually.",
             "\n\n",
-            "If you need help with something, you can visit the #noita-wiki channel in the Noita Discord server.",
+            "If you need help editing the wiki, you can visit the #noita-wiki channel in the Noita Discord server.",
             "\n\n",
             "To easily copy wands off of the Noita wiki, you can add the following line to your personal common.js file:",
         }))
