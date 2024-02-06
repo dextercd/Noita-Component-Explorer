@@ -80,11 +80,7 @@ function wiki.parse_template(template_text)
     local template_name = string_util.trim(readuntil(state, {"}}", "|"}))
 
     local values = {}
-    while true do
-        if peek(state, 2) == "}}" then
-            break
-        end
-
+    while peek(state, 2) ~= "}}" do
         expect(state, "|")
 
         local key = string_util.trim(readuntil(state, {"="}))
