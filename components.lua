@@ -2,6 +2,7 @@ dofile_once("mods/component-explorer/serialise_component.lua")
 dofile_once("mods/component-explorer/component_fields.lua")
 dofile_once("mods/component-explorer/configs.lua")
 local matinv_field = dofile_once("mods/component-explorer/matinv_field.lua")
+local help = dofile_once("mods/component-explorer/ui/help.lua")
 
 component_types = {
     {% for component in component_documentation %}
