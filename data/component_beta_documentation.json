@@ -4922,7 +4922,36 @@
         ]
     },
     {
-        "name": "HealthBarComponent"
+        "name": "HealthBarComponent",
+        "members": [
+            {
+                "type": "bool",
+                "name": "gui",
+                "example": "1 [0, 1]"
+            },
+            {
+                "type": "bool",
+                "name": "gui_special_final_boss",
+                "example": "0 [0, 1]"
+            },
+            {
+                "type": "bool",
+                "name": "in_world",
+                "example": "0 [0, 1]"
+            },
+            {
+                "type": "float",
+                "name": "gui_max_distance_visible",
+                "example": "600 [0, 1]"
+            }
+        ],
+        "privates": [
+            {
+                "type": "bool",
+                "name": "mOldSpritesDestroyed",
+                "example": "0 [0, 1]"
+            }
+        ]
     },
     {
         "name": "HitEffectComponent",
@@ -7090,7 +7119,7 @@
             {
                 "type": "int",
                 "name": "material2",
-                "example": "-1 [0, 1]",
+                "example": "0 [0, 1]",
                 "description": "String name of material2 that we check that the aabb contains"
             }
         ]
@@ -9527,6 +9556,21 @@
             {
                 "type": "vec2",
                 "name": "mCamErrorAveraged"
+            },
+            {
+                "type": "bool",
+                "name": "mCamMovingFastPrev",
+                "example": "0 [0, 1]"
+            },
+            {
+                "type": "int",
+                "name": "mCamFrameStartedMovingFast",
+                "example": "0 [0, 1]"
+            },
+            {
+                "type": "int",
+                "name": "mCamFrameLastMovingFastExplosion",
+                "example": "0 [0, 1]"
             }
         ],
         "custom_data_types": [
