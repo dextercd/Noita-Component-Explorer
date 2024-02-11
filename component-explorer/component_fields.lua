@@ -491,7 +491,7 @@ function show_field_unknown(name, type, description, component_id)
     imgui.Text("ComponentObjectGetMembers(component_id, name)             " .. stringify({ComponentObjectGetMembers(component_id, name)}, ""))
     -- imgui.Text("ComponentGetMembers(component_id)                         " .. stringify({ComponentGetMembers(component_id)}, ""))
 
-    local members = ComponentObjectGetMembers(component_id, name) or {}, ""
+    local members = ComponentObjectGetMembers(component_id, name) or {}
     for member, value in pairs(members) do
         imgui.Text("----- " .. member)
         imgui.Text("ComponentObjectGetValue(component_id, name, member)      " .. stringify({ComponentObjectGetValue(component_id, name, member)}, ""))
