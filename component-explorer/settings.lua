@@ -130,7 +130,7 @@ mod_settings = {
             {
                 id = "preferred_decimal_format",
                 ui_name = "Preferred decimal format",
-                value_default = "decimal",
+                value_default = "magnitude",
                 values = {
                     {"decimal", "Decimal"},
                     {"all_scientific", "Scientific (all)"},
