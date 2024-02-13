@@ -155,26 +155,32 @@ function lua_console.menu_bar_items(console)
         console_run_command(console, console.last_command)
     end
 
-    if imgui.MenuItem("Copy commands") then
-        local all_commands = ""
-        for _, item in ipairs(console.history) do
-            all_commands = all_commands .. item[1] .. "\n"
+    if imgui.BeginMenu("Copy") then
+        if imgui.MenuItem("Copy commands") then
+            local all_commands = {}
+            for _, item in ipairs(console.history) do
+                all_commands[#all_commands+1] = item[1]
+            end
+            imgui.SetClipboardText(table.concat(all_commands, "\n"))
         end
 
-        imgui.SetClipboardText(all_commands)
-    end
-
-    if imgui.MenuItem("Copy history") then
-        local all_history = ""
-        for _, item in ipairs(console.history) do
-            all_history = (
-                all_history ..
-                decorated_text("> ", item[1]) .. "\n" ..
-                item[2] .. "\n"
-            )
+        if imgui.MenuItem("Copy output") then
+            local all_output = {}
+            for _, item in ipairs(console.history) do
+                all_output[#all_output+1] = item[2]
+            end
+            imgui.SetClipboardText(table.concat(all_output, "\n"))
         end
 
-        imgui.SetClipboardText(all_history)
+        if imgui.MenuItem("Copy history") then
+            local all_history = {}
+            for _, item in ipairs(console.history) do
+                all_history[#all_history+1] = decorated_text("> ", item[1])
+                all_history[#all_history+1] = item[2]
+            end
+            imgui.SetClipboardText(table.concat(all_history, "\n"))
+        end
+        imgui.EndMenu()
     end
 end
 

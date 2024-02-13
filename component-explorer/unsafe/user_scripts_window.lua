@@ -6,9 +6,6 @@ local us_unsafe = dofile_once("mods/component-explorer/unsafe/user_scripts.lua")
 ---@module 'component-explorer.utils.strings'
 local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 
----@module 'component-explorer.unsafe.win32'
-local win32 = dofile_once("mods/component-explorer/unsafe/win32.lua")
-
 ---@module 'component-explorer.utils.ce_settings'
 local ce_settings = dofile_once("mods/component-explorer/utils/ce_settings.lua")
 
@@ -24,10 +21,6 @@ function uswindow.draw_user_scripts_window()
 
     if not should_show then
         return
-    end
-
-    if imgui.Button("Open script folder") then
-        win32.explore(us.directory_path)
     end
 
     local _
