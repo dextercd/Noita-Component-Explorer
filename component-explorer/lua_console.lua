@@ -43,9 +43,11 @@ function new_console()
 end
 
 function console_draw(console)
+    local window_flags = imgui.WindowFlags.MenuBar
+
     local should_show
     imgui.SetNextWindowSize(600, 400, imgui.Cond.FirstUseEver)
-    should_show, console.open = imgui.Begin("Console", console.open)
+    should_show, console.open = imgui.Begin("Console", console.open, window_flags)
     if not should_show then
         return
     end
@@ -144,18 +146,16 @@ local function console_item_context_menu(str_id, console, index)
     imgui.EndPopup()
 end
 
-function lua_console.header_buttons(console)
-    if imgui.SmallButton("Clear") then
+function lua_console.menu_bar_items(console)
+    if imgui.MenuItem("Clear") then
         console.history = {}
     end
 
-    imgui.SameLine()
-    if imgui.SmallButton("Redo") then
+    if imgui.MenuItem("Redo") then
         console_run_command(console, console.last_command)
     end
 
-    imgui.SameLine()
-    if imgui.SmallButton("Copy commands") then
+    if imgui.MenuItem("Copy commands") then
         local all_commands = ""
         for _, item in ipairs(console.history) do
             all_commands = all_commands .. item[1] .. "\n"
@@ -164,8 +164,7 @@ function lua_console.header_buttons(console)
         imgui.SetClipboardText(all_commands)
     end
 
-    imgui.SameLine()
-    if imgui.SmallButton("Copy history") then
+    if imgui.MenuItem("Copy history") then
         local all_history = ""
         for _, item in ipairs(console.history) do
             all_history = (
@@ -179,10 +178,18 @@ function lua_console.header_buttons(console)
     end
 end
 
-function console_contents_draw(console)
-    lua_console.header_buttons(console)
+function lua_console.menu_bar(console)
+    if not imgui.BeginMenuBar() then
+        return
+    end
 
-    imgui.Separator()
+    lua_console.menu_bar_items(console)
+
+    imgui.EndMenuBar()
+end
+
+function console_contents_draw(console)
+    lua_console.menu_bar(console)
 
     local style = imgui.GetStyle()
     local line_height = imgui.GetTextLineHeight()
