@@ -190,7 +190,7 @@ local modal
 
 ---@param script RepeatScript
 function repeat_scripts.show_script_menu(script)
-    if imgui.MenuItem("Edit") then
+    if imgui.MenuItem("Edit...") then
         modal = EditRepeatScriptModal.new(script)
     end
 
@@ -205,6 +205,7 @@ function repeat_scripts.show_script_menu(script)
     local _
     _, script.options.paused = imgui.MenuItem("Pause", "", script.options.paused)
     _, script.options.output_in_console = imgui.MenuItem("Output in console", "", script.options.output_in_console)
+    imgui.PushStyleColor(imgui.Col.Text, unpack(style.colour_danger))
     if imgui.MenuItem("Remove") then
         for nr, s in ipairs(repeat_scripts.scripts) do
             if s == script then
@@ -213,6 +214,7 @@ function repeat_scripts.show_script_menu(script)
             end
         end
     end
+    imgui.PopStyleColor()
 end
 
 function repeat_scripts.show()
