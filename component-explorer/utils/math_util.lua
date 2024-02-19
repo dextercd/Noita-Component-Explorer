@@ -20,6 +20,9 @@ function math_util.uint64_clamp(a)
     return a
 end
 
+---@param a number
+---@param min number
+---@param max number
 function math_util.clamp(a, min, max)
     if a < min then return min end
     if a > max then return max end

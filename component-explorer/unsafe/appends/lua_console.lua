@@ -10,9 +10,9 @@ local ce_settings = dofile_once("mods/component-explorer/utils/ce_settings.lua")
 ---@module 'component-explorer.unsafe.win32'
 local win32 = dofile_once("mods/component-explorer/unsafe/win32.lua")
 
-local _menu_bar = lua_console.menu_bar_items
-lua_console.menu_bar_items = function(console)
-    _menu_bar(console)
+local _menu_bar = lua_console.Console.draw_menu_bar_items
+function lua_console.Console:draw_menu_bar_items()
+    _menu_bar(self)
 
     local user_scripts_open = ce_settings.get("window_open_user_scripts") --[[@as boolean]]
 

@@ -82,10 +82,7 @@ function update_ui(paused, current_frame_run)
     end
 
     if console.open and ce_settings.get("window_open_user_scripts") then
-        local script = uswindow.draw_user_scripts_window()
-        if script then
-            console_run_command(console, us.user_script_call_string(script))
-        end
+        uswindow.draw_user_scripts_window(console)
     end
 
     if magic_numbers and magic_numbers.open then

@@ -17,13 +17,13 @@ function string_util.split_iter(str, sep, plain)
     local start = 1
 
     return function()
-        local skip_start, skip_end = string.find(str, sep, start, plain)
-        skip_start = skip_start or #str + 1
-        skip_end = skip_end or #str + 1
+        local sep_start, sep_end = string.find(str, sep, start, plain)
+        sep_start = sep_start or #str + 1
+        sep_end = sep_end or #str + 1
 
-        if start <= skip_start then
-            local value = string.sub(str, start, skip_start - 1)
-            start = skip_end + 1
+        if start <= sep_start then
+            local value = string.sub(str, start, sep_start - 1)
+            start = sep_end + 1
             return value
         end
     end

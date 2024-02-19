@@ -1,25 +1,35 @@
 local CE_PARSE_ERROR = "Couldn't parse expression, check logger.txt"
 
+local eval = {}
+
 local set_content = ModTextFileSetContent
 
--- loadstring but returns nil if there's a syntax error
-local function loadstring_ish(str)
+--- loadstring but returns nil if there's a syntax error
+---@param str string
+---@return function?
+---@return string?
+function eval.loadstring_ish(str)
     local filename = "mods/component-explorer/user_command.lua"
     set_content(filename, str)
-    return loadfile(filename)
+    local f, err = loadfile(filename)
+
+    if not f then
+        return nil, err or CE_PARSE_ERROR
+    end
+
+    return f
 end
 
 ---@param str string String to evaluate
 ---@return boolean succes
 ---@return any result
-local function eval(str)
-    local f = loadstring_ish(str)
-    if f == nil then
-        return false, CE_PARSE_ERROR
+function eval.eval(str)
+    local f, err = eval.loadstring_ish(str)
+    if not f then
+        return false, err
     end
 
-    local success, result = pcall(f)
-    return success, result
+    return pcall(f)
 end
 
 return eval

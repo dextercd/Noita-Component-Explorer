@@ -176,19 +176,21 @@ local function log_item_context_menu(line_nr)
 end
 
 local function line_colour(str)
-    if string_util.ifind(str, "erro") or
-       string_util.ifind(str, "problem") or
-       string_util.ifind(str, "fail") or
-       string_util.ifind(str, "OOPSIE WOOPSIE") or
-       string_util.ifind(str, "We made a fucky wucky") or
-       string_util.ifind(str, "critical")
+    str = string_util.normalise(str)
+
+    if string.find(str, "erro", 1, true) or
+       string.find(str, "problem", 1, true) or
+       string.find(str, "fail", 1, true) or
+       string.find(str, ": in function ", 1, true) or
+       string.find(str, "we made a fucky wucky", 1, true) or
+       string.find(str, "critical", 1, true)
     then
         return unpack(style.colour_fail)
     end
 
-    if string_util.ifind(str, "warn") or
-       string_util.ifind(str, "couldn't") or
-       string_util.ifind(str, "missing")
+    if string.find(str, "warn", 1, true) or
+       string.find(str, "couldn't", 1, true) or
+       string.find(str, "missing", 1, true)
     then
         return unpack(style.colour_warn)
     end

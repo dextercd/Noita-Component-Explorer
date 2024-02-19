@@ -4,7 +4,8 @@ imgui = load_imgui({version="1.7.0", mod="Component Explorer"})
 ---@module 'component-explorer.utils.ce_settings'
 local ce_settings = dofile_once("mods/component-explorer/utils/ce_settings.lua")
 
-dofile_once("mods/component-explorer/lua_console.lua")
+---@module 'component-explorer.lua_console'
+local lua_console = dofile_once("mods/component-explorer/lua_console.lua")
 
 ---@module 'component-explorer.globals'
 local globals = dofile_once("mods/component-explorer/globals.lua")
@@ -53,6 +54,9 @@ local cursor = dofile_once("mods/component-explorer/cursor.lua")
 ---@module 'component-explorer.spawn_stuff'
 local spawn_stuff = dofile_once("mods/component-explorer/spawn_stuff.lua")
 
+---@module 'component-explorer.repeat_scripts'
+local repeat_scripts = dofile_once("mods/component-explorer/repeat_scripts.lua")
+
 -- Not used here right now, but depends on grabbing a function that's only
 -- supposed to be accessible during mod init.
 ---@module 'component-explorer.utils.file_util'
@@ -94,7 +98,7 @@ function OnPausePreUpdate()
     update_ui(true, current_frame_run)
 end
 
-console = new_console()
+console = lua_console.Console.new()
 
 local window_open_about = false
 local windows_hidden_component = false
@@ -103,7 +107,7 @@ local windows_hidden_entity = false
 function OnMagicNumbersAndWorldSeedInitialized()
     local function run_us_ifexists(script)
         if us.exists(script) then
-            console_run_command(console, us.user_script_call_string(script))
+            console:run_command_text(us.user_script_call_string(script))
         end
     end
 
@@ -118,7 +122,8 @@ end
 function show_view_menu_items()
     local _
     _, console.open = imgui.MenuItem("Lua Console", sct("CTRL+SHIFT+L"), console.open)
-    _, entity_list.open   = imgui.MenuItem("Entity List", sct("CTRL+SHIFT+K"), entity_list.open)
+    _, repeat_scripts.open = imgui.MenuItem("Repeat Scripts", "", repeat_scripts.open)
+    _, entity_list.open = imgui.MenuItem("Entity List", sct("CTRL+SHIFT+K"), entity_list.open)
     _, herd_relation.open = imgui.MenuItem("Herd Relation", "", herd_relation.open)
 
     local clicked
@@ -132,21 +137,21 @@ function show_view_menu_items()
         }))
     end
 
-    _, spawn_stuff.open    = imgui.MenuItem("Spawn Stuff", sct("CTRL+SHIFT+S"), spawn_stuff.open)
+    _, spawn_stuff.open = imgui.MenuItem("Spawn Stuff", sct("CTRL+SHIFT+S"), spawn_stuff.open)
 
-    _, wiki_wands.open    = imgui.MenuItem("Wiki Wands", "", wiki_wands.open)
-    _, file_viewer.open   = imgui.MenuItem("File Viewer", sct("CTRL+SHIFT+F"), file_viewer.open)
-    _, translations.open  = imgui.MenuItem("Translations", "", translations.open)
+    _, wiki_wands.open = imgui.MenuItem("Wiki Wands", "", wiki_wands.open)
+    _, file_viewer.open = imgui.MenuItem("File Viewer", sct("CTRL+SHIFT+F"), file_viewer.open)
+    _, translations.open = imgui.MenuItem("Translations", "", translations.open)
 
     _, cursor.config_open = imgui.MenuItem("Cursor Config", sct("CTRL+SHIFT+C"), cursor.config_open)
 
-    _, globals.open  = imgui.MenuItem("Globals", "", globals.open)
-    _, run_flags.open  = imgui.MenuItem("Run Flags", "", run_flags.open)
-    _, mod_settings.open  = imgui.MenuItem("Mod Settings", "", mod_settings.open)
+    _, globals.open = imgui.MenuItem("Globals", "", globals.open)
+    _, run_flags.open = imgui.MenuItem("Run Flags", "", run_flags.open)
+    _, mod_settings.open = imgui.MenuItem("Mod Settings", "", mod_settings.open)
 
     imgui.Separator()
-    _, windows_hidden_entity     = imgui.MenuItem("Hide entity windows", "", windows_hidden_entity)
-    _, windows_hidden_component  = imgui.MenuItem("Hide component windows", "", windows_hidden_component)
+    _, windows_hidden_entity = imgui.MenuItem("Hide entity windows", "", windows_hidden_entity)
+    _, windows_hidden_component = imgui.MenuItem("Hide component windows", "", windows_hidden_component)
 end
 
 -- Can't know the width before creating the window.. Just an initial value, it's updated
@@ -279,8 +284,13 @@ function update_ui(paused, current_frame_run)
     end
 
     if console.open then
-        console_draw(console)
+        console:draw()
     end
+
+    if repeat_scripts.open then
+        repeat_scripts.show()
+    end
+    repeat_scripts.update(console, paused)
 
     if entity_picker.open then
         entity_picker.show()
@@ -374,10 +384,6 @@ function keyboard_shortcut_items()
 
     if imgui.IsKeyPressed(imgui.Key.S) then
         spawn_stuff.open = not spawn_stuff.open
-    end
-
-    if imgui.IsKeyPressed(imgui.Key.U) then
-        console.user_scripts_open = not console.user_scripts_open
     end
 
     if imgui.IsKeyPressed(imgui.Key.W) then
