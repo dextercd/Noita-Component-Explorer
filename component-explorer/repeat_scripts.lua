@@ -227,6 +227,10 @@ function repeat_scripts.show()
         return
     end
 
+    if imgui.Button("Add New...") then
+        modal = EditRepeatScriptModal.new()
+    end
+
     local _
     _, repeat_scripts.all_pause = imgui.Checkbox("Pause all", repeat_scripts.all_pause)
 
