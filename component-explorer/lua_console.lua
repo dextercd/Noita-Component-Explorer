@@ -402,8 +402,11 @@ function Console:draw_contents()
     help.marker(
         "Use CTRL+Enter or the submit button to evaluate the Lua expression.\n\n" ..
 
-        'You can use print or return to display values in the console, return displays ' ..
-        'items within tables while print will only display something like "table: 0x00741c68"'
+        "You can use print or return to display values in the console, return displays " ..
+        'items within tables while print will only display something like "table: 0x00741c68"\n\n' ..
+
+        "Right click the submit button to make this a 'repeat script' instead." ..
+        "(This also works for user scripts and you can find the option when right clicking a history item in the console.)"
     )
 
     imgui.EndGroup()
