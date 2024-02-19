@@ -16,6 +16,8 @@ local stringify = dofile_once("mods/component-explorer/deps/datadumper.lua")
 ---@module 'component-explorer.ui.helpers'
 local ui_helpers = dofile_once("mods/component-explorer/ui/helpers.lua")
 
+local NAME_TAKEN_ERROR = "This name is already taken"
+
 local repeat_scripts = {}
 
 repeat_scripts.all_pause = false
@@ -45,6 +47,7 @@ repeat_scripts.open = false
 ---@field offset integer
 ---@field options RepeatScriptOptions
 ---@field script_error string?
+---@field name_error string?
 local EditRepeatScriptModal = {}
 EditRepeatScriptModal.__index = EditRepeatScriptModal
 
@@ -91,20 +94,29 @@ function EditRepeatScriptModal:show()
         return
     end
 
-    local _
-    _, self.name = imgui.InputText("Name", self.name)
+    local nc
+    nc, self.name = imgui.InputText("Name", self.name)
+
+    if nc then self.name_error = nil end
 
     local name_taken = false
     if self.name ~= "" then
         for _, script in ipairs(repeat_scripts.scripts) do
             if script ~= self.editing_script and script.name == self.name then
                 name_taken = true
-                imgui.PushStyleColor(imgui.Col.Text, unpack(style.colour_fail))
-                imgui.Text("This name was already taken")
-                imgui.PopStyleColor()
                 break
             end
         end
+    end
+
+    if self.name_error then
+        imgui.PushStyleColor(imgui.Col.Text, unpack(style.colour_fail))
+        imgui.Text(self.name_error)
+        imgui.PopStyleColor()
+    elseif name_taken then
+        imgui.PushStyleColor(imgui.Col.Text, unpack(style.colour_fail))
+        imgui.Text(NAME_TAKEN_ERROR)
+        imgui.PopStyleColor()
     end
 
     local line_height = imgui.GetTextLineHeight()
@@ -169,8 +181,9 @@ function EditRepeatScriptModal:show()
 
         if success then
             self.open = false
-        else
-            self.script_error = error
+        elseif error then
+            self.script_error = error.script
+            self.name_error = error.name
         end
     end
 
@@ -370,6 +383,16 @@ end
 
 local auto_name_counter = 1
 
+---@param name string
+---@return RepeatScript?
+function repeat_scripts.get_script_by_name(name)
+    for _, script in ipairs(repeat_scripts.scripts) do
+        if script.name == name then
+            return script
+        end
+    end
+end
+
 ---@param name string?
 ---@return string name
 ---@return boolean using_auto
@@ -389,14 +412,24 @@ function repeat_scripts.decide_name(name, script_text)
     return name, using_auto_name
 end
 
+---@class ScriptError
+---@field name string?
+---@field script string?
+
 ---@param name string?
 ---@param script_text string
 ---@param period integer
 ---@param offset? integer
 ---@param options table?
+---@return boolean success
+---@return ScriptError? error
 function repeat_scripts.add_script(name, script_text, period, offset, options)
     local using_auto_name
     name, using_auto_name = repeat_scripts.decide_name(name, script_text)
+
+    if repeat_scripts.get_script_by_name(name) then
+        return false, {name=NAME_TAKEN_ERROR}
+    end
 
     if not offset then
         offset = GameGetFrameNum() % period
@@ -404,7 +437,7 @@ function repeat_scripts.add_script(name, script_text, period, offset, options)
 
     local func, error = eval.loadstring_ish(script_text)
     if not func then
-        return nil, error
+        return false, {script=error}
     end
 
     options = copy.shallow_copy(options or {})

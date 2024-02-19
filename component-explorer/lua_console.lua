@@ -188,10 +188,10 @@ end
 ---@param script string
 ---@param run_every integer
 function Console:add_repeat_script(script, run_every)
-    local success, error = repeat_scripts.add_script(nil, script, run_every)
-    if not success then
+    local _, error = repeat_scripts.add_script(nil, script, run_every)
+    if error then
         self.history[#self.history+1] = {
-            script, error, false
+            script, error.script or error.name, false
         }
         self:scroll_to_bottom()
     end
