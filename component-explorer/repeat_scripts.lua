@@ -296,7 +296,12 @@ function repeat_scripts.show()
                 imgui.PushStyleColor(imgui.Col.Text, unpack(style.colour_fail))
             end
 
-            local value_text = stringify(script.last_run_result, "")
+            local value_text
+            if script.last_run_success or type(script.last_run_result) ~= "string" then
+                value_text = stringify(script.last_run_result, "")
+            else
+                value_text = script.last_run_result
+            end
             imgui.Text(value_text:gsub("%s+", " "))
             if imgui.IsItemHovered() and imgui.BeginTooltip() ~= false then
                 imgui.Text(value_text)
