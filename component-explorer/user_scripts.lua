@@ -1,6 +1,3 @@
-local ModDoesFileExist = ModDoesFileExist
-local ModTextFileGetContent = ModTextFileGetContent
-
 local us = {}
 
 us.directory_path = "user-scripts"
