@@ -81,7 +81,7 @@ end
 function EditRepeatScriptModal:show()
     local title = self.editing_script
         and "Editing repeat script: " .. self.editing_script.name
-        or "New repeat script: " .. self.name
+        or "New repeat script: " .. self.name .. "###new_repeat_script"
 
     if not imgui.IsPopupOpen(title) then
         imgui.OpenPopup(title)
