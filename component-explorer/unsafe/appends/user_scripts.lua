@@ -9,7 +9,12 @@ end
 
 function us.user_script(script_name)
     local path = us.make_path(script_name)
-    return loadstring(read_all(path), path)()
+    local f, err = loadstring(read_all(path), path)
+    if not f then
+        error(err, 0)
+    end
+
+    return f()
 end
 
 function us.exists(script_name)
