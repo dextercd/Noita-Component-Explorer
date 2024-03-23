@@ -386,7 +386,7 @@ local function show_entity(entity_id, data)
             imgui.TableSetupColumn("ID", imgui.TableColumnFlags.WidthFixed)
             imgui.TableSetupColumn("Type", imgui.TableColumnFlags.WidthStretch, 6)
             imgui.TableSetupColumn("Enabled", imgui.TableColumnFlags.WidthFixed)
-            imgui.TableSetupColumn("Open", imgui.TableColumnFlags.WidthFixed)
+            imgui.TableSetupColumn("Actions", imgui.TableColumnFlags.WidthFixed)
             imgui.TableHeadersRow()
 
             for _, component_id in ipairs(components) do
@@ -410,6 +410,11 @@ local function show_entity(entity_id, data)
 
                     imgui.TableNextColumn()
                     open_component_small_button(entity_id, component_id)
+
+                    imgui.SameLine()
+                    if style.danger_small_button("Remove") then
+                        EntityRemoveComponent(entity_id, component_id)
+                    end
 
                     imgui.PopID()
                 end
