@@ -146,19 +146,18 @@ function entity_list.show()
         table_flags = bit.bor(table_flags, imgui.TableFlags.Sortable)
     end
 
-    if imgui.BeginTable("entity_table", 6 + #entity_list.extra_columns, table_flags) then
+    if imgui.BeginTable("entity_table", 5 + #entity_list.extra_columns, table_flags) then
         imgui.TableSetupColumn("ID", imgui.TableColumnFlags.WidthFixed)
         imgui.TableSetupColumn("Name", imgui.TableColumnFlags.WidthFixed)
         imgui.TableSetupColumn("Tags", imgui.TableColumnFlags.WidthStretch, 6)
         imgui.TableSetupColumn("File", imgui.TableColumnFlags.WidthStretch, 12)
-        imgui.TableSetupColumn("Kill", bit.bor(imgui.TableColumnFlags.WidthFixed, imgui.TableColumnFlags.NoSort))
 
         for _, extra_column in ipairs(entity_list.extra_columns) do
             local flags =  bit.bor(imgui.TableColumnFlags.WidthFixed, imgui.TableColumnFlags.NoSort)
             imgui.TableSetupColumn(extra_column.name, flags, 12)
         end
 
-        imgui.TableSetupColumn("Open", bit.bor(imgui.TableColumnFlags.WidthFixed, imgui.TableColumnFlags.NoSort))
+        imgui.TableSetupColumn("Actions", bit.bor(imgui.TableColumnFlags.WidthFixed, imgui.TableColumnFlags.NoSort))
         imgui.TableHeadersRow()
 
         handle_sort_spec()
@@ -189,8 +188,6 @@ function entity_list.show()
                 imgui.Text(tags)
                 imgui.TableNextColumn()
                 imgui.Text(file)
-                imgui.TableNextColumn()
-                local kill_entity = style.danger_small_button("Kill")
 
                 for _, extra_column in ipairs(entity_list.extra_columns) do
                     imgui.TableNextColumn()
@@ -209,6 +206,8 @@ function entity_list.show()
 
                 imgui.TableNextColumn()
                 open_entity_small_button(entity_id)
+                imgui.SameLine()
+                local kill_entity = style.danger_small_button("Kill")
 
                 -- Highlight entities at weird locations
                 local x, y = EntityGetTransform(entity_id)
