@@ -127,11 +127,19 @@ function open_entity_button(entity_id)
 end
 
 local function get_entity_label(entity_id)
-    local name = EntityGetName(entity_id)
+    local parts = {}
 
-    if name == "unknown" then name = "" end
+    local name = EntityGetName(entity_id)
+    if name ~= "unknown" and name ~= "" then
+        parts[#parts+1] = name
+    end
+
     local tags = EntityGetTags(entity_id)
-    return entity_id .. " " .. name .. " [" .. tags .. "]"
+    if tags ~= "" then
+        parts[#parts+1] = "[" .. tags .. "]"
+    end
+
+    return table.concat(parts, " ")
 end
 
 local function show_entity_children(children)
