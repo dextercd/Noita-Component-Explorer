@@ -142,23 +142,68 @@ local function get_entity_label(entity_id)
     return table.concat(parts, " ")
 end
 
-local function show_entity_children(children)
+local function entity_child_buttons(parent_id, child_id)
+    imgui.PushID(child_id)
+
+    open_entity_small_button(child_id)
+
+    imgui.SameLine()
+    if imgui.SmallButton("Unparent") then
+        EntityRemoveFromParent(child_id)
+    end
+
+    imgui.SameLine()
+    if style.danger_small_button("Kill") then
+        EntityKill(child_id)
+    end
+
+    imgui.PopID()
+end
+
+local function show_entity_children_row(parent_id, children)
     for _, child_id in ipairs(children) do
+        imgui.TableNextColumn()
+
         local sub_children = EntityGetAllChildren(child_id)
         if not sub_children then
             imgui.Bullet()
             imgui.Text(get_entity_label(child_id))
-            imgui.SameLine() open_entity_small_button(child_id)
+
+            imgui.TableNextColumn()
+            entity_child_buttons(parent_id, child_id)
         else
             if imgui.TreeNode(get_entity_label(child_id) .. "##" .. tostring(child_id)) then
-                imgui.SameLine() open_entity_small_button(child_id)
-                show_entity_children(sub_children)
+
+                imgui.TableNextColumn()
+                entity_child_buttons(parent_id, child_id)
+
+                show_entity_children_row(child_id, sub_children)
                 imgui.TreePop()
             else
-                imgui.SameLine() open_entity_small_button(child_id)
+                imgui.TableNextColumn()
+                entity_child_buttons(parent_id, child_id)
             end
         end
     end
+end
+
+local function show_entity_children(parent_id, children)
+    local table_flags = bit.bor(
+        imgui.TableFlags.Resizable,
+        imgui.TableFlags.RowBg
+    )
+
+    if not imgui.BeginTable("entity_children", 2, table_flags) then
+        return
+    end
+
+    imgui.TableSetupColumn("Entity")
+    imgui.TableSetupColumn("Actions", imgui.TableColumnFlags.WidthFixed)
+    imgui.TableHeadersRow()
+
+    show_entity_children_row(parent_id, children)
+
+    imgui.EndTable()
 end
 
 local function show_entity(entity_id, data)
@@ -299,7 +344,7 @@ local function show_entity(entity_id, data)
     local children = EntityGetAllChildren(entity_id)
     if children then
         if imgui.CollapsingHeader("Child Entities (" .. #children .. ")###entity_child_entites") then
-            show_entity_children(children)
+            show_entity_children(entity_id, children)
         end
     else
         imgui.BeginDisabled()
