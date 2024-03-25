@@ -380,8 +380,33 @@
             },
             {
                 "type": "int",
+                "name": "mNextFrameUsable",
+                "example": "0 [0, 1]",
+                "description": "hax, don't touch!"
+            },
+            {
+                "type": "int",
+                "name": "mCastDelayStartFrame",
+                "example": "0 [0, 1]",
+                "description": "hax, don't touch!"
+            },
+            {
+                "type": "int",
+                "name": "mReloadFramesLeft",
+                "example": "0 [0, 1]",
+                "description": "hax, don't touch!"
+            },
+            {
+                "type": "int",
+                "name": "mReloadNextFrameUsable",
+                "example": "0 [0, 1]",
+                "description": "hax, don't touch!"
+            },
+            {
+                "type": "int",
                 "name": "mChargeCount",
-                "example": "0 [0, 1]"
+                "example": "0 [0, 1]",
+                "description": "hax, don't touch!"
             },
             {
                 "type": "bool",
@@ -392,27 +417,7 @@
         "privates": [
             {
                 "type": "int",
-                "name": "mNextFrameUsable",
-                "example": "0 [0, 1]"
-            },
-            {
-                "type": "int",
-                "name": "mCastDelayStartFrame",
-                "example": "0 [0, 1]"
-            },
-            {
-                "type": "int",
                 "name": "mAmmoLeft",
-                "example": "0 [0, 1]"
-            },
-            {
-                "type": "int",
-                "name": "mReloadFramesLeft",
-                "example": "0 [0, 1]"
-            },
-            {
-                "type": "int",
-                "name": "mReloadNextFrameUsable",
                 "example": "0 [0, 1]"
             },
             {
@@ -580,6 +585,12 @@
                 "name": "ai_state_timer",
                 "example": "0 [0, 1000]",
                 "description": "If not 0, then we wait till this frame to pop current state from our state stack"
+            },
+            {
+                "type": "bool",
+                "name": "keep_state_alive_when_enabled",
+                "example": "0 [0, 1]",
+                "description": "if 1, will ensure state timer keeps current state alive for a while when Component is Enabled"
             },
             {
                 "type": "std::string",
@@ -4729,6 +4740,12 @@
                 "description": "set when e.g. polymorphed"
             },
             {
+                "type": "bool",
+                "name": "dont_do_logplayerkill",
+                "example": "0 [0, 1]",
+                "description": "if 1, StatsLogPlayerKill must be manually called from lua"
+            },
+            {
                 "type": "int",
                 "name": "player_polymorph_count",
                 "example": "0 [0, 1]",
@@ -5220,6 +5237,10 @@
             {
                 "type": "vec2",
                 "name": "mJointWorldPos"
+            },
+            {
+                "type": "vec2",
+                "name": "mEndPrevPos"
             }
         ]
     },
@@ -5323,6 +5344,12 @@
                 "name": "no_ground_attachment_penalty_coeff",
                 "example": "0.75 [0, 1]",
                 "description": "If a limb movement would make it not collide with ground, the movement score is multiplied with this value. Use lower values to make the limbs prioritize attaching to walls."
+            },
+            {
+                "type": "bool",
+                "name": "is_limp",
+                "example": "0 [0, 1]",
+                "description": "If 1, will apply verlet animation to simulate ragdoll-like limbs"
             }
         ],
         "privates": [
@@ -5567,6 +5594,11 @@
                 "example": "0 [0, 1]"
             },
             {
+                "type": "bool",
+                "name": "mDontLogNextItemEquip",
+                "example": "0 [0, 1]"
+            },
+            {
                 "type": "float",
                 "name": "mSmoothedItemXOffset",
                 "example": "0 [0, 1]"
@@ -5649,6 +5681,12 @@
                 "type": "int",
                 "name": "wallet_money_target",
                 "example": "0 [0, 1]"
+            },
+            {
+                "type": "bool",
+                "name": "mDisplayFireRateWaitBar",
+                "example": "0 [0, 1]",
+                "description": "hax, don't touch!"
             }
         ],
         "privates": [
@@ -5708,11 +5746,6 @@
                 "name": "mFrameShake_FireRateWaitBar",
                 "example": "0 [0, 1]",
                 "description": "for animations of shaking them bars"
-            },
-            {
-                "type": "bool",
-                "name": "mDisplay_FireRateWaitBar",
-                "example": "0 [0, 1]"
             }
         ]
     },
@@ -7084,6 +7117,18 @@
                 "description": "if true, will send message Message_MaterialAreaCheckerFailed if the material doesn't exist. If false, will send a message Message_MaterialAreaCheckerSuccess if the aabb is full of material and material2"
             },
             {
+                "type": "int",
+                "name": "count_min",
+                "example": "0 [0, 1]",
+                "description": "If > 0, and look_for_failure=0, will send message if material count exceeds this number of cells"
+            },
+            {
+                "type": "bool",
+                "name": "always_check_fullness",
+                "example": "0 [0, 1]",
+                "description": "if 1, and look_for_failure=0, will always check the whole area for cells"
+            },
+            {
                 "type": "bool",
                 "name": "kill_after_message",
                 "example": "1 [0, 1]",
@@ -8312,6 +8357,11 @@
                 "example": "1 [0, 1]"
             },
             {
+                "type": "bool",
+                "name": "v0_body_id_logic",
+                "example": "1 [0, 1]"
+            },
+            {
                 "type": "int",
                 "name": "swim_check_y_min",
                 "example": "-2 [0, 1]"
@@ -9240,6 +9290,14 @@
                 "name": "capsule_y_percent",
                 "example": "0.3 [0, 1]"
             }
+        ],
+        "custom_data_types": [
+            {
+                "type": "int",
+                "name": "material",
+                "example": "0 [0, 1]",
+                "description": "the material to use for collision audio"
+            }
         ]
     },
     {
@@ -9709,6 +9767,14 @@
                 "name": "never_color",
                 "example": "0 [0, 1]",
                 "description": "Petri: body_colored didn't seem to work, so I added never_color. It can be set to true if you never want the potion to be colored"
+            }
+        ],
+        "custom_data_types": [
+            {
+                "type": "int",
+                "name": "custom_color_material",
+                "example": "0 [0, 1]",
+                "description": "if set, will always use the color from this material"
             }
         ]
     },
@@ -10895,6 +10961,10 @@
             {
                 "type": "VECTOR_FLOAT",
                 "name": "stain_effects"
+            },
+            {
+                "type": "VECTOR_INT32",
+                "name": "stain_effect_cooldowns"
             },
             {
                 "type": "VECTOR_FLOAT",
