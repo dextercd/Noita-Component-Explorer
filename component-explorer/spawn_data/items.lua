@@ -1,9 +1,15 @@
 return {
   {
+    file="data/biome_impl/static_tile/chest_darkness.xml",
+    item_name="$item_chest_treasure",
+    origin="Vanilla",
+    tags="teleportable_NOT,item_physics,chest,item_pickup,effectable_prop"
+  },
+  {
     file="data/entities/animals/boss_alchemist/key.xml",
     item_name="$item_key",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,alchemist_key"
+    tags="hittable,teleportable_NOT,item_physics,alchemist_key"
   },
   {
     file="data/entities/animals/boss_centipede/rewards/gold_reward.xml",
@@ -144,7 +150,7 @@ return {
     file="data/entities/items/books/book_02.xml",
     item_name="$booktitle02",
     origin="Vanilla",
-    tags="tablet,normal_tablet,forgeable"
+    tags="forgeable,tablet,normal_tablet"
   },
   {
     file="data/entities/items/books/book_03.xml",
@@ -156,43 +162,43 @@ return {
     file="data/entities/items/books/book_04.xml",
     item_name="$booktitle04",
     origin="Vanilla",
-    tags="tablet,normal_tablet,forgeable"
+    tags="forgeable,tablet,normal_tablet"
   },
   {
     file="data/entities/items/books/book_05.xml",
     item_name="$booktitle05",
     origin="Vanilla",
-    tags="tablet,normal_tablet,forgeable"
+    tags="forgeable,tablet,normal_tablet"
   },
   {
     file="data/entities/items/books/book_06.xml",
     item_name="$booktitle06",
     origin="Vanilla",
-    tags="tablet,normal_tablet,forgeable"
+    tags="forgeable,tablet,normal_tablet"
   },
   {
     file="data/entities/items/books/book_07.xml",
     item_name="$booktitle07",
     origin="Vanilla",
-    tags="tablet,normal_tablet,forgeable"
+    tags="forgeable,tablet,normal_tablet"
   },
   {
     file="data/entities/items/books/book_08.xml",
     item_name="$booktitle08",
     origin="Vanilla",
-    tags="tablet,normal_tablet,forgeable"
+    tags="forgeable,tablet,normal_tablet"
   },
   {
     file="data/entities/items/books/book_09.xml",
     item_name="$booktitle09",
     origin="Vanilla",
-    tags="tablet,normal_tablet,forgeable"
+    tags="forgeable,tablet,normal_tablet"
   },
   {
     file="data/entities/items/books/book_10.xml",
     item_name="$booktitle10",
     origin="Vanilla",
-    tags="tablet,normal_tablet,forgeable"
+    tags="forgeable,tablet,normal_tablet"
   },
   {
     file="data/entities/items/books/book_all_spells.xml",
@@ -201,10 +207,16 @@ return {
     tags="tablet,normal_tablet"
   },
   {
+    file="data/entities/items/books/book_barren.xml",
+    item_name="$booktitle_barren",
+    origin="Vanilla",
+    tags="tablet,scroll"
+  },
+  {
     file="data/entities/items/books/book_bunker.xml",
     item_name="$booktitle_fisher",
     origin="Vanilla",
-    tags="scroll,tablet"
+    tags="tablet,scroll"
   },
   {
     file="data/entities/items/books/book_corpse.xml",
@@ -216,85 +228,85 @@ return {
     file="data/entities/items/books/book_diamond.xml",
     item_name="$item_book_diamond",
     origin="Vanilla",
-    tags="scroll,tablet"
+    tags="tablet,scroll"
   },
   {
     file="data/entities/items/books/book_essences.xml",
     item_name="$item_book_essences",
     origin="Vanilla",
-    tags="scroll,tablet"
+    tags="tablet,scroll"
   },
   {
     file="data/entities/items/books/book_hint.xml",
     item_name="$item_book_hint",
     origin="Vanilla",
-    tags="scroll,tablet"
+    tags="tablet,scroll"
   },
   {
     file="data/entities/items/books/book_mestari.xml",
     item_name="$booktitle_mestari",
     origin="Vanilla",
-    tags="scroll,tablet"
+    tags="tablet,scroll"
   },
   {
     file="data/entities/items/books/book_moon.xml",
     item_name="$item_book_moon",
     origin="Vanilla",
-    tags="scroll,tablet"
+    tags="tablet,scroll"
   },
   {
     file="data/entities/items/books/book_music_a.xml",
     item_name="$item_book_music",
     origin="Vanilla",
-    tags="scroll,tablet"
+    tags="tablet,scroll"
   },
   {
     file="data/entities/items/books/book_music_b.xml",
     item_name="$item_book_music_b",
     origin="Vanilla",
-    tags="scroll,tablet"
+    tags="tablet,scroll"
   },
   {
     file="data/entities/items/books/book_music_c.xml",
     item_name="$item_book_music_c",
     origin="Vanilla",
-    tags="scroll,tablet"
+    tags="tablet,scroll"
   },
   {
     file="data/entities/items/books/book_robot.xml",
     item_name="$item_book_robot",
     origin="Vanilla",
-    tags="scroll,tablet"
+    tags="tablet,scroll"
   },
   {
     file="data/entities/items/books/book_s_a.xml",
     item_name="$item_book_s_a",
     origin="Vanilla",
-    tags="scroll,tablet"
+    tags="tablet,scroll"
   },
   {
     file="data/entities/items/books/book_s_b.xml",
     item_name="$item_book_s_a",
     origin="Vanilla",
-    tags="scroll,tablet"
+    tags="tablet,scroll"
   },
   {
     file="data/entities/items/books/book_s_c.xml",
     item_name="$item_book_s_a",
     origin="Vanilla",
-    tags="scroll,tablet"
+    tags="tablet,scroll"
   },
   {
     file="data/entities/items/books/book_s_d.xml",
     item_name="$item_book_s_a",
     origin="Vanilla",
-    tags="scroll,tablet"
+    tags="tablet,scroll"
   },
   {
     file="data/entities/items/books/book_s_e.xml",
     item_name="$item_book_s_a",
     origin="Vanilla",
-    tags="scroll,tablet"
+    tags="tablet,scroll"
   },
   {
     file="data/entities/items/books/book_tree.xml",
@@ -306,14 +318,14 @@ return {
     file="data/entities/items/easter/beer_bottle.xml",
     item_name="$item_potion",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable",
+    tags="hittable,teleportable_NOT",
     ui_name="$item_kaljapullo"
   },
   {
     file="data/entities/items/easter/minit_watering.xml",
     item_name="Potion",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable",
+    tags="hittable,teleportable_NOT",
     ui_name="Watering can"
   },
   {
@@ -338,13 +350,13 @@ return {
     file="data/entities/items/orbs/orb_base.xml",
     item_name="$item_orb",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,polymorphable_NOT"
+    tags="hittable,teleportable_NOT,polymorphable_NOT"
   },
   {
     file="data/entities/items/pickup/beamstone.xml",
     item_name="$item_mega_beam_stone",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup"
   },
   {
     file="data/entities/items/pickup/bloodmoney_10.xml",
@@ -392,13 +404,13 @@ return {
     file="data/entities/items/pickup/brimstone.xml",
     item_name="$item_brimstone",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,brimstone"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,brimstone"
   },
   {
     file="data/entities/items/pickup/broken_wand.xml",
     item_name="$item_broken_wand",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,forgeable,broken_wand"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,forgeable,broken_wand"
   },
   {
     file="data/entities/items/pickup/cape.xml",
@@ -417,62 +429,62 @@ return {
     file="data/entities/items/pickup/chest_random.xml",
     item_name="$item_chest_treasure",
     origin="Vanilla",
-    tags="teleportable_NOT,item_physics,item_pickup,chest,effectable_prop"
+    tags="teleportable_NOT,item_physics,chest,item_pickup,effectable_prop"
   },
   {
     file="data/entities/items/pickup/chest_random_super.xml",
     item_name="$item_chest_treasure",
     origin="Vanilla",
-    tags="teleportable_NOT,item_physics,item_pickup,chest,effectable_prop",
+    tags="teleportable_NOT,item_physics,chest,item_pickup,effectable_prop",
     ui_name="$item_chest_treasure_super"
   },
   {
     file="data/entities/items/pickup/egg_fire.xml",
     item_name="$item_egg_fire",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,egg_item"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,egg_item"
   },
   {
     file="data/entities/items/pickup/egg_hollow.xml",
     item_name="$item_egg_hollow",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,egg_item"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,egg_item"
   },
   {
     file="data/entities/items/pickup/egg_monster.xml",
     item_name="$item_egg",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,egg_item"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,egg_item"
   },
   {
     file="data/entities/items/pickup/egg_purple.xml",
     item_name="$item_egg_purple",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,egg_item"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,egg_item"
   },
   {
     file="data/entities/items/pickup/egg_red.xml",
     item_name="$item_egg",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,egg_item"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,egg_item"
   },
   {
     file="data/entities/items/pickup/egg_slime.xml",
     item_name="$item_egg_slime",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,egg_item"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,egg_item"
   },
   {
     file="data/entities/items/pickup/egg_spiders.xml",
     item_name="$item_egg_purple",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,egg_item"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,egg_item"
   },
   {
     file="data/entities/items/pickup/egg_worm.xml",
     item_name="$item_egg_worm",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,egg_item"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,egg_item"
   },
   {
     file="data/entities/items/pickup/essence_air.xml",
@@ -508,7 +520,7 @@ return {
     file="data/entities/items/pickup/evil_eye.xml",
     item_name="$item_evil_eye",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,evil_eye"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,evil_eye"
   },
   {
     file="data/entities/items/pickup/goldnugget.xml",
@@ -563,7 +575,7 @@ return {
     file="data/entities/items/pickup/gourd.xml",
     item_name="$item_gourd",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,gourd"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,gourd"
   },
   {
     file="data/entities/items/pickup/greed_curse.xml",
@@ -575,97 +587,103 @@ return {
     file="data/entities/items/pickup/heart.xml",
     item_name="$item_heart",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_pickup,drillable"
+    tags="hittable,teleportable_NOT,item_pickup,drillable"
   },
   {
     file="data/entities/items/pickup/heart_better.xml",
     item_name="$item_heart_better",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_pickup,drillable"
+    tags="hittable,teleportable_NOT,item_pickup,drillable"
   },
   {
     file="data/entities/items/pickup/heart_evil.xml",
     item_name="$item_heart",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_pickup,drillable"
+    tags="hittable,teleportable_NOT,item_pickup,drillable"
   },
   {
     file="data/entities/items/pickup/heart_fullhp.xml",
     item_name="$item_heart_fullhp",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_pickup,drillable"
+    tags="hittable,teleportable_NOT,item_pickup,drillable"
   },
   {
     file="data/entities/items/pickup/jar.xml",
     item_name="$item_jar",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,potion"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,potion"
   },
   {
     file="data/entities/items/pickup/moon.xml",
     item_name="$item_moon",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_pickup,moon_energy"
+    tags="hittable,teleportable_NOT,item_pickup,moon_energy"
   },
   {
     file="data/entities/items/pickup/musicstone.xml",
     item_name="$item_musicstone",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,moon_energy"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,moon_energy"
   },
   {
     file="data/entities/items/pickup/perk_reroll.xml",
     item_name="$item_perk_reroll",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item,glue_NOT,perk_reroll_machine,item_shop"
+    tags="hittable,teleportable_NOT,item,glue_NOT,perk_reroll_machine,item_shop"
   },
   {
     file="data/entities/items/pickup/physics_die.xml",
     item_name="$item_die",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup"
   },
   {
     file="data/entities/items/pickup/physics_gold_orb.xml",
     item_name="$item_gold_orb",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup"
   },
   {
     file="data/entities/items/pickup/physics_gold_orb_greed.xml",
     item_name="$item_gold_orb_greed",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup"
   },
   {
     file="data/entities/items/pickup/physics_greed_die.xml",
     item_name="$item_greed_die",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup"
   },
   {
     file="data/entities/items/pickup/poopstone.xml",
     item_name="$item_kakka",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,poopstone"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,poopstone"
   },
   {
     file="data/entities/items/pickup/potion.xml",
     item_name="$item_potion",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,potion"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,potion"
   },
   {
     file="data/entities/items/pickup/potion_aggressive.xml",
     item_name="$item_potion",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,potion,projectile_item"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,potion,projectile_item"
+  },
+  {
+    file="data/entities/items/pickup/potion_mimic.xml",
+    item_name="$item_potion_mimic",
+    origin="Vanilla",
+    tags="teleportable_NOT,item_physics,item_pickup,effectable_prop"
   },
   {
     file="data/entities/items/pickup/powder_stash.xml",
     item_name="$item_powder_stash_3",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,powder_stash"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,powder_stash"
   },
   {
     file="data/entities/items/pickup/runestones/runestone_base.xml",
@@ -719,55 +737,55 @@ return {
     file="data/entities/items/pickup/safe_haven.xml",
     item_name="$item_safe_haven",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics"
+    tags="hittable,teleportable_NOT,item_physics"
   },
   {
     file="data/entities/items/pickup/spell_refresh.xml",
     item_name="$item_spell_refresh",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_pickup,drillable"
+    tags="hittable,teleportable_NOT,item_pickup,drillable"
   },
   {
     file="data/entities/items/pickup/stonestone.xml",
     item_name="$item_stonestone",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,stonestone"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,stonestone"
   },
   {
     file="data/entities/items/pickup/summon_portal_broken.xml",
     item_name="$action_broken_spell",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,forgeable,card_summon_portal_broken"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,forgeable,card_summon_portal_broken"
   },
   {
     file="data/entities/items/pickup/sun/sunseed.xml",
     item_name="$item_sunseed",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,seed_a"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,seed_a"
   },
   {
     file="data/entities/items/pickup/sun/sunstone.xml",
     item_name="$item_seed_c",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,seed_b"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,seed_b"
   },
   {
     file="data/entities/items/pickup/test/pouch.xml",
     item_name="$item_potion",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics"
+    tags="hittable,teleportable_NOT,item_physics"
   },
   {
     file="data/entities/items/pickup/test/pouch_static.xml",
     item_name="$item_potion",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics"
+    tags="hittable,teleportable_NOT,item_physics"
   },
   {
     file="data/entities/items/pickup/thunderstone.xml",
     item_name="$item_thunderstone",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,thunderstone"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,thunderstone"
   },
   {
     file="data/entities/items/pickup/utility_box.xml",
@@ -779,13 +797,13 @@ return {
     file="data/entities/items/pickup/wandstone.xml",
     item_name="$item_wandstone",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup"
   },
   {
     file="data/entities/items/pickup/waterstone.xml",
     item_name="$item_waterstone",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item_physics,item_pickup,waterstone"
+    tags="hittable,teleportable_NOT,item_physics,item_pickup,waterstone"
   },
   {
     file="data/entities/items/starting_bomb_wand.xml",
@@ -1051,92 +1069,92 @@ return {
   {
     file="data/entities/items/wands/level_01/base_wand_level_1.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,wand"
+    tags="hittable,teleportable_NOT,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_001.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,wand"
+    tags="hittable,teleportable_NOT,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_002.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,wand"
+    tags="hittable,teleportable_NOT,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_003.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,wand"
+    tags="hittable,teleportable_NOT,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_004.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,wand"
+    tags="hittable,teleportable_NOT,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_005.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,wand"
+    tags="hittable,teleportable_NOT,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_006.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,wand"
+    tags="hittable,teleportable_NOT,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_007.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,wand"
+    tags="hittable,teleportable_NOT,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_008.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,wand"
+    tags="hittable,teleportable_NOT,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_009.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,wand"
+    tags="hittable,teleportable_NOT,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_010.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item,wand"
+    tags="hittable,teleportable_NOT,item,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_011.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item,wand"
+    tags="hittable,teleportable_NOT,item,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_012.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item,wand"
+    tags="hittable,teleportable_NOT,item,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_013.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item,wand"
+    tags="hittable,teleportable_NOT,item,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_014.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item,wand"
+    tags="hittable,teleportable_NOT,item,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_015.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item,wand"
+    tags="hittable,teleportable_NOT,item,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_016.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item,wand"
+    tags="hittable,teleportable_NOT,item,wand"
   },
   {
     file="data/entities/items/wands/level_01/wand_017.xml",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,item,wand"
+    tags="hittable,teleportable_NOT,item,wand"
   },
   {
     file="data/entities/items/wands/wand_good/wand_good_1.xml",
@@ -1161,7 +1179,7 @@ return {
     file="data/entities/projectiles/cocktail.xml",
     item_name="$item_cocktail",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,projectile_item"
+    tags="hittable,teleportable_NOT,projectile_item"
   },
   {
     file="data/scripts/streaming_integration/entities/chest_random.xml",
@@ -1173,7 +1191,7 @@ return {
     file="data/scripts/streaming_integration/entities/spell_refresh.xml",
     item_name="$item_spell_refresh",
     origin="Vanilla",
-    tags="teleportable_NOT,hittable,drillable"
+    tags="hittable,teleportable_NOT,drillable"
   },
   {
     file="data/scripts/streaming_integration/entities/wand_level_01.xml",
@@ -1194,13 +1212,13 @@ return {
     file="mods/starting_loadouts/files/butcher/potion_berserk.xml",
     item_name="$item_potion",
     origin="starting_loadouts",
-    tags="teleportable_NOT,hittable,item_physics,potion"
+    tags="hittable,teleportable_NOT,item_physics,potion"
   },
   {
     file="mods/starting_loadouts/files/butcher/potion_blood.xml",
     item_name="$item_potion",
     origin="starting_loadouts",
-    tags="teleportable_NOT,hittable,item_physics,potion"
+    tags="hittable,teleportable_NOT,item_physics,potion"
   },
   {
     file="mods/starting_loadouts/files/butcher/wands/wand_1.xml",
@@ -1218,7 +1236,7 @@ return {
     file="mods/starting_loadouts/files/eldritch/potion_teleport.xml",
     item_name="$item_potion",
     origin="starting_loadouts",
-    tags="teleportable_NOT,hittable,item_physics,potion"
+    tags="hittable,teleportable_NOT,item_physics,potion"
   },
   {
     file="mods/starting_loadouts/files/eldritch/wands/wand_1.xml",
@@ -1242,7 +1260,7 @@ return {
     file="mods/starting_loadouts/files/fire/potion_fire.xml",
     item_name="$item_potion",
     origin="starting_loadouts",
-    tags="teleportable_NOT,hittable,item_physics,potion"
+    tags="hittable,teleportable_NOT,item_physics,potion"
   },
   {
     file="mods/starting_loadouts/files/fire/wands/wand_1.xml",
@@ -1260,7 +1278,7 @@ return {
     file="mods/starting_loadouts/files/slime/potion_slime.xml",
     item_name="$item_potion",
     origin="starting_loadouts",
-    tags="teleportable_NOT,hittable,item_physics,potion"
+    tags="hittable,teleportable_NOT,item_physics,potion"
   },
   {
     file="mods/starting_loadouts/files/slime/wands/wand_1.xml",
