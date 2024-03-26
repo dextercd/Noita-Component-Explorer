@@ -9629,6 +9629,16 @@
                 "type": "int",
                 "name": "mCamFrameLastMovingFastExplosion",
                 "example": "0 [0, 1]"
+            },
+            {
+                "type": "bool",
+                "name": "mCessationDo",
+                "example": "0 [0, 1]"
+            },
+            {
+                "type": "int",
+                "name": "mCessationLifetime",
+                "example": "0 [0, 1]"
             }
         ],
         "custom_data_types": [
