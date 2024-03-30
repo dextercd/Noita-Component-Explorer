@@ -182,8 +182,7 @@ local function line_colour(str)
        string.find(str, "problem", 1, true) or
        string.find(str, "fail", 1, true) or
        string.find(str, ": in function ", 1, true) or
-       string.find(str, "we made a fucky wucky", 1, true) or
-       string.find(str, "critical", 1, true)
+       string.find(str, "we made a fucky wucky", 1, true)
     then
         return unpack(style.colour_fail)
     end
