@@ -62,6 +62,8 @@ local repeat_scripts = dofile_once("mods/component-explorer/repeat_scripts.lua")
 ---@module 'component-explorer.utils.file_util'
 dofile_once("mods/component-explorer/utils/file_util.lua")
 
+local HAS_KAE_WAYPOINT = ModIsEnabled("kae_waypoint")
+
 local last_frame_run = -1
 
 local is_escape_paused = false
@@ -148,6 +150,16 @@ function show_view_menu_items()
     _, globals.open = imgui.MenuItem("Globals", "", globals.open)
     _, run_flags.open = imgui.MenuItem("Run Flags", "", run_flags.open)
     _, mod_settings.open = imgui.MenuItem("Mod Settings", "", mod_settings.open)
+
+    if HAS_KAE_WAYPOINT then
+        imgui.Separator()
+        local enabled = ModSettingGet("kae_waypoint.enable") --[[@as boolean]]
+        local changed
+        changed, enabled = imgui.MenuItem("Kaedenn Teleport", sct("CTRL+SHIFT+T"), enabled)
+        if changed then
+            ModSettingSetNextValue("kae_waypoint.enable", enabled, false)
+        end
+    end
 
     imgui.Separator()
     _, windows_hidden_entity = imgui.MenuItem("Hide entity windows", "", windows_hidden_entity)
@@ -384,6 +396,11 @@ function keyboard_shortcut_items()
 
     if imgui.IsKeyPressed(imgui.Key.S) then
         spawn_stuff.open = not spawn_stuff.open
+    end
+
+    if HAS_KAE_WAYPOINT and imgui.IsKeyPressed(imgui.Key.T) then
+        local toggle = not ModSettingGet("kae_waypoint.enable")
+        ModSettingSetNextValue("kae_waypoint.enable", toggle, false)
     end
 
     if imgui.IsKeyPressed(imgui.Key.W) then
