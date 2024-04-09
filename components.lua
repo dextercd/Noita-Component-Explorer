@@ -18,6 +18,7 @@ component_types = {
     "AudioSourceHandle",
     "types_vector2", "vec2", "ivec2",
     "types_aabb",
+    "types_iaabb",
     "types_xform",
     "ValueRange", "ValueRangeInt",
     "std_string", "USTRING",

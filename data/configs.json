@@ -108,6 +108,21 @@
                 "description": "If 1, music is triggered in this biome no matter what the danger level is"
             },
             {
+                "type": "int32",
+                "name": "audio_music_trigger_min_y",
+                "description": "If not 0, player Y has to be larger than this for the music to start playing"
+            },
+            {
+                "type": "int32",
+                "name": "audio_music_trigger_max_y",
+                "description": "If not 0, player Y has to be smaller than this for the music to start playing"
+            },
+            {
+                "type": "std::string",
+                "name": "audio_biome_id_for_music",
+                "description": "if set, this will be used to identify the biome in which this music plays, instead of Biome.name. can be used to get around some bugs with _EMPTY_ as name"
+            },
+            {
                 "type": "std::string",
                 "name": "audio_ambience",
                 "description": "the ambience event that plays while player is in this biome"
@@ -141,6 +156,26 @@
                 "type": "bool",
                 "name": "has_rain",
                 "description": "if 1, rain or snowfall may occur in this biome"
+            },
+            {
+                "type": "float",
+                "name": "gradient_sky_alpha_target_mod",
+                "description": "affects sky gradient. if larger than procedural value, will override it"
+            },
+            {
+                "type": "float",
+                "name": "rain_target_mod",
+                "description": "affects clouds visibility. if larger than procedural value, will override it"
+            },
+            {
+                "type": "float",
+                "name": "fog_target_mod",
+                "description": "affects fog amount. if larger than procedural value, will override it"
+            },
+            {
+                "type": "float",
+                "name": "sunset_alpha_target",
+                "description": "affects sunset gradient amount"
             },
             {
                 "type": "std::string",
@@ -320,6 +355,11 @@
                 "type": "bool",
                 "name": "coarse_map_cell_count_always_zero",
                 "description": "if 1, areas in this biome always have a 64x64 cell count of 0"
+            },
+            {
+                "type": "bool",
+                "name": "coarse_map_inject_light",
+                "description": "if 1, areas in this biome set the sky light propagation value to 1"
             }
         ],
         "privates": [
@@ -1095,6 +1135,11 @@
                 "type": "int",
                 "name": "explosion_delay_id",
                 "description": "for delayed barrel explosions... this has to be set and has to be the same for the explosions for there to be a delay"
+            },
+            {
+                "type": "bool",
+                "name": "not_scaled_by_gamefx",
+                "description": "If 1, DAMAGE_MULTIPLIER etc don't affect this explosion"
             }
         ],
         "privates": [
@@ -1717,6 +1762,14 @@
             {
                 "type": "bool",
                 "name": "mDrawPathFindingGrid"
+            },
+            {
+                "type": "bool",
+                "name": "mDrawPathFindingPaths"
+            },
+            {
+                "type": "bool",
+                "name": "mDrawPathFindingCompJumpTrajectories"
             },
             {
                 "type": "float",

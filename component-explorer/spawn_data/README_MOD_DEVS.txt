@@ -2,8 +2,7 @@ Hey mod developer!
 
 Your custom perks, spells, and materials should show up automatically. In the
 case of materials, the origin is only deduced correctly when
-`ModMaterialFilesGet()` is available. (Only on the beta at the time of writing
-this).
+`ModMaterialFilesGet()` is available.
 
 Creatures and items use a hardcoded list. See the items.lua and
 creatures.lua file for the kind of data it contains. You can append to

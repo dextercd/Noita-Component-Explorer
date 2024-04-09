@@ -6380,6 +6380,24 @@
                 "name": "kill_all_parents",
                 "example": "0 [0, 1]",
                 "description": "if 1, will kill all the parents entity"
+            },
+            {
+                "type": "bool",
+                "name": "serialize_duration",
+                "example": "0 [0, 1]",
+                "description": "if 1, will retain kill_frame and creation_frame over serialization"
+            },
+            {
+                "type": "int",
+                "name": "kill_frame_serialized",
+                "example": "0 [0, 1]",
+                "description": "frame that this is killed at"
+            },
+            {
+                "type": "int",
+                "name": "creation_frame_serialized",
+                "example": "0 [0, 1]",
+                "description": "frame that this is killed at"
             }
         ],
         "privates": [
