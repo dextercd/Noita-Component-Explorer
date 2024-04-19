@@ -61,6 +61,18 @@ function globals.unwatch(name)
     end
 end
 
+---@param name string
+---@return boolean
+function globals.is_watching(name)
+    for _, v in ipairs(watched_globals) do
+        if v.name == name then
+            return true
+        end
+    end
+
+    return false
+end
+
 local function set_default(name, type)
     if type == "true/false" then
         GlobalsSetValue(name, "false")
@@ -214,6 +226,18 @@ local function show_globals_table_ui()
 
         imgui.TableNextColumn()
         imgui.Text(data.name)
+        if imgui.BeginPopupContextItem(data.name) then
+            if imgui.MenuItem("Copy key") then
+                imgui.SetClipboardText(data.name)
+            end
+            if imgui.MenuItem("Copy Value") then
+                local value = GlobalsGetValue(data.name, VARIABLE_NOT_SET_VALUE)
+                if value ~= VARIABLE_NOT_SET_VALUE then
+                    imgui.SetClipboardText(value)
+                end
+            end
+            imgui.EndPopup()
+        end
 
         imgui.TableNextColumn()
         imgui.Text(data.type)
@@ -236,6 +260,9 @@ local function show_globals_table_ui()
     imgui.EndTable()
 end
 
+--- Can be overwritten in mods. Used by unsafe explorer
+function globals.extra() end
+
 function globals.show()
     imgui.SetNextWindowSize(600, 200, imgui.Cond.FirstUseEver)
     local should_show
@@ -244,6 +271,7 @@ function globals.show()
     if not should_show then return end
 
     add_global_ui()
+    globals.extra()
     show_globals_table_ui()
 
     imgui.End()
