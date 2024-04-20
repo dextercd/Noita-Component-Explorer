@@ -5,8 +5,7 @@ local get_global_addr = ouroborous.func_c_address(GlobalsGetValue)
 
 local iter = ffi.cast("uint8_t*", get_global_addr)
 for _=1,1500 do
-    if
-        iter[0x0] == 0x8d and iter[0x1] == 0x4c and iter[0x2] == 0x24
+    if  iter[0x0] == 0x8d and iter[0x1] == 0x4c and iter[0x2] == 0x24
     and iter[0x4] == 0xe8
     and iter[0x9] == 0x8b and iter[0xa] == 0x35
     then
@@ -27,8 +26,7 @@ do return {} end
 local world_state
 
 for _=1, 300 do
-    if
-        iter[0x0] == 0x8b and iter[0x1] == 0x1d
+    if  iter[0x0] == 0x8b and iter[0x1] == 0x1d
     and iter[0x6] == 0x85 and iter[0x7] == 0xdb
     and iter[0x8] == 0x74
     then
@@ -47,10 +45,9 @@ do return {} end
 local world_state_lua_globals
 
 for _=1, 200 do
-    if
-            iter[0x0] == 0x8b and iter[0x1] == 0xf0
-        and iter[0x2] == 0x3b and iter[0x3] == 0xb3
-        and iter[0x8] == 0x74
+    if  iter[0x0] == 0x8b and iter[0x1] == 0xf0
+    and iter[0x2] == 0x3b and iter[0x3] == 0xb3
+    and iter[0x8] == 0x74
     then
         world_state_lua_globals = ffi.cast("int32_t*", iter + 4)[0]
         goto stage4
