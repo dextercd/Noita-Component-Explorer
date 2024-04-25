@@ -1,0 +1,2423 @@
+[
+    {
+        "name": "Biome",
+        "members": [
+            {
+                "type": "std::string",
+                "name": "name",
+                "description": "the name that is exposed to lua functions that spawn entities"
+            },
+            {
+                "type": "std::string",
+                "name": "background_image",
+                "description": "path to the image file (texture) that is used for the background"
+            },
+            {
+                "type": "std::string",
+                "name": "background_edge_left",
+                "description": "if not empty, will use this image as the left edge"
+            },
+            {
+                "type": "std::string",
+                "name": "background_edge_right",
+                "description": "if not empty, will use this image as the right edge"
+            },
+            {
+                "type": "std::string",
+                "name": "background_edge_top",
+                "description": "if not empty, will use this image as the top edge"
+            },
+            {
+                "type": "std::string",
+                "name": "background_edge_bottom",
+                "description": "if not empty, will use this image as the bottom edge"
+            },
+            {
+                "type": "int",
+                "name": "background_edge_priority",
+                "description": "if both biomes have edges defined, will use the one with higher priority (if priority is same, will compare (>) background_images)"
+            },
+            {
+                "type": "bool",
+                "name": "background_use_neighbor",
+                "description": "if set will look for neighboring biomes and use their background image"
+            },
+            {
+                "type": "float",
+                "name": "background_image_height",
+                "description": "height were the background image starts"
+            },
+            {
+                "type": "bool",
+                "name": "limit_background_image",
+                "description": "Will limit the background image to start at the cave height"
+            },
+            {
+                "type": "std::string",
+                "name": "bitmap_noise_file",
+                "description": "if set, loads it to mBitmapNoise"
+            },
+            {
+                "type": "bool",
+                "name": "noise_biome_edges",
+                "description": "does the noisy edge for biomes, if either of biomes has this set to 0 will do a straight edge"
+            },
+            {
+                "type": "bool",
+                "name": "big_noise_biome_edges",
+                "description": "if true, will leak onto other biomes and not be carveable"
+            },
+            {
+                "type": "bool",
+                "name": "fat_biome_edges",
+                "description": "if true, will leak onto other biomes and not be carveable"
+            },
+            {
+                "type": "bool",
+                "name": "skip_edge_textures",
+                "description": "skips edge texture generation. Turn of for pixel scenes"
+            },
+            {
+                "type": "std::string",
+                "name": "audio_music_enter",
+                "description": "the music event that plays when player enters this biome (e.g. 'music/desert/enter')"
+            },
+            {
+                "type": "std::string",
+                "name": "audio_music_2",
+                "description": "the music directory that plays while player is in this biome (e.g 'coalmine')"
+            },
+            {
+                "type": "float",
+                "name": "audio_music_energy_coeff",
+                "description": "Multiplier for music energy in this biome"
+            },
+            {
+                "type": "bool",
+                "name": "audio_music_no_forced_quietness",
+                "description": "If 1, music is not quieted by occasional quietness"
+            },
+            {
+                "type": "int32",
+                "name": "audio_music_forced_quietness_duration_seconds",
+                "description": "If > 0, this is the duration of occasional quietness, else the value from magic numbers is used."
+            },
+            {
+                "type": "bool",
+                "name": "audio_music_trigger_without_danger",
+                "description": "If 1, music is triggered in this biome no matter what the danger level is"
+            },
+            {
+                "type": "std::string",
+                "name": "audio_ambience",
+                "description": "the ambience event that plays while player is in this biome"
+            },
+            {
+                "type": "std::string",
+                "name": "audio_ambience_surface",
+                "description": "the ambience event that plays while player is in this biome and on surface"
+            },
+            {
+                "type": "float",
+                "name": "color_grading_r",
+                "description": "post fx color grading"
+            },
+            {
+                "type": "float",
+                "name": "color_grading_g",
+                "description": "post fx color grading"
+            },
+            {
+                "type": "float",
+                "name": "color_grading_b",
+                "description": "post fx color grading"
+            },
+            {
+                "type": "float",
+                "name": "color_grading_grayscale",
+                "description": "post fx color grading. [0.0,1.0], larger value means more grayscale"
+            },
+            {
+                "type": "bool",
+                "name": "has_rain",
+                "description": "if 1, rain or snowfall may occur in this biome"
+            },
+            {
+                "type": "std::string",
+                "name": "bitmap_filename",
+                "description": "loads the chunk from this bitmap, the bitmap should be 512x512"
+            },
+            {
+                "type": "std::string",
+                "name": "wang_template_file",
+                "description": "uses this file to create a herringbone wang map"
+            },
+            {
+                "type": "int",
+                "name": "wang_map_width",
+                "description": "the size of the wang map"
+            },
+            {
+                "type": "int",
+                "name": "wang_map_height",
+                "description": "the size of the wang map"
+            },
+            {
+                "type": "std::string",
+                "name": "lua_script",
+                "description": "default is data/scripts/biomes/NAME.lua"
+            },
+            {
+                "type": "bool",
+                "name": "pixel_scene",
+                "description": "for 'pixel scene' biomes, this forces the loading before hand "
+            },
+            {
+                "type": "bool",
+                "name": "static_tile",
+                "description": "if 1, directly blits wang_template_file without wang randomization, kind of like a pixel scene but at the wang tile resolution"
+            },
+            {
+                "type": "std::string",
+                "name": "static_tile_bg_mask",
+                "description": "if set, and static tile is 1, the background_image will use a special shader and this mask to calculate visiblity. should be same size and resolution as 'wang_template_file'"
+            },
+            {
+                "type": "float",
+                "name": "static_tile_bg_mask_threshold",
+                "description": "threshold used in 'sprite_static_tile_bg.frag' shader in conjuction with 'sprite_static_tile_bg_mask' to determine if a background pixel is visible or not"
+            },
+            {
+                "type": "float",
+                "name": "game_enemy_hp_scale",
+                "description": "1.f = default. Will multiply the hp of the camerabounded enemies in the area with hp_scale"
+            },
+            {
+                "type": "float",
+                "name": "game_enemy_attack_speed",
+                "description": "1.f = default. This multiplies AnimalAI's attack_ranged_frames_between in camerabounded enemies"
+            },
+            {
+                "type": "bool",
+                "name": "mInsideNoiseFBM",
+                "description": "will fbm the mInsideNoise if set true"
+            },
+            {
+                "type": "double",
+                "name": "mInsidePerlinScaleX",
+                "description": "the noise inside the stones..."
+            },
+            {
+                "type": "double",
+                "name": "mInsidePerlinScaleY",
+                "description": "the noise inside the stones..."
+            },
+            {
+                "type": "bool",
+                "name": "mInsidePerlinSquared"
+            },
+            {
+                "type": "bool",
+                "name": "mInsidePerlinClamped"
+            },
+            {
+                "type": "bool",
+                "name": "mInsidePerlinScaled"
+            },
+            {
+                "type": "float",
+                "name": "mInsidePerlinScaleMin"
+            },
+            {
+                "type": "float",
+                "name": "mInsidePerlinScaleMax"
+            },
+            {
+                "type": "bool",
+                "name": "mInsidePerlinForceInside",
+                "description": "if set, will multiply the noise_value with the gradient value "
+            },
+            {
+                "type": "bool",
+                "name": "mInsidePerlinOffsetBySeed",
+                "description": "NOTE( Petri ): 17.8.2023 - if set, will add worldseed as an offset to the noise"
+            },
+            {
+                "type": "double",
+                "name": "mInsidePerlinOffsetX",
+                "description": "NOTE( Petri ): 17.8.2023 - perlin noise offset"
+            },
+            {
+                "type": "double",
+                "name": "mInsidePerlinOffsetY",
+                "description": "NOTE( Petri ): 17.8.2023 - perlin noise offset"
+            },
+            {
+                "type": "float",
+                "name": "mInsideAddValue",
+                "description": "added inside the caves the gradient value"
+            },
+            {
+                "type": "float",
+                "name": "mMultiplierGradient",
+                "description": "how much of the gradient is applied"
+            },
+            {
+                "type": "float",
+                "name": "mMultiplierPerlin",
+                "description": "how much of the inside noise"
+            },
+            {
+                "type": "float",
+                "name": "mMultiplierExtraPerlin"
+            },
+            {
+                "type": "float",
+                "name": "mGradientStartY"
+            },
+            {
+                "type": "float",
+                "name": "mGradientEndY"
+            },
+            {
+                "type": "double",
+                "name": "mGradientSlopeStartX",
+                "description": "if addNoise = 3, will use this to the ( x - mGradientSlopeStartX ) * mGradientSlopeDelta"
+            },
+            {
+                "type": "double",
+                "name": "mGradientSlopeDelta",
+                "description": "if addNoise = 3, will use this to the ( x - mGradientSlopeStartX ) * mGradientSlopeDelta"
+            },
+            {
+                "type": "int",
+                "name": "mGradientAddNoise",
+                "description": "fake enum 1=standard noise, 2=fbm noise, 3=slope"
+            },
+            {
+                "type": "double",
+                "name": "mGradientNoiseScale"
+            },
+            {
+                "type": "float",
+                "name": "mGradientLowNoise"
+            },
+            {
+                "type": "float",
+                "name": "mGradientHighNoise"
+            },
+            {
+                "type": "bool",
+                "name": "coarse_map_force_terrain",
+                "description": "if 1, is initially marked as 'terrain' in the coarse map used for sky light calculations etc"
+            },
+            {
+                "type": "bool",
+                "name": "coarse_map_not_terrain",
+                "description": "if 1, is initially never marked as 'terrain' in the coarse map used for sky light calculations etc"
+            },
+            {
+                "type": "bool",
+                "name": "coarse_map_cell_count_always_zero",
+                "description": "if 1, areas in this biome always have a 64x64 cell count of 0"
+            }
+        ],
+        "privates": [
+            {
+                "type": "ceng::CArray2D<uint32>*",
+                "name": "bitmap_data",
+                "description": "for bitmap loading, well cache it here"
+            },
+            {
+                "type": "BitmapNoise*",
+                "name": "mBitmapNoise",
+                "description": "load the bitmap noise here"
+            },
+            {
+                "type": "BiomeMaterials*",
+                "name": "mBiomeMaterials",
+                "description": "this is set when the biome is loaded by BiomeHelper"
+            },
+            {
+                "type": "std::string",
+                "name": "mModifierUIDescription",
+                "description": "this should be set when the biome has modifiers. will be displayed when entering the biome"
+            },
+            {
+                "type": "std::string",
+                "name": "mModifierUIDecorationFile",
+                "description": "this should be set when the biome has modifiers. UI 3-piece image to use when displaying modifier message when entering the biome"
+            },
+            {
+                "type": "std::string",
+                "name": "mDebugFilename",
+                "description": "the file this was loaded from"
+            }
+        ],
+        "objects": [
+            {
+                "type": "BiomeModifiers",
+                "name": "modifiers"
+            }
+        ],
+        "custom_data_types": [
+            {
+                "type": "BIOME_TYPE::Enum",
+                "name": "type",
+                "description": "0 = standard, 1 = bitmap level loading, loads the bitmap file"
+            },
+            {
+                "type": "CavesSetup*",
+                "name": "BitmapCaves"
+            },
+            {
+                "type": "FOG_OF_WAR_TYPE::Enum",
+                "name": "fog_of_war_type",
+                "description": "the way removing fog of war works in this biome"
+            },
+            {
+                "type": "RandomizeMaterials*",
+                "name": "RandomMaterials",
+                "description": "for wang tiles allows color -> random color transform"
+            },
+            {
+                "type": "NOISE_TYPE::Enum",
+                "name": "noise_type",
+                "description": "the style of the cave noise"
+            },
+            {
+                "type": "GENERAL_NOISE::Enum",
+                "name": "mInsideNoiseType",
+                "description": "the style of the inside noise"
+            }
+        ]
+    },
+    {
+        "name": "BiomeModifiers",
+        "members": [
+            {
+                "type": "float",
+                "name": "dust_amount",
+                "description": "amount of dust rendered"
+            },
+            {
+                "type": "float",
+                "name": "projectile_drag_coeff",
+                "description": "projectile velocity is multiplied with this value every frame"
+            },
+            {
+                "type": "float",
+                "name": "entity_gravity_y_multiplier",
+                "description": "affects the VelocityComponents gravity_y"
+            },
+            {
+                "type": "int8",
+                "name": "fog_of_war_delta",
+                "description": "fog of war change per frame"
+            },
+            {
+                "type": "uint8",
+                "name": "fire_extinguish_chance",
+                "description": "probability of fire being extinguished per cell update"
+            },
+            {
+                "type": "uint8",
+                "name": "reaction_freeze_chance",
+                "description": "probability of spontaneous freezing reactions per cell reaction update"
+            },
+            {
+                "type": "uint8",
+                "name": "reaction_unfreeze_chance",
+                "description": "probability of spontaneous frozen material melting reactions per cell reaction update"
+            },
+            {
+                "type": "uint8",
+                "name": "random_water_stains_chance",
+                "description": "probability of random water stains being added to characters"
+            },
+            {
+                "type": "uint8",
+                "name": "random_water_stains_amount",
+                "description": "number of water cells added when adding random water stains"
+            },
+            {
+                "type": "bool",
+                "name": "everything_is_conductive",
+                "description": "if 1, every static material in this place conduct electricity"
+            }
+        ]
+    },
+    {
+        "name": "CavesSetup",
+        "members": [
+            {
+                "type": "std::string",
+                "name": "name",
+                "description": "we share these based on the names, so make them unique"
+            },
+            {
+                "type": "int",
+                "name": "size_x",
+                "description": "How big the image is that we generate these from"
+            },
+            {
+                "type": "int",
+                "name": "size_y",
+                "description": "How big the image is that we generate these from"
+            },
+            {
+                "type": "float",
+                "name": "spawn_percent",
+                "description": "0-1 - with what chance do we add a spawn point to a cave"
+            },
+            {
+                "type": "int",
+                "name": "cave_count_min",
+                "description": "generates caves n, where n = random(cave_count_min, cave_count_max)"
+            },
+            {
+                "type": "int",
+                "name": "cave_count_max",
+                "description": "generates caves n, where n = random(cave_count_min, cave_count_max)"
+            },
+            {
+                "type": "bool",
+                "name": "do_beginning_paths",
+                "description": "if set, will do the paths that go down near the center of the image, used for setting up the caves to coal mines near where player starts"
+            },
+            {
+                "type": "bool",
+                "name": "do_beginning_down",
+                "description": "if true, will do a hole straight down"
+            },
+            {
+                "type": "int",
+                "name": "surface_caves_count_min",
+                "description": "generates caves n from the surface, where n = random(surface_caves_count_min, surface_caves_count_max)"
+            },
+            {
+                "type": "int",
+                "name": "surface_caves_count_max",
+                "description": "generates caves n from the surface, where n = random(surface_caves_count_min, surface_caves_count_max)"
+            },
+            {
+                "type": "float",
+                "name": "cave_strength_min",
+                "description": "how strongly do we carve the cave"
+            },
+            {
+                "type": "float",
+                "name": "cave_strength_max",
+                "description": "how strongly do we carve the cave"
+            },
+            {
+                "type": "int",
+                "name": "cave_childs_min",
+                "description": "how many child trails a cave can have"
+            },
+            {
+                "type": "int",
+                "name": "cave_childs_max",
+                "description": "how many child trails a cave can have"
+            },
+            {
+                "type": "int",
+                "name": "surface_cave_childs_min",
+                "description": "how many child trails a cave can have"
+            },
+            {
+                "type": "int",
+                "name": "surface_cave_childs_max",
+                "description": "how many child trails a cave can have"
+            },
+            {
+                "type": "int",
+                "name": "mountain_count_min",
+                "description": "how many child trails a cave can have"
+            },
+            {
+                "type": "int",
+                "name": "mountain_count_max",
+                "description": "how many child trails a cave can have"
+            },
+            {
+                "type": "float",
+                "name": "mountain_size_min"
+            },
+            {
+                "type": "float",
+                "name": "mountain_size_max"
+            },
+            {
+                "type": "int",
+                "name": "blob_caves_count_min"
+            },
+            {
+                "type": "int",
+                "name": "blob_caves_count_max"
+            },
+            {
+                "type": "float",
+                "name": "blob_caves_strength_min"
+            },
+            {
+                "type": "float",
+                "name": "blob_caves_strength_max"
+            },
+            {
+                "type": "float",
+                "name": "blob_caves_radius_min"
+            },
+            {
+                "type": "float",
+                "name": "blob_caves_radius_max"
+            },
+            {
+                "type": "std::string",
+                "name": "DEBUG_output_image",
+                "description": "if set, will save a png of the height map to the file specified here"
+            }
+        ],
+        "privates": [
+            {
+                "type": "std::string",
+                "name": "mLuaScript",
+                "description": "this is the Biome::lua_script"
+            }
+        ],
+        "custom_data_types": [
+            {
+                "type": "VEC_STRUCTURES",
+                "name": "structures"
+            }
+        ]
+    },
+    {
+        "name": "CaveStructure",
+        "members": [
+            {
+                "type": "std::string",
+                "name": "image_file",
+                "description": "path to image file that's going to be blitted"
+            },
+            {
+                "type": "int",
+                "name": "count_min"
+            },
+            {
+                "type": "int",
+                "name": "count_max"
+            },
+            {
+                "type": "int",
+                "name": "aabb_min_x"
+            },
+            {
+                "type": "int",
+                "name": "aabb_min_y"
+            },
+            {
+                "type": "int",
+                "name": "aabb_max_x"
+            },
+            {
+                "type": "int",
+                "name": "aabb_max_y"
+            },
+            {
+                "type": "float",
+                "name": "strength_min"
+            },
+            {
+                "type": "float",
+                "name": "strength_max"
+            }
+        ]
+    },
+    {
+        "name": "ConfigCutThroughWorld",
+        "members": [
+            {
+                "type": "int32",
+                "name": "x"
+            },
+            {
+                "type": "int32",
+                "name": "y_min"
+            },
+            {
+                "type": "int32",
+                "name": "y_max"
+            },
+            {
+                "type": "int32",
+                "name": "radius"
+            },
+            {
+                "type": "int32",
+                "name": "edge_darkening_width"
+            },
+            {
+                "type": "uint32",
+                "name": "global_id"
+            }
+        ]
+    },
+    {
+        "name": "ConfigDamageCritical",
+        "members": [
+            {
+                "type": "int",
+                "name": "chance",
+                "description": "the chance of a critical hit. ]0-100[ - can be higher than 100% - then will multiply the multiplier by the extra"
+            },
+            {
+                "type": "float",
+                "name": "damage_multiplier",
+                "description": "multiplier that is applied to all damage types on a critical hit"
+            }
+        ],
+        "privates": [
+            {
+                "type": "bool",
+                "name": "mSucceeded"
+            }
+        ]
+    },
+    {
+        "name": "ConfigDamagesByType",
+        "members": [
+            {
+                "type": "float",
+                "name": "melee"
+            },
+            {
+                "type": "float",
+                "name": "projectile"
+            },
+            {
+                "type": "float",
+                "name": "explosion"
+            },
+            {
+                "type": "float",
+                "name": "electricity",
+                "description": "electricity stun effect is rand[0-1] < electricity"
+            },
+            {
+                "type": "float",
+                "name": "fire"
+            },
+            {
+                "type": "float",
+                "name": "drill"
+            },
+            {
+                "type": "float",
+                "name": "slice"
+            },
+            {
+                "type": "float",
+                "name": "ice",
+                "description": "freezing stun effect is rand[0-1] < ice"
+            },
+            {
+                "type": "float",
+                "name": "healing",
+                "description": "healing aka negative damage. this should be given as a negative value."
+            },
+            {
+                "type": "float",
+                "name": "physics_hit",
+                "description": "damage from being hit with a physics object"
+            },
+            {
+                "type": "float",
+                "name": "radioactive"
+            },
+            {
+                "type": "float",
+                "name": "poison"
+            },
+            {
+                "type": "float",
+                "name": "overeating"
+            },
+            {
+                "type": "float",
+                "name": "curse"
+            },
+            {
+                "type": "float",
+                "name": "holy",
+                "description": "NOTE( Petri ): Added 18.7.2023. Just an extra type of damage"
+            }
+        ]
+    },
+    {
+        "name": "ConfigDrugFx",
+        "members": [
+            {
+                "type": "float",
+                "name": "distortion_amount"
+            },
+            {
+                "type": "float",
+                "name": "color_amount"
+            },
+            {
+                "type": "float",
+                "name": "fractals_amount"
+            },
+            {
+                "type": "float",
+                "name": "fractals_size"
+            },
+            {
+                "type": "float",
+                "name": "nightvision_amount"
+            },
+            {
+                "type": "float",
+                "name": "doublevision_amount"
+            }
+        ]
+    },
+    {
+        "name": "ConfigExplosion",
+        "members": [
+            {
+                "type": "bool",
+                "name": "never_cache",
+                "description": "if set, won't ever cache and the explosion happens that frame. Used for projectiles"
+            },
+            {
+                "type": "float",
+                "name": "explosion_radius",
+                "description": "Explosion radius, used to find the peasants and physics bodies that are thrown into the air"
+            },
+            {
+                "type": "std::string",
+                "name": "explosion_sprite",
+                "description": "sprite animation of the explosion that we play"
+            },
+            {
+                "type": "bool",
+                "name": "explosion_sprite_emissive",
+                "description": "if 1, sprite is emissive"
+            },
+            {
+                "type": "bool",
+                "name": "explosion_sprite_additive",
+                "description": "if 1, sprite is additive"
+            },
+            {
+                "type": "bool",
+                "name": "explosion_sprite_random_rotation",
+                "description": "if true, rotates the sprite to random 90 degrees"
+            },
+            {
+                "type": "float",
+                "name": "explosion_sprite_lifetime",
+                "description": "if 0, finds the lifetime based on the rect animation currently playing. If not 0 it is seconds how long does the explosion sprite stay in the world"
+            },
+            {
+                "type": "float",
+                "name": "damage",
+                "description": "how much damage does this do to living entities"
+            },
+            {
+                "type": "float",
+                "name": "camera_shake",
+                "description": "camera shake - how much we shake the camera"
+            },
+            {
+                "type": "bool",
+                "name": "particle_effect",
+                "description": "Should we use the ParticleEffect::DoExplosion()"
+            },
+            {
+                "type": "std::string",
+                "name": "load_this_entity",
+                "description": "if set, this entity is loaded when the explosion is queued"
+            },
+            {
+                "type": "bool",
+                "name": "light_enabled",
+                "description": "Should the explosion emit light to its surroundings?"
+            },
+            {
+                "type": "float",
+                "name": "light_fade_time",
+                "description": "The time it takes for the light flash to fade out"
+            },
+            {
+                "type": "unsignedint",
+                "name": "light_r",
+                "description": "Color red 0-255"
+            },
+            {
+                "type": "unsignedint",
+                "name": "light_g",
+                "description": "Color green 0-255"
+            },
+            {
+                "type": "unsignedint",
+                "name": "light_b",
+                "description": "Color blue 0-255"
+            },
+            {
+                "type": "float",
+                "name": "light_radius_coeff",
+                "description": "The radius of the light will be explosion_radius * light_radius_coeff"
+            },
+            {
+                "type": "bool",
+                "name": "hole_enabled",
+                "description": "Do we remove ground, creata a crater"
+            },
+            {
+                "type": "bool",
+                "name": "destroy_non_platform_solid_enabled",
+                "description": "Do we remove solid cells that aren't platforms?"
+            },
+            {
+                "type": "int",
+                "name": "electricity_count",
+                "description": "How many electricity entitities should we create?"
+            },
+            {
+                "type": "int",
+                "name": "min_radius_for_cracks",
+                "description": "Cracks are created if explosion_radius is larger than this"
+            },
+            {
+                "type": "int",
+                "name": "crack_count",
+                "description": "How many crack entitities should we create?"
+            },
+            {
+                "type": "float",
+                "name": "knockback_force",
+                "description": "How far do entities get thrown if a knockback occurs? final_knocback = explosion_radius * knockback_force * target.inv_normalized_distance_from_explosion / target.mass"
+            },
+            {
+                "type": "bool",
+                "name": "hole_destroy_liquid",
+                "description": "Do we destroy the liquid cells we ran into, or do we just throw them into to the air?"
+            },
+            {
+                "type": "bool",
+                "name": "hole_destroy_physics_dynamic",
+                "description": "Do we destroy the dynamic physics cells we encountered?"
+            },
+            {
+                "type": "std::string",
+                "name": "create_cell_material",
+                "description": "The material destroyed cells might turn into."
+            },
+            {
+                "type": "int",
+                "name": "create_cell_probability",
+                "description": "The probability a destroyed cell is turned into 'create_cell_material'"
+            },
+            {
+                "type": "int",
+                "name": "background_lightning_count",
+                "description": "Parallax background lightning count is set to this on explosion"
+            },
+            {
+                "type": "std::string",
+                "name": "spark_material",
+                "description": "spark material, TODO moved these to use a special Serializer"
+            },
+            {
+                "type": "int",
+                "name": "material_sparks_min_hp",
+                "description": "How many sparks are we creating (rand max)"
+            },
+            {
+                "type": "int",
+                "name": "material_sparks_probability",
+                "description": "How many sparks are we creating (rand max)"
+            },
+            {
+                "type": "int",
+                "name": "material_sparks_count_min",
+                "description": "How many sparks are we creating (rand min)"
+            },
+            {
+                "type": "int",
+                "name": "material_sparks_count_max",
+                "description": "How many sparks are we creating (rand max)"
+            },
+            {
+                "type": "bool",
+                "name": "material_sparks_enabled",
+                "description": "Should we create few fire particles around the explosion"
+            },
+            {
+                "type": "bool",
+                "name": "material_sparks_real",
+                "description": "if the spark particles created are real or fake"
+            },
+            {
+                "type": "bool",
+                "name": "material_sparks_scale_with_hp",
+                "description": "if true, will create more sparks the harder the material"
+            },
+            {
+                "type": "bool",
+                "name": "sparks_enabled",
+                "description": "Should we create few fire particles around the explosion"
+            },
+            {
+                "type": "int",
+                "name": "sparks_count_min",
+                "description": "How many sparks are we creating (rand min)"
+            },
+            {
+                "type": "int",
+                "name": "sparks_count_max",
+                "description": "How many sparks are we creating (rand max)"
+            },
+            {
+                "type": "float",
+                "name": "sparks_inner_radius_coeff",
+                "description": "If 'sparks_enabled', Sparks are created in the area between circles defined by 'explosion_radius'*'sparks_inner_radius_coeff' and 'explosion_radius'"
+            },
+            {
+                "type": "bool",
+                "name": "stains_enabled",
+                "description": "Should we stain the ground and other particles"
+            },
+            {
+                "type": "float",
+                "name": "stains_radius",
+                "description": "The distance from the edge of the hole to the edge of the stained area, 0.0f for default which is 0.3 * explosion_radius"
+            },
+            {
+                "type": "int",
+                "name": "ray_energy",
+                "description": "This is the energy we have per ray. Could be called 'penetration power' or something like that. If cells have a hp of 20 rays with 100 energy can penetrate 5 cells"
+            },
+            {
+                "type": "int",
+                "name": "max_durability_to_destroy",
+                "description": "When destroying cells only cells with a durability <= max_durability_to_destroy will be affected"
+            },
+            {
+                "type": "int",
+                "name": "gore_particle_count",
+                "description": "How many particles to create in case we do gore stuff?"
+            },
+            {
+                "type": "bool",
+                "name": "shake_vegetation",
+                "description": "Should we shake vegetation around the explosion (uses the area of stain_image to find vegetation)"
+            },
+            {
+                "type": "bool",
+                "name": "damage_mortals",
+                "description": "Look for peasants and throw them into the air? Remember to enabled physics_throw as well if you want them to actually fly"
+            },
+            {
+                "type": "bool",
+                "name": "physics_throw_enabled",
+                "description": "Should we throw physics objects into the air, also peasants"
+            },
+            {
+                "type": "float",
+                "name": "physics_multiplier_ragdoll_force",
+                "description": "treat the ragdolls a bit differently from other physics objects, to get them to fly nicely"
+            },
+            {
+                "type": "float",
+                "name": "cell_explosion_power",
+                "description": "used when a solid cell explodes as the multiplier to how big the radius is going to be"
+            },
+            {
+                "type": "float",
+                "name": "cell_explosion_radius_min",
+                "description": "when cell explodes, this is the minimum radius that explosion is made of"
+            },
+            {
+                "type": "float",
+                "name": "cell_explosion_radius_max",
+                "description": "when cell explodes, this is the minimum radius that explosion is made of"
+            },
+            {
+                "type": "float",
+                "name": "cell_explosion_velocity_min",
+                "description": "cell explodes only when body velocity is greater than this"
+            },
+            {
+                "type": "float",
+                "name": "cell_explosion_damage_required",
+                "description": "how much fire damage is required before this explodes"
+            },
+            {
+                "type": "float",
+                "name": "cell_explosion_probability",
+                "description": "this is used when there's a tiny contact that doesn't cause an explosion, in those cases this is used as a random to check if we should explode or not"
+            },
+            {
+                "type": "float",
+                "name": "cell_explosion_power_ragdoll_coeff",
+                "description": "ragdoll cells destruction power is multiplied with this"
+            },
+            {
+                "type": "bool",
+                "name": "pixel_sprites_enabled",
+                "description": "if enabled will carve out the pixel sprites"
+            },
+            {
+                "type": "bool",
+                "name": "is_digger",
+                "description": "if 1, we apply some special digger logic to this explosion"
+            },
+            {
+                "type": "bool",
+                "name": "audio_enabled",
+                "description": "Do we play an explosion sound?"
+            },
+            {
+                "type": "std::string",
+                "name": "audio_event_name",
+                "description": "Name of audio event in 'explosion' audio bank. If not set, will default to 'explosion' or 'explosion_small' based on explosion radius."
+            },
+            {
+                "type": "float",
+                "name": "audio_liquid_amount_normalized",
+                "description": "value of the 'liquid_amount' parameter passed to the explosion's audio event"
+            },
+            {
+                "type": "int",
+                "name": "explosion_delay_id",
+                "description": "for delayed barrel explosions... this has to be set and has to be the same for the explosions for there to be a delay"
+            }
+        ],
+        "privates": [
+            {
+                "type": "EntityID",
+                "name": "who_is_responsible",
+                "description": "the entity that caused the explosion"
+            },
+            {
+                "type": "bool",
+                "name": "null_damage",
+                "description": "if set, will not call DamageModelSystem::TakeDamage()"
+            },
+            {
+                "type": "EntityID",
+                "name": "dont_damage_this",
+                "description": "if set, this entity doesn't receive damage from the explosion"
+            },
+            {
+                "type": "EntityID",
+                "name": "impl_send_message_to_this"
+            },
+            {
+                "type": "types_vector2",
+                "name": "impl_position"
+            },
+            {
+                "type": "int32",
+                "name": "impl_delay_frame"
+            }
+        ],
+        "objects": [
+            {
+                "type": "ConfigDamageCritical",
+                "name": "damage_critical",
+                "description": "critical damage config. NOTE: must be already calculated ('chance' does nothing)."
+            }
+        ],
+        "custom_data_types": [
+            {
+                "type": "ValueRange",
+                "name": "physics_explosion_power",
+                "description": "how hard do we throw physics objects"
+            },
+            {
+                "type": "ValueRangeInt",
+                "name": "delay",
+                "description": "if > 0, the explosion occurs with a delay chosen randomly from this range and is never buffered"
+            }
+        ]
+    },
+    {
+        "name": "ConfigGunActionInfo",
+        "members": [
+            {
+                "type": "std::string",
+                "name": "action_id"
+            },
+            {
+                "type": "std::string",
+                "name": "action_name"
+            },
+            {
+                "type": "std::string",
+                "name": "action_description"
+            },
+            {
+                "type": "std::string",
+                "name": "action_sprite_filename"
+            },
+            {
+                "type": "std::string",
+                "name": "action_unidentified_sprite_filename"
+            },
+            {
+                "type": "int",
+                "name": "action_type"
+            },
+            {
+                "type": "std::string",
+                "name": "action_spawn_level",
+                "description": "comma separated values should match probabilities"
+            },
+            {
+                "type": "std::string",
+                "name": "action_spawn_probability",
+                "description": "comma separated values should match levels"
+            },
+            {
+                "type": "std::string",
+                "name": "action_spawn_requires_flag",
+                "description": "if set, requires that this persistent flag is set for spawn probablities to be something else than 0"
+            },
+            {
+                "type": "bool",
+                "name": "action_spawn_manual_unlock",
+                "description": "if true, will not automatically call AddFlagPersistent( action_spawn_requires_flag ) when this action is spawned. You must do it yourself! "
+            },
+            {
+                "type": "int",
+                "name": "action_max_uses",
+                "description": "-1 = infinite otherwise it's the amount specified"
+            },
+            {
+                "type": "std::string",
+                "name": "custom_xml_file",
+                "description": "if set, this will be used instead of 'action.xml'"
+            },
+            {
+                "type": "float",
+                "name": "action_mana_drain",
+                "description": "how much mana does this action drain?"
+            },
+            {
+                "type": "bool",
+                "name": "action_is_dangerous_blast",
+                "description": "TODO - is this used anywhere?"
+            },
+            {
+                "type": "int",
+                "name": "action_draw_many_count"
+            },
+            {
+                "type": "bool",
+                "name": "action_ai_never_uses"
+            },
+            {
+                "type": "bool",
+                "name": "action_never_unlimited"
+            },
+            {
+                "type": "bool",
+                "name": "state_shuffled"
+            },
+            {
+                "type": "int",
+                "name": "state_cards_drawn"
+            },
+            {
+                "type": "bool",
+                "name": "state_discarded_action"
+            },
+            {
+                "type": "bool",
+                "name": "state_destroyed_action"
+            },
+            {
+                "type": "int",
+                "name": "fire_rate_wait"
+            },
+            {
+                "type": "float",
+                "name": "speed_multiplier"
+            },
+            {
+                "type": "float",
+                "name": "child_speed_multiplier"
+            },
+            {
+                "type": "float",
+                "name": "dampening"
+            },
+            {
+                "type": "float",
+                "name": "explosion_radius"
+            },
+            {
+                "type": "float",
+                "name": "spread_degrees",
+                "description": "in 360 degrees, randomizes the direction of the bullet -spread_degrees to +spread_degrees"
+            },
+            {
+                "type": "float",
+                "name": "pattern_degrees",
+                "description": "in 360 degrees, if != 0, distributes the bullets to an even pattern from -pattern_degrees to +pattern_degrees"
+            },
+            {
+                "type": "float",
+                "name": "screenshake"
+            },
+            {
+                "type": "float",
+                "name": "recoil"
+            },
+            {
+                "type": "float",
+                "name": "damage_melee_add",
+                "description": "TODO - is this used anywhere?"
+            },
+            {
+                "type": "float",
+                "name": "damage_projectile_add",
+                "description": "if change to mul - take into account that default is 0"
+            },
+            {
+                "type": "float",
+                "name": "damage_electricity_add"
+            },
+            {
+                "type": "float",
+                "name": "damage_fire_add",
+                "description": "TODO - is this used anywhere?"
+            },
+            {
+                "type": "float",
+                "name": "damage_explosion_add"
+            },
+            {
+                "type": "float",
+                "name": "damage_ice_add"
+            },
+            {
+                "type": "float",
+                "name": "damage_slice_add"
+            },
+            {
+                "type": "float",
+                "name": "damage_healing_add"
+            },
+            {
+                "type": "float",
+                "name": "damage_curse_add"
+            },
+            {
+                "type": "float",
+                "name": "damage_drill_add"
+            },
+            {
+                "type": "float",
+                "name": "damage_null_all",
+                "description": "if > 0 then will set all damage to 0 and add a NullDamageComponent (that nullss the rest). The value is a percent (0.0-1.0) of what the chance is that everything will be nulled. 1 = always"
+            },
+            {
+                "type": "int",
+                "name": "damage_critical_chance",
+                "description": "the chance of a critical hit. ]0-100["
+            },
+            {
+                "type": "float",
+                "name": "damage_critical_multiplier",
+                "description": "multiplier that is applied to all damage types on a critical hit"
+            },
+            {
+                "type": "float",
+                "name": "explosion_damage_to_materials"
+            },
+            {
+                "type": "float",
+                "name": "knockback_force",
+                "description": "how much knockback it does to enemies"
+            },
+            {
+                "type": "int",
+                "name": "reload_time"
+            },
+            {
+                "type": "int",
+                "name": "lightning_count"
+            },
+            {
+                "type": "std::string",
+                "name": "material"
+            },
+            {
+                "type": "int",
+                "name": "material_amount"
+            },
+            {
+                "type": "std::string",
+                "name": "trail_material"
+            },
+            {
+                "type": "int",
+                "name": "trail_material_amount"
+            },
+            {
+                "type": "int",
+                "name": "bounces"
+            },
+            {
+                "type": "float",
+                "name": "gravity"
+            },
+            {
+                "type": "float",
+                "name": "light"
+            },
+            {
+                "type": "float",
+                "name": "blood_count_multiplier",
+                "description": "ProjectileComponent has blood_count_multiplier, it tells how much blood is generated when this hits an entity. These are multiplied together..."
+            },
+            {
+                "type": "int",
+                "name": "gore_particles",
+                "description": "amount of blood particles generated by the explosion"
+            },
+            {
+                "type": "int",
+                "name": "ragdoll_fx",
+                "description": "ragdoll_fx of the projectile, selects the highest 1 = normal, 2 = gore"
+            },
+            {
+                "type": "bool",
+                "name": "friendly_fire",
+                "description": "if 1, will set friendly fire on to the bullet"
+            },
+            {
+                "type": "float",
+                "name": "physics_impulse_coeff",
+                "description": "projectile applies an impulse to physics bodies it hits. Impulse = physics_impulse_coeff * velocity"
+            },
+            {
+                "type": "int",
+                "name": "lifetime_add"
+            },
+            {
+                "type": "std::string",
+                "name": "sprite"
+            },
+            {
+                "type": "std::string",
+                "name": "extra_entities",
+                "description": "comma separated xml files, that are loaded into the projectile entity. Their components get added but nothing else from the xml files is loaded"
+            },
+            {
+                "type": "std::string",
+                "name": "game_effect_entities",
+                "description": "comma separated xml files, that have the game effects when they hit the entity"
+            },
+            {
+                "type": "std::string",
+                "name": "sound_loop_tag",
+                "description": "If wand has a SoundLoopComponent with this tag it will start playing when this is shot"
+            },
+            {
+                "type": "std::string",
+                "name": "projectile_file"
+            }
+        ]
+    },
+    {
+        "name": "ConfigGun",
+        "members": [
+            {
+                "type": "int",
+                "name": "actions_per_round"
+            },
+            {
+                "type": "bool",
+                "name": "shuffle_deck_when_empty"
+            },
+            {
+                "type": "int",
+                "name": "reload_time"
+            },
+            {
+                "type": "int",
+                "name": "deck_capacity",
+                "description": "e.g. deck size, how many cards can be put into this gun"
+            }
+        ]
+    },
+    {
+        "name": "ConfigLaser",
+        "members": [
+            {
+                "type": "int32",
+                "name": "max_cell_durability_to_destroy"
+            },
+            {
+                "type": "uint32",
+                "name": "damage_to_cells"
+            },
+            {
+                "type": "float",
+                "name": "max_length"
+            },
+            {
+                "type": "float",
+                "name": "beam_radius"
+            },
+            {
+                "type": "int32",
+                "name": "beam_particle_chance"
+            },
+            {
+                "type": "float",
+                "name": "beam_particle_fade"
+            },
+            {
+                "type": "bool",
+                "name": "beam_particle_fade_reverse"
+            },
+            {
+                "type": "int32",
+                "name": "hit_particle_chance"
+            },
+            {
+                "type": "bool",
+                "name": "audio_enabled"
+            },
+            {
+                "type": "bool",
+                "name": "audio_hit_always_enabled"
+            },
+            {
+                "type": "float",
+                "name": "damage_to_entities"
+            },
+            {
+                "type": "bool",
+                "name": "damage_apply_hitbox_dmg_multiplier",
+                "description": "NOTE( Petri ): 20.6.2023 - laser emitters have by default skipped the HitboxComponent's damage_multiplier. Added this as a way to enable that multiplier. "
+            },
+            {
+                "type": "bool",
+                "name": "root_entity_is_responsible_for_damage",
+                "description": "If 1, damage from laser to entities will be treated as if it was caused by the laser emitter's root entity"
+            }
+        ],
+        "custom_data_types": [
+            {
+                "type": "int32",
+                "name": "beam_particle_type"
+            }
+        ]
+    },
+    {
+        "name": "ConfigNpcParty",
+        "members": [
+            {
+                "type": "bool",
+                "name": "entities_exist"
+            },
+            {
+                "type": "int",
+                "name": "direction"
+            },
+            {
+                "type": "float",
+                "name": "speed"
+            }
+        ],
+        "custom_data_types": [
+            {
+                "type": "types_vector2",
+                "name": "position"
+            },
+            {
+                "type": "std::vector<EntityID>",
+                "name": "member_entities"
+            },
+            {
+                "type": "std::vector<std::string>",
+                "name": "member_files"
+            }
+        ]
+    },
+    {
+        "name": "ConfigParallaxBackground",
+        "members": [
+            {
+                "type": "bool",
+                "name": "debug"
+            },
+            {
+                "type": "bool",
+                "name": "init_randomize"
+            },
+            {
+                "type": "float",
+                "name": "storm_clouds_pos_y_0"
+            },
+            {
+                "type": "float",
+                "name": "storm_clouds_pos_y_1"
+            },
+            {
+                "type": "float",
+                "name": "storm_alpha_0"
+            },
+            {
+                "type": "float",
+                "name": "storm_alpha_1"
+            },
+            {
+                "type": "float",
+                "name": "parallax_offset_y"
+            },
+            {
+                "type": "float",
+                "name": "mountains_01_offset_y"
+            },
+            {
+                "type": "float",
+                "name": "mountains_02_offset_y"
+            },
+            {
+                "type": "float",
+                "name": "clouds_01_offset_y_min"
+            },
+            {
+                "type": "float",
+                "name": "clouds_01_offset_y_max"
+            },
+            {
+                "type": "float",
+                "name": "clouds_02_offset_y_min"
+            },
+            {
+                "type": "float",
+                "name": "clouds_02_offset_y_max"
+            },
+            {
+                "type": "float",
+                "name": "gradient_sky_alpha"
+            },
+            {
+                "type": "float",
+                "name": "sunset_alpha"
+            },
+            {
+                "type": "float",
+                "name": "cloud_coeff"
+            }
+        ]
+    },
+    {
+        "name": "ConfigPendingPortal",
+        "members": [
+            {
+                "type": "uint32",
+                "name": "id"
+            },
+            {
+                "type": "uint32",
+                "name": "target_id"
+            },
+            {
+                "type": "bool",
+                "name": "is_at_home"
+            },
+            {
+                "type": "std::string",
+                "name": "target_biome_name"
+            }
+        ],
+        "privates": [
+            {
+                "type": "Entity*",
+                "name": "entity"
+            }
+        ],
+        "custom_data_types": [
+            {
+                "type": "types_vector2",
+                "name": "position"
+            },
+            {
+                "type": "types_vector2",
+                "name": "target_position"
+            }
+        ]
+    },
+    {
+        "name": "ConfigSound",
+        "members": [
+            {
+                "type": "std::string",
+                "name": "file"
+            },
+            {
+                "type": "bool",
+                "name": "stream"
+            },
+            {
+                "type": "bool",
+                "name": "is_3d"
+            },
+            {
+                "type": "bool",
+                "name": "loop"
+            },
+            {
+                "type": "float",
+                "name": "random_volume_min"
+            },
+            {
+                "type": "float",
+                "name": "random_volume_max"
+            },
+            {
+                "type": "float",
+                "name": "random_pitch_min"
+            },
+            {
+                "type": "float",
+                "name": "random_pitch_max"
+            },
+            {
+                "type": "float",
+                "name": "min_distance"
+            },
+            {
+                "type": "float",
+                "name": "max_distance"
+            }
+        ],
+        "custom_data_types": [
+            {
+                "type": "AUDIO_LAYER::Enum",
+                "name": "layer"
+            }
+        ]
+    },
+    {
+        "name": "DebugSettings",
+        "members": [
+            {
+                "type": "bool",
+                "name": "mDrawPathFindingGrid"
+            },
+            {
+                "type": "float",
+                "name": "DEBUG_RAGDOLL_EXTRA_FORCE"
+            },
+            {
+                "type": "bool",
+                "name": "mRenderPathFinding"
+            },
+            {
+                "type": "bool",
+                "name": "mPauseSimulation"
+            },
+            {
+                "type": "bool",
+                "name": "mPauseSomeSimulation"
+            },
+            {
+                "type": "bool",
+                "name": "mCameraFreeIsSmoothed"
+            },
+            {
+                "type": "bool",
+                "name": "mCameraIsLockedInGameplay"
+            },
+            {
+                "type": "bool",
+                "name": "camera_light"
+            },
+            {
+                "type": "bool",
+                "name": "mAllowCameraMoveWhenLocked"
+            },
+            {
+                "type": "bool",
+                "name": "mCameraDisableCameraShake"
+            },
+            {
+                "type": "float",
+                "name": "mCameraTargetOffsetY"
+            },
+            {
+                "type": "float",
+                "name": "mCameraTargetOffsetX"
+            },
+            {
+                "type": "bool",
+                "name": "mPostFxDisabled"
+            },
+            {
+                "type": "bool",
+                "name": "mGuiDisabled"
+            },
+            {
+                "type": "bool",
+                "name": "mGuiHalfSize"
+            },
+            {
+                "type": "bool",
+                "name": "mFogOfWarOpenEverywhere"
+            },
+            {
+                "type": "bool",
+                "name": "mTrailerMode"
+            },
+            {
+                "type": "bool",
+                "name": "mDayTimeRotationPaused"
+            },
+            {
+                "type": "bool",
+                "name": "mPlayerNeverDies"
+            },
+            {
+                "type": "bool",
+                "name": "mFreezeAI"
+            },
+            {
+                "type": "bool",
+                "name": "mGameAudioVisualization"
+            },
+            {
+                "type": "bool",
+                "name": "mGameMusicDebug"
+            },
+            {
+                "type": "bool",
+                "name": "mGameMusicDebugFades"
+            },
+            {
+                "type": "bool",
+                "name": "mAudioPerformanceDebug"
+            },
+            {
+                "type": "float",
+                "name": "B2_Friction"
+            },
+            {
+                "type": "float",
+                "name": "mRecordingCameraStartX"
+            },
+            {
+                "type": "float",
+                "name": "mRecordingCameraStartY"
+            }
+        ],
+        "privates": [
+            {
+                "type": "bool",
+                "name": "GLOBAL_WE_ARE_DOING_RESET",
+                "description": "used to track if we're doing the reset. cassert(false) in places "
+            },
+            {
+                "type": "bool",
+                "name": "mSettingWasChanged"
+            }
+        ]
+    },
+    {
+        "name": "DebugSettingsOllis",
+        "members": [
+            {
+                "type": "float",
+                "name": "airflow_lo_time"
+            },
+            {
+                "type": "float",
+                "name": "airflow_lo_scale"
+            },
+            {
+                "type": "float",
+                "name": "airflow_lo_force"
+            },
+            {
+                "type": "float",
+                "name": "airflow_hi_time"
+            },
+            {
+                "type": "float",
+                "name": "airflow_hi_scale"
+            },
+            {
+                "type": "float",
+                "name": "airflow_hi_force"
+            }
+        ]
+    },
+    {
+        "name": "DebugSettingsPetrisDontTouchAndDontMoveToHeader",
+        "members": [
+            {
+                "type": "bool",
+                "name": "LIMIT_VELOCITY",
+                "description": "if true, will reload wang maps"
+            },
+            {
+                "type": "bool",
+                "name": "REGEN_WANG_MAPS",
+                "description": "if true, will reload wang maps"
+            },
+            {
+                "type": "bool",
+                "name": "DISABLE_GRIDWORLD_RENDERING",
+                "description": "disables the rendering so you can check the backgrounds in peace"
+            },
+            {
+                "type": "float",
+                "name": "SWIMMING_FORCE"
+            },
+            {
+                "type": "int8",
+                "name": "test"
+            },
+            {
+                "type": "uint8",
+                "name": "test2"
+            },
+            {
+                "type": "bool",
+                "name": "draw_game_stats"
+            },
+            {
+                "type": "bool",
+                "name": "DEBUG_LOAD_ALL_ENTITIES",
+                "description": "CODE WILL TOGGLE THIS OFF AFTER THE EXECUTION! "
+            },
+            {
+                "type": "bool",
+                "name": "mDrawUpdateRects"
+            },
+            {
+                "type": "bool",
+                "name": "mDrawBox2D"
+            },
+            {
+                "type": "bool",
+                "name": "mDrawBox2DAABB"
+            },
+            {
+                "type": "bool",
+                "name": "mDrawBox2DVelocities"
+            },
+            {
+                "type": "bool",
+                "name": "mDrawBox2DForces"
+            },
+            {
+                "type": "bool",
+                "name": "mDrawBox2DMassDensity"
+            },
+            {
+                "type": "bool",
+                "name": "mDrawBox2DCollisionGroups"
+            },
+            {
+                "type": "bool",
+                "name": "mDrawJoints"
+            },
+            {
+                "type": "bool",
+                "name": "mBox2DMousePick"
+            },
+            {
+                "type": "bool",
+                "name": "mDebugEnabled"
+            },
+            {
+                "type": "bool",
+                "name": "mDebugKeysEnabled"
+            },
+            {
+                "type": "bool",
+                "name": "mDrawEntities"
+            },
+            {
+                "type": "float",
+                "name": "mEntityScale"
+            },
+            {
+                "type": "bool",
+                "name": "mEntityDrawTags"
+            },
+            {
+                "type": "bool",
+                "name": "mEntityDrawFilename"
+            },
+            {
+                "type": "bool",
+                "name": "mDrawWorldChunks"
+            },
+            {
+                "type": "float",
+                "name": "mDrawWorldChunksScale"
+            },
+            {
+                "type": "float",
+                "name": "mDrawWorldChunksPosX"
+            },
+            {
+                "type": "float",
+                "name": "mDrawWorldChunksPosY"
+            },
+            {
+                "type": "bool",
+                "name": "mDrawBiomeHeight"
+            },
+            {
+                "type": "bool",
+                "name": "mDraw64x64CellCounts"
+            },
+            {
+                "type": "bool",
+                "name": "mDrawWangMap"
+            },
+            {
+                "type": "bool",
+                "name": "draw_wang_colors"
+            },
+            {
+                "type": "float",
+                "name": "mWangMapScale"
+            },
+            {
+                "type": "float",
+                "name": "mWangMapAlpha"
+            },
+            {
+                "type": "bool",
+                "name": "mDebugSpamRandomEntities"
+            },
+            {
+                "type": "bool",
+                "name": "do_edge"
+            },
+            {
+                "type": "float",
+                "name": "physics_impulse_limit"
+            },
+            {
+                "type": "float",
+                "name": "physics_multiplier"
+            },
+            {
+                "type": "float",
+                "name": "physics_pos_x"
+            },
+            {
+                "type": "float",
+                "name": "physics_pos_y"
+            },
+            {
+                "type": "float",
+                "name": "physics_throw_str"
+            },
+            {
+                "type": "int",
+                "name": "physics_damage_frames"
+            },
+            {
+                "type": "float",
+                "name": "physics_damage_coeff"
+            },
+            {
+                "type": "int",
+                "name": "player_flying_frames"
+            },
+            {
+                "type": "bool",
+                "name": "memory_leak_im_gui"
+            },
+            {
+                "type": "bool",
+                "name": "display_cell_velocities"
+            },
+            {
+                "type": "bool",
+                "name": "mDoingVideoCapture"
+            },
+            {
+                "type": "bool",
+                "name": "DISABLE_ANIMAL_AI"
+            }
+        ],
+        "privates": [
+            {
+                "type": "std::vector<std::string>",
+                "name": "mRandomEntities"
+            }
+        ]
+    },
+    {
+        "name": "GameStats",
+        "members": [
+            {
+                "type": "bool",
+                "name": "dead",
+                "description": "is player dead?"
+            },
+            {
+                "type": "int",
+                "name": "death_count",
+                "description": "for global"
+            },
+            {
+                "type": "int",
+                "name": "streaks",
+                "description": "tracks winning streaks"
+            },
+            {
+                "type": "uint32",
+                "name": "world_seed",
+                "description": "writes the world seed that is in use"
+            },
+            {
+                "type": "std::string",
+                "name": "killed_by"
+            },
+            {
+                "type": "std::string",
+                "name": "killed_by_extra"
+            },
+            {
+                "type": "double",
+                "name": "playtime",
+                "description": "session playtime in seconds, this does not include time in menus"
+            },
+            {
+                "type": "std::string",
+                "name": "playtime_str",
+                "description": "session playtime as a string"
+            },
+            {
+                "type": "int",
+                "name": "places_visited",
+                "description": "places visited"
+            },
+            {
+                "type": "int",
+                "name": "enemies_killed"
+            },
+            {
+                "type": "int",
+                "name": "heart_containers"
+            },
+            {
+                "type": "int64",
+                "name": "hp",
+                "description": "max hp"
+            },
+            {
+                "type": "int64",
+                "name": "gold"
+            },
+            {
+                "type": "int64",
+                "name": "gold_all",
+                "description": "all gold, not just what's currently in players inventory"
+            },
+            {
+                "type": "bool",
+                "name": "gold_infinite",
+                "description": "will be set to true if all of the money is unlocked "
+            },
+            {
+                "type": "int",
+                "name": "items",
+                "description": "wands,potions,actions"
+            },
+            {
+                "type": "int",
+                "name": "projectiles_shot",
+                "description": "player, how many projectiles shot?"
+            },
+            {
+                "type": "int",
+                "name": "kicks",
+                "description": "player, kick count"
+            },
+            {
+                "type": "double",
+                "name": "damage_taken",
+                "description": "total damage taken"
+            },
+            {
+                "type": "double",
+                "name": "healed",
+                "description": "when player is healed (by healer, or some other thing, it's tracked here, BUG: Healing liquid isn't tracked here"
+            },
+            {
+                "type": "int",
+                "name": "teleports",
+                "description": "how many times have we teleported, this is bugged out right now, teleport projectiles are not counted"
+            },
+            {
+                "type": "int",
+                "name": "wands_edited",
+                "description": "how many wands player has edited"
+            },
+            {
+                "type": "int",
+                "name": "biomes_visited_with_wands",
+                "description": "used to figure out if a player played a no-wands-run, tracks how many biomes has player entered with wands. Hills doesn't fire Message_VisitedNewBiome so it doesn't count."
+            }
+        ],
+        "custom_data_types": [
+            {
+                "type": "types_vector2",
+                "name": "death_pos"
+            }
+        ]
+    },
+    {
+        "name": "GlobalStats",
+        "members": [
+            {
+                "type": "int",
+                "name": "STATS_VERSION",
+                "description": "used to help with stats parsing"
+            },
+            {
+                "type": "int",
+                "name": "DEBUG_HOW_MANY_RESETS",
+                "description": "how many times have reset this?"
+            },
+            {
+                "type": "bool",
+                "name": "DEBUG_FIXED_STATS",
+                "description": "this gets set true, if -fix_stats has been used"
+            },
+            {
+                "type": "bool",
+                "name": "session_dead",
+                "description": "is player dead?"
+            }
+        ],
+        "privates": [
+            {
+                "type": "int",
+                "name": "DEBUG_HOW_MANY_TIMES_DONE",
+                "description": "debug tracker"
+            },
+            {
+                "type": "bool",
+                "name": "DEBUG_IS_ON",
+                "description": "is debug on"
+            }
+        ],
+        "objects": [
+            {
+                "type": "GameStats",
+                "name": "session",
+                "description": "the current run stats"
+            },
+            {
+                "type": "GameStats",
+                "name": "highest",
+                "description": "stores the highest values of each"
+            },
+            {
+                "type": "GameStats",
+                "name": "global",
+                "description": "stores the total value of each"
+            },
+            {
+                "type": "GameStats",
+                "name": "prev_best",
+                "description": "stores the total value of each"
+            }
+        ],
+        "custom_data_types": [
+            {
+                "type": "STATS_KEY_VALUE_MAP",
+                "name": "KEY_VALUE_STATS",
+                "description": "tracks causes and counts"
+            }
+        ]
+    },
+    {
+        "name": "grid::CosmeticParticleConfig",
+        "members": [
+            {
+                "type": "int",
+                "name": "m_material_id"
+            },
+            {
+                "type": "bool",
+                "name": "cosmetic_force_create"
+            },
+            {
+                "type": "bool",
+                "name": "render_back"
+            },
+            {
+                "type": "bool",
+                "name": "render_on_grid"
+            },
+            {
+                "type": "bool",
+                "name": "draw_as_long"
+            },
+            {
+                "type": "float",
+                "name": "airflow_force"
+            },
+            {
+                "type": "float",
+                "name": "airflow_scale"
+            },
+            {
+                "type": "float",
+                "name": "friction"
+            },
+            {
+                "type": "float",
+                "name": "probability"
+            },
+            {
+                "type": "bool",
+                "name": "particle_single_width"
+            },
+            {
+                "type": "bool",
+                "name": "fade_based_on_lifetime"
+            }
+        ],
+        "custom_data_types": [
+            {
+                "type": "types_vector2",
+                "name": "vel"
+            },
+            {
+                "type": "types::aabb",
+                "name": "vel_random"
+            },
+            {
+                "type": "uint32",
+                "name": "color",
+                "description": "if something else than 0 will use this color"
+            },
+            {
+                "type": "ValueRange",
+                "name": "lifetime"
+            },
+            {
+                "type": "types_vector2",
+                "name": "gravity"
+            },
+            {
+                "type": "ValueRangeInt",
+                "name": "count"
+            }
+        ]
+    },
+    {
+        "name": "impl::ConfigItemStats",
+        "members": [
+            {
+                "type": "std::string",
+                "name": "name"
+            },
+            {
+                "type": "bool",
+                "name": "count_as_item_pickup"
+            }
+        ],
+        "custom_data_types": [
+            {
+                "type": "types_vector2",
+                "name": "pos"
+            }
+        ]
+    },
+    {
+        "name": "impl::ConfigPlayerStats",
+        "members": [
+            {
+                "type": "std::string",
+                "name": "BUILD_NAME",
+                "description": "build name from the macro"
+            }
+        ],
+        "objects": [
+            {
+                "type": "GameStats",
+                "name": "stats",
+                "description": "stores sessions stats"
+            },
+            {
+                "type": "GameStats",
+                "name": "biome_baseline",
+                "description": "stores biome baseline for sessions stats"
+            }
+        ],
+        "custom_data_types": [
+            {
+                "type": "STATS_ITEM_MAP",
+                "name": "item_map",
+                "description": "just a map of all the items picked up"
+            },
+            {
+                "type": "STATS_DEATH_MAP",
+                "name": "biomes_visited",
+                "description": "tracks biomes visited, second value is how many times, but that bugs out with save/load"
+            }
+        ]
+    },
+    {
+        "name": "impl::ConfigStats",
+        "members": [
+            {
+                "type": "int",
+                "name": "deaths",
+                "description": "total deaths (by whom ever)"
+            },
+            {
+                "type": "int",
+                "name": "player_kills",
+                "description": "how many times has killed player"
+            },
+            {
+                "type": "int",
+                "name": "player_projectile_count",
+                "description": "how many times has projectiles been fired"
+            },
+            {
+                "type": "int",
+                "name": "kills",
+                "description": "how many kills to we have all together"
+            }
+        ],
+        "custom_data_types": [
+            {
+                "type": "STATS_DEATH_MAP",
+                "name": "death_map",
+                "description": "tracks causes and counts"
+            },
+            {
+                "type": "STATS_DEATH_MAP",
+                "name": "kill_map",
+                "description": "tracks who we've killed and how many times"
+            }
+        ]
+    }
+]
