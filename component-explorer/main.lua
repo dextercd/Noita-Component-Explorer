@@ -359,7 +359,7 @@ end
 
 local good_mouse_handling = is_imgui_version(1, 15, 1)
 
----Handles the keyboard shortcuts.
+---Called when CTRL and SHIFT are held
 function keyboard_shortcut_items()
     if good_mouse_handling then
         imgui.SetNextFrameWantCaptureMouse(true)

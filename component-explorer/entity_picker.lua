@@ -45,6 +45,12 @@ local function entity_label(entity_id)
 
     if name ~= "" then
         table.insert(label_parts, name)
+    else
+        -- fallback to the file name
+        local file_name = EntityGetFilename(entity_id)
+        if file_name ~= "" then
+            table.insert(label_parts, file_name)
+        end
     end
 
     if tags ~= "" then
