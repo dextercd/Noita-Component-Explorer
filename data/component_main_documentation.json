@@ -1581,7 +1581,12 @@
         "privates": [
             {
                 "type": "Biome*",
-                "name": "current_biome",
+                "name": "unsafe_current_biome",
+                "description": "DO NOT ACCESS, since this can be in valid"
+            },
+            {
+                "type": "std::string",
+                "name": "current_biome_name",
                 "description": "used to track in which biome we are at"
             }
         ]
@@ -1839,6 +1844,38 @@
             {
                 "type": "bool",
                 "name": "mIsInitialized",
+                "example": "0 [0, 1]"
+            }
+        ]
+    },
+    {
+        "name": "BossHealthBarComponent",
+        "members": [
+            {
+                "type": "bool",
+                "name": "gui",
+                "example": "1 [0, 1]"
+            },
+            {
+                "type": "bool",
+                "name": "gui_special_final_boss",
+                "example": "0 [0, 1]"
+            },
+            {
+                "type": "bool",
+                "name": "in_world",
+                "example": "0 [0, 1]"
+            },
+            {
+                "type": "float",
+                "name": "gui_max_distance_visible",
+                "example": "600 [0, 1]"
+            }
+        ],
+        "privates": [
+            {
+                "type": "bool",
+                "name": "mOldSpritesDestroyed",
                 "example": "0 [0, 1]"
             }
         ]
@@ -4651,6 +4688,12 @@
                 "name": "mIsExtension",
                 "example": "0 [0, 1]",
                 "description": "If 1, this is an effect extension and shouldn't create an extension when removed"
+            },
+            {
+                "type": "bool",
+                "name": "mIsSpent",
+                "example": "0 [0, 1]",
+                "description": "NOTE( Petri ): 29.4.2024 - this is used internally to make RESPAWN perk disabled in the UI"
             }
         ],
         "custom_data_types": [
@@ -4939,36 +4982,7 @@
         ]
     },
     {
-        "name": "HealthBarComponent",
-        "members": [
-            {
-                "type": "bool",
-                "name": "gui",
-                "example": "1 [0, 1]"
-            },
-            {
-                "type": "bool",
-                "name": "gui_special_final_boss",
-                "example": "0 [0, 1]"
-            },
-            {
-                "type": "bool",
-                "name": "in_world",
-                "example": "0 [0, 1]"
-            },
-            {
-                "type": "float",
-                "name": "gui_max_distance_visible",
-                "example": "600 [0, 1]"
-            }
-        ],
-        "privates": [
-            {
-                "type": "bool",
-                "name": "mOldSpritesDestroyed",
-                "example": "0 [0, 1]"
-            }
-        ]
+        "name": "HealthBarComponent"
     },
     {
         "name": "HitEffectComponent",
