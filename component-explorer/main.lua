@@ -131,13 +131,11 @@ function show_view_menu_items()
     local clicked
     clicked, entity_picker.open = imgui.MenuItem("Entity Picker...", sct("CTRL+SHIFT+E"), entity_picker.open)
     if clicked then imgui.SetWindowFocus(nil) end
-    if imgui.IsItemHovered() then
-        help.tooltip(table.concat({
-            "Allows you to move your mouse over an entity to open a window for it. ",
-            "Press the entry number to select the entity. ESC to cancel the action.\n\n",
-            "When keyboard shortcuts are enabled, you can hit CTRL+SHIFT+E to open or close the picker.",
-        }))
-    end
+    help.tooltip(table.concat({
+        "Allows you to move your mouse over an entity to open a window for it. ",
+        "Press the entry number to select the entity. ESC to cancel the action.\n\n",
+        "When keyboard shortcuts are enabled, you can hit CTRL+SHIFT+E to open or close the picker.",
+    }))
 
     _, spawn_stuff.open = imgui.MenuItem("Spawn Stuff", sct("CTRL+SHIFT+S"), spawn_stuff.open)
 
