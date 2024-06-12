@@ -16,6 +16,9 @@ local combo = dofile_once("mods/component-explorer/ui/combo.lua")
 ---@module 'component-explorer.utils.file_util'
 local file_util = dofile_once("mods/component-explorer/utils/file_util.lua")
 
+---@module 'component-explorer.entity'
+local entity = dofile_once("mods/component-explorer/entity.lua")
+
 local function get_enhanced_creatures()
     local ret = {}
     for _, c_ in ipairs(creatures_) do
@@ -202,7 +205,11 @@ return function()
 
                 imgui.TableNextColumn()
                 if imgui.SmallButton("Spawn") then
-                    EntityLoad(c.file, cursor.pos())
+                    local spawned_entity = EntityLoad(c.file, cursor.pos())
+
+                    if imgui.IsKeyDown(imgui.Key.LeftShift) then
+                        entity.watch_entity(spawned_entity)
+                    end
                 end
 
                 imgui.PopID()

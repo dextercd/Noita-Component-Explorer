@@ -27,6 +27,8 @@ local cursor = dofile_once("mods/component-explorer/cursor.lua")
 ---@module 'component-explorer.ui.im'
 local im = dofile_once("mods/component-explorer/ui/im.lua")
 
+local entity = {}
+
 local common_entity_tags = {
     "card_action",
     "effect_protection",
@@ -443,3 +445,7 @@ function show_entity_windows()
         show_entity(v[1], v[2])
     end
 end
+
+entity.watch_entity = watch_entity
+
+return entity
