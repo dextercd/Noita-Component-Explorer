@@ -100,23 +100,6 @@ local function get_entities_data()
         })
     end
 
-    local sort_fn = function(left, right)
-        local a, b = left[sort_by_idx], right[sort_by_idx]
-        if not sort_asc then
-            a, b = b, a
-        end
-
-        if a == "" then a = nil end
-        if b == "" then b = nil end
-
-        if a == nil and b == nil then return false end
-        if b == nil then return false end
-        if a == nil then return true end
-
-        return a < b
-    end
-
-    table.sort(ret, sort_fn)
     return ret
 end
 
@@ -162,9 +145,49 @@ function entity_list.show()
 
         handle_sort_spec()
 
+        local clipper = imgui.ListClipper.new()
+
+        local filtered_entities = {}
         for _, entity_data in ipairs(entities_data) do
             local entity_id = entity_data[1]
+            local name = entity_data[2]
+            local tags = entity_data[3]
+            local file = entity_data[4]
+            if
+                (include_child_entities or EntityGetParent(entity_id) == 0) and
+                (entity_search == "" or
+                 (string_util.ifind(name, entity_search, 1, true) or
+                  string_util.ifind(tags, entity_search, 1, true) or
+                  string_util.ifind(file, entity_search, 1, true)))
+            then
+                filtered_entities[#filtered_entities+1] = entity_data
+            end
+        end
 
+        local sort_fn = function(left, right)
+            local a, b = left[sort_by_idx], right[sort_by_idx]
+            if not sort_asc then
+                a, b = b, a
+            end
+
+            if a == "" then a = nil end
+            if b == "" then b = nil end
+
+            if a == nil and b == nil then return false end
+            if b == nil then return false end
+            if a == nil then return true end
+
+            return a < b
+        end
+
+        table.sort(filtered_entities, sort_fn)
+
+        clipper:Begin(#filtered_entities)
+
+        while clipper:Step() do for i=clipper.DisplayStart,clipper.DisplayEnd-1 do
+            local entity_data = filtered_entities[i + 1]
+
+            local entity_id = entity_data[1]
             local name = entity_data[2]
             local tags = entity_data[3]
             local file = entity_data[4]
@@ -223,7 +246,7 @@ function entity_list.show()
                     EntityKill(entity_id)
                 end
             end
-        end
+        end end
 
         imgui.EndTable()
     end
