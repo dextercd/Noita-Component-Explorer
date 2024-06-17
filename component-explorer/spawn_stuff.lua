@@ -70,6 +70,17 @@ function spawn_stuff.show()
             imgui.EndTabItem()
         end
 
+        if imgui.BeginTabItem("Props") then
+            ---@module 'component-explorer.spawn_stuff.props'
+            local props_content = dofile_once("mods/component-explorer/spawn_stuff/props.lua")
+
+            if imgui.BeginChild("#props_child") then
+                props_content()
+                imgui.EndChild()
+            end
+            imgui.EndTabItem()
+        end
+
         imgui.EndTabBar()
     end
 
