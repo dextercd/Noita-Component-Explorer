@@ -40,20 +40,6 @@ mod_settings = {
                 value_default = false,
                 scope = MOD_SETTING_SCOPE_RUNTIME,
             },
-            {
-                id = "window_open_logs",
-                ui_name = "Logs window (requires UnsafeExplorer)",
-                ui_description = "logger.txt monitor window",
-                value_default = false,
-                scope = MOD_SETTING_SCOPE_RUNTIME,
-            },
-            {
-                id = "overlay_open_logs",
-                ui_name = "Logs Overlay (requires UnsafeExplorer)",
-                ui_description = "Overlay displaying the logger.txt file",
-                value_default = false,
-                scope = MOD_SETTING_SCOPE_RUNTIME,
-            },
         },
     },
     {
@@ -167,6 +153,34 @@ mod_settings = {
             }
         },
     },
+    {
+        category_id = "unsafe",
+        ui_name = "Unsafe Explorer",
+        ui_description = "These settings require unsafe explorer to take effect",
+        settings = {
+            {
+                id = "window_open_logs",
+                ui_name = "Open Logs window by default",
+                ui_description = "logger.txt monitor window",
+                value_default = false,
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            },
+            {
+                id = "overlay_open_logs",
+                ui_name = "Open Logs Overlay by default",
+                ui_description = "Overlay displaying the logger.txt file",
+                value_default = false,
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            },
+            {
+                id = "logger_txt",
+                ui_name = "Enable logger.txt output",
+                ui_description = "Need this if you want to use the logger window or overlay.",
+                value_default = true,
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            }
+        },
+    }
 }
 
 function ModSettingsUpdate(init_scope)
