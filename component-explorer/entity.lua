@@ -144,7 +144,7 @@ local function get_entity_label(entity_id)
     return table.concat(parts, " ")
 end
 
-local function entity_child_buttons(parent_id, child_id)
+function entity.child_buttons(parent_id, child_id)
     imgui.PushID(child_id)
 
     open_entity_small_button(child_id)
@@ -172,18 +172,18 @@ local function show_entity_children_row(parent_id, children)
             imgui.Text(get_entity_label(child_id))
 
             imgui.TableNextColumn()
-            entity_child_buttons(parent_id, child_id)
+            entity.child_buttons(parent_id, child_id)
         else
             if imgui.TreeNode(get_entity_label(child_id) .. "##" .. tostring(child_id)) then
 
                 imgui.TableNextColumn()
-                entity_child_buttons(parent_id, child_id)
+                entity.child_buttons(parent_id, child_id)
 
                 show_entity_children_row(child_id, sub_children)
                 imgui.TreePop()
             else
                 imgui.TableNextColumn()
-                entity_child_buttons(parent_id, child_id)
+                entity.child_buttons(parent_id, child_id)
             end
         end
     end
