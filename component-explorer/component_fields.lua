@@ -13,6 +13,9 @@ local ce_settings = dofile_once("mods/component-explorer/utils/ce_settings.lua")
 ---@module 'component-explorer.utils.math_util'
 local math_util = dofile_once("mods/component-explorer/utils/math_util.lua")
 
+---@module 'component-explorer.entity'
+local ce_entity = dofile_once("mods/component-explorer/entity.lua")
+
 function show_field_int(name, description, component_id, get, set)
     local value = (get or ComponentGetValue2)(component_id, name)
 
@@ -366,7 +369,7 @@ function show_field_EntityID(name, description, component_id, get, set)
 
     imgui.SameLine()
     if EntityGetIsAlive(entity_id) then
-        open_entity_button(entity_id)
+        ce_entity.open_entity_button(entity_id)
     else
         imgui.Text("(not found)")
     end
@@ -407,7 +410,7 @@ function show_field_VECTOR_ENTITYID(name, description, component_id)
         imgui.Text(tostring(entity_id))
         imgui.SameLine()
         if EntityGetIsAlive(entity_id) then
-            open_entity_small_button(entity_id)
+            ce_entity.open_entity_small_button(entity_id)
         else
             imgui.Text("(not found)")
         end

@@ -15,6 +15,9 @@ local comp_tag_util = dofile_once("mods/component-explorer/utils/component_tags.
 ---@module 'component-explorer.ui.im'
 local im = dofile_once("mods/component-explorer/ui/im.lua")
 
+---@module 'component-explorer.entity'
+local ce_entity = dofile_once("mods/component-explorer/entity.lua")
+
 local components_watching = {}
 local components_to_remove = {}
 
@@ -86,7 +89,7 @@ function component_attributes(entity_id, component_id)
 
     imgui.Text("Entity:")
     imgui.SameLine()
-    open_entity_small_button(entity_id)
+    ce_entity.open_entity_small_button(entity_id)
 end
 
 local function new_component_tags(component_id, data)

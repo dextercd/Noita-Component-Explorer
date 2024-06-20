@@ -120,11 +120,11 @@ local function _make_entity_button(entity_id, button_fn)
     end
 end
 
-function open_entity_small_button(entity_id)
+function entity.open_entity_small_button(entity_id)
     return _make_entity_button(entity_id, imgui.SmallButton)
 end
 
-function open_entity_button(entity_id)
+function entity.open_entity_button(entity_id)
     return _make_entity_button(entity_id, imgui.Button)
 end
 
@@ -147,7 +147,7 @@ end
 function entity.child_buttons(parent_id, child_id)
     imgui.PushID(child_id)
 
-    open_entity_small_button(child_id)
+    entity.open_entity_small_button(child_id)
 
     imgui.SameLine()
     if imgui.SmallButton("Unparent") then
@@ -316,13 +316,13 @@ local function show_entity(entity_id, data)
         if parent ~= 0 then
             imgui.Text("Parent: " .. parent)
             imgui.SameLine()
-            open_entity_small_button(parent)
+            entity.open_entity_small_button(parent)
 
             local root = EntityGetRootEntity(parent)
             if root ~= parent then
                 imgui.Text("Root: " .. root)
                 imgui.SameLine()
-                open_entity_small_button(root)
+                entity.open_entity_small_button(root)
             end
         end
     end

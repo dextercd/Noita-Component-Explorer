@@ -7,6 +7,9 @@ local style = dofile_once("mods/component-explorer/style.lua")
 ---@module 'component-explorer.utils.ce_settings'
 local ce_settings = dofile_once("mods/component-explorer/utils/ce_settings.lua")
 
+---@module 'component-explorer.entity'
+local ce_entity = dofile_once("mods/component-explorer/entity.lua")
+
 local entity_list = {}
 
 entity_list.open = ce_settings.get("window_open_entity_list")
@@ -228,7 +231,7 @@ function entity_list.show()
                 end
 
                 imgui.TableNextColumn()
-                open_entity_small_button(entity_id)
+                ce_entity.open_entity_small_button(entity_id)
                 imgui.SameLine()
                 local kill_entity = style.danger_small_button("Kill")
 
