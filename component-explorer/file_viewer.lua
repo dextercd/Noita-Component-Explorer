@@ -43,6 +43,7 @@ local function is_supported_file_type(path)
 
     if l5 == ".frag" then return true end
     if l5 == ".vert" then return true end
+    if l5 == ".json" then return true end
 
     return false
 end
