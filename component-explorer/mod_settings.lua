@@ -168,26 +168,17 @@ function mod_settings.show()
 
         imgui.EndTable()
 
-        local modal_current_value = nil
-        local modal_current_next_value = nil
-        local modal_setting_exists = false
-
-        for setting_idx=0,ModSettingGetCount()-1 do
-            local id, value, next_value = ModSettingGetAtIndex(setting_idx)
-            if modal and modal.setting_id == id then
-                modal_setting_exists = true
-                modal_current_value = value
-                modal_current_next_value = next_value
-            end
-        end
-
         if modal then
+            local current_val = ModSettingGet(modal.setting_id)
+            local next_val = ModSettingGetNextValue(modal.setting_id)
+            local exists = current_val ~= nil or next_val ~= nil
+
             if modal.type == "delete" then
-                modal:show(modal_setting_exists, modal_current_value, modal_current_next_value)
+                modal:show(exists, current_val, next_val)
             elseif modal.type == "create" then
-                modal:show(modal_setting_exists)
+                modal:show(exists)
             elseif modal.type == "edit" then
-                modal:show(modal_setting_exists, modal_current_value, modal_current_next_value)
+                modal:show(exists, current_val, next_val)
             end
 
             if not modal.open then
