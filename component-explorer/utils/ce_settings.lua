@@ -20,19 +20,18 @@ function ce_settings.load()
 end
 
 function ce_settings.get(key)
-    return load_setting_value(key)
-    --[[
     if settings[key] == nil then
         settings[key] = load_setting_value(key)
     end
 
     return settings[key]
-    --]]
 end
 
 function ce_settings.set(key, value)
-    ModSettingSet(mod_id .. "." .. key, value)
-    settings[key] = value
+    if ce_settings.get(key) ~= value then
+        ModSettingSet(mod_id .. "." .. key, value)
+        settings[key] = value
+    end
 end
 
 return ce_settings
