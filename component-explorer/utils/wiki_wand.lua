@@ -61,7 +61,7 @@ function wiki_wand.get_wand_values(ezwand, to_wand_card, is_wand2)
 
     local spells, attached_spells = ezwand:GetSpells()
 
-    if to_wand_card then
+    if is_wand2 or to_wand_card then
         table.insert(values, {"capacity", ezwand.capacity})
     else
         table.insert(values, {"capacity", #spells})
@@ -81,11 +81,24 @@ function wiki_wand.get_wand_values(ezwand, to_wand_card, is_wand2)
             table.insert(values, {"alwaysCasts", table.concat(ac_actions, ",")})
         end
 
+        local previous_inv_x = -1
+
         local spell_actions = {}
         for _, spell in ipairs(spells) do
-            spell_actions[#spell_actions+1] = spell.action_id
+            local prepend = ""
+            if previous_inv_x + 1 ~= spell.inventory_x then
+                for _=previous_inv_x+1,spell.inventory_x-1 do
+                    spell_actions[#spell_actions+1] = ""
+                end
+                prepend = "\n" .. string.rep(" ", 17)
+            end
+            spell_actions[#spell_actions+1] = prepend .. spell.action_id
+            previous_inv_x = spell.inventory_x
         end
-        table.insert(values, {"spells", table.concat(spell_actions, ",")})
+
+        if #spell_actions > 0 then
+            table.insert(values, {"spells", table.concat(spell_actions, ",")})
+        end
     else
         for _, spell in ipairs(attached_spells) do
             local wiki_name = wiki_spell_names.by_action_id[spell.action_id]
@@ -194,13 +207,14 @@ local function set_sprite_by_filename(ezwand, filename)
 end
 
 ---@param spell_list string
+---@param keep_gaps boolean?
 ---@return string[]
-local function split_spell_list(spell_list)
+local function split_spell_list(spell_list, keep_gaps)
     local actions = string_util.split(spell_list, ",", true)
     local ret = {}
     for _, action in ipairs(actions) do
         action = string_util.trim(action)
-        if action ~= "" then
+        if action ~= "" or keep_gaps then
             ret[#ret+1] = action
         end
     end
@@ -270,10 +284,11 @@ function wiki_wand.load_data_to_wand(wand, template_data)
 
     if template_data.template_name == "Wand2" then
         if map.alwaysCasts then
-             wand:AttachSpells(split_spell_list(map.alwaysCasts))
+            wand:AttachSpells(split_spell_list(map.alwaysCasts))
         end
         if map.spells then
-             wand:AddSpells(split_spell_list(map.spells))
+            wand:AddSpells(split_spell_list(map.spells, true))
+            wand:RemoveSpells("", -1)
         end
     else
         for _, item in ipairs(template_data.values) do
