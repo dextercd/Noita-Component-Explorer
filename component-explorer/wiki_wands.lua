@@ -263,6 +263,12 @@ local function needs_wand()
     imgui.PopStyleColor()
 end
 
+local function legacy_template()
+    imgui.PushStyleColor(imgui.Col.Text, unpack(style.colour_warn))
+    imgui.Text("Consider using the Wand2 template instead of this legacy template.")
+    imgui.PopStyleColor()
+end
+
 local wand2_wand_card = false
 
 local function wiki_wands_contents()
@@ -270,34 +276,6 @@ local function wiki_wands_contents()
 
     if not imgui.BeginTabBar("wiki_wand_tabs") then
         return
-    end
-
-    if imgui.BeginTabItem("Wand") then
-        if not wand then
-            needs_wand()
-        else
-            local wand_text = wiki_wand_util.wand_to_wiki_text(wand, false)
-            if imgui.Button("Copy") then
-                imgui.SetClipboardText(wand_text)
-            end
-
-            imgui.Text(wand_text)
-        end
-        imgui.EndTabItem()
-    end
-
-    if imgui.BeginTabItem("Wand Card") then
-        if not wand then
-            needs_wand()
-        else
-            local wand_text = wiki_wand_util.wand_to_wiki_text(wand, true)
-            if imgui.Button("Copy") then
-                imgui.SetClipboardText(wand_text)
-            end
-
-            imgui.Text(wand_text)
-        end
-        imgui.EndTabItem()
     end
 
     if imgui.BeginTabItem("Wand2") then
@@ -316,6 +294,36 @@ local function wiki_wands_contents()
         imgui.EndTabItem()
     end
 
+    if imgui.BeginTabItem("Wand (old)") then
+        legacy_template()
+        if not wand then
+            needs_wand()
+        else
+            local wand_text = wiki_wand_util.wand_to_wiki_text(wand, false)
+            if imgui.Button("Copy") then
+                imgui.SetClipboardText(wand_text)
+            end
+
+            imgui.Text(wand_text)
+        end
+        imgui.EndTabItem()
+    end
+
+    if imgui.BeginTabItem("Wand Card (old)") then
+        legacy_template()
+        if not wand then
+            needs_wand()
+        else
+            local wand_text = wiki_wand_util.wand_to_wiki_text(wand, true)
+            if imgui.Button("Copy") then
+                imgui.SetClipboardText(wand_text)
+            end
+
+            imgui.Text(wand_text)
+        end
+        imgui.EndTabItem()
+    end
+
     if imgui.BeginTabItem("Import") then
         import_menu()
         imgui.EndTabItem()
@@ -325,9 +333,6 @@ local function wiki_wands_contents()
         imgui.TextWrapped(table.concat({
             "The Noita wiki (noita.wiki.gg) could use more inspiring wand builds and demo GIF's!\n",
             "Noita includes a built-in GIF recorder and this mod should make it easier to use the wand templates on the wiki.",
-            "\n\n",
-            "In most cases the spells are the most important thing and the exact wand stats aren't that important, ",
-            "so you should prefer the 'Wand' template over the 'Wand Card' template usually.",
             "\n\n",
             "If you need help editing the wiki, you can visit the #noita-wiki channel in the Noita Discord server.",
             "\n\n",
