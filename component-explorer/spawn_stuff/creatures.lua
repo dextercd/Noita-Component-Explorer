@@ -71,6 +71,16 @@ local function get_unique_attrs(attr)
     return ret
 end
 
+local function popup_contents(c)
+    if imgui.MenuItem("Copy file path") then
+        imgui.SetClipboardText(c.file)
+    end
+
+    if imgui.MenuItem("Copy name") then
+        imgui.SetClipboardText(c.display_name)
+    end
+end
+
 local unique_herds = get_unique_attrs("herd")
 local unique_origins = get_unique_attrs("origin")
 
@@ -210,6 +220,11 @@ return function()
                     if imgui.IsKeyDown(imgui.Key.LeftShift) then
                         entity.watch_entity(spawned_entity)
                     end
+                end
+
+                if imgui.BeginPopupContextItem() then
+                    popup_contents(c)
+                    imgui.EndPopup()
                 end
 
                 imgui.PopID()

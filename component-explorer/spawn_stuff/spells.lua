@@ -33,6 +33,16 @@ local function get_unique_attrs(attr)
 end
 local unique_origins = get_unique_attrs("origin")
 
+local function popup_contents(action)
+    if imgui.MenuItem("Copy action.id") then
+        imgui.SetClipboardText(action.id)
+    end
+
+    if imgui.MenuItem("Copy name") then
+        imgui.SetClipboardText(action.display_name)
+    end
+end
+
 local filter_search = ""
 ---@type string?
 local filter_origin = nil
@@ -167,6 +177,11 @@ return function()
                     end
 
                     CreateItemActionEntity(action.id, x, y)
+                end
+
+                if imgui.BeginPopupContextItem() then
+                    popup_contents(action)
+                    imgui.EndPopup()
                 end
 
                 imgui.PopID()

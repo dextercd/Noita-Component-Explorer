@@ -32,6 +32,20 @@ local function get_unique_attrs(attr)
     return ret
 end
 
+local function popup_contents(c)
+    if imgui.MenuItem("Copy file path") then
+        imgui.SetClipboardText(c.file)
+    end
+
+    if imgui.MenuItem("Copy name") then
+        imgui.SetClipboardText(c.name)
+    end
+
+    if c.material ~= "" and imgui.MenuItem("Copy material") then
+        imgui.SetClipboardText(c.material)
+    end
+end
+
 local unique_origins = get_unique_attrs("origin")
 
 local filter_search = ""
@@ -153,7 +167,13 @@ return function()
                 end
 
                 imgui.TableNextColumn()
-                if imgui.SmallButton("Spawn") then
+                local do_spawn = imgui.SmallButton("Spawn")
+                if imgui.BeginPopupContextItem() then
+                    popup_contents(c)
+                    imgui.EndPopup()
+                end
+
+                if do_spawn then
                     local spawned_prop = EntityLoad(c.file, cursor.pos())
 
                     if imgui.IsKeyDown(imgui.Key.LeftShift) then

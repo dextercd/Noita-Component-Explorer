@@ -50,6 +50,16 @@ local function container_matinv_size(entity)
     return 1000
 end
 
+local function popup_contents(mat)
+    if imgui.MenuItem("Copy name") then
+        imgui.SetClipboardText(mat.name)
+    end
+
+    if imgui.MenuItem("Copy display name") then
+        imgui.SetClipboardText(mat.display_name)
+    end
+end
+
 local filter_search = ""
 ---@type string?
 local filter_origin = nil
@@ -175,6 +185,11 @@ return function()
                         end
                         AddMaterialInventoryMaterial(container, mat.name, container_matinv_size(container))
                     end
+                end
+
+                if imgui.BeginPopupContextItem() then
+                    popup_contents(mat)
+                    imgui.EndPopup()
                 end
 
                 imgui.PopID()

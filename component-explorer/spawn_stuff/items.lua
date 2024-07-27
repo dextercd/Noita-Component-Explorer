@@ -60,6 +60,16 @@ end
 
 local unique_origins = get_unique_attrs("origin")
 
+local function popup_contents(item)
+    if imgui.MenuItem("Copy file path") then
+        imgui.SetClipboardText(item.file)
+    end
+
+    if imgui.MenuItem("Copy name") then
+        imgui.SetClipboardText(item.display_name)
+    end
+end
+
 local filter_search = ""
 ---@type string?
 local filter_origin = nil
@@ -141,6 +151,11 @@ return function()
                 imgui.TableNextColumn()
                 if imgui.SmallButton("Spawn") then
                     EntityLoad(c.file, cursor.pos())
+                end
+
+                if imgui.BeginPopupContextItem() then
+                    popup_contents(c)
+                    imgui.EndPopup()
                 end
 
                 imgui.PopID()

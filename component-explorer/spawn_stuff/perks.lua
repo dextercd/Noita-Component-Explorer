@@ -49,6 +49,16 @@ local function player_equip_perk(perk)
     end
 end
 
+local function popup_contents(p)
+    if imgui.MenuItem("Copy perk.id") then
+        imgui.SetClipboardText(p.id)
+    end
+
+    if imgui.MenuItem("Copy name") then
+        imgui.SetClipboardText(p.display_name)
+    end
+end
+
 
 local filter_search = ""
 ---@type string?
@@ -165,6 +175,11 @@ return function()
                     if imgui.SmallButton("Spawn") then spawn_perk_at_cursor(perk) end
                 else
                     if imgui.SmallButton("Equip") then player_equip_perk(perk) end
+                end
+
+                if imgui.BeginPopupContextItem() then
+                    popup_contents(perk)
+                    imgui.EndPopup()
                 end
 
                 imgui.PopID()
