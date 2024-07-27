@@ -26,7 +26,6 @@ repeat_scripts.open = false
 ---@class RepeatScriptOptions
 ---@field paused boolean
 ---@field output_in_console boolean
----@field run_while_game_paused boolean
 
 ---@class RepeatScript
 ---@field name string
@@ -65,7 +64,6 @@ function EditRepeatScriptModal.new(editing_script)
         options = {
             paused = false,
             output_in_console = false,
-            run_while_game_paused = false,
         }
     end
 
@@ -140,7 +138,6 @@ function EditRepeatScriptModal:show()
     local pause_title = self.editing_script and "Pause script" or "Start paused"
     _, self.options.paused = imgui.Checkbox(pause_title, self.options.paused)
     _, self.options.output_in_console = imgui.Checkbox("Show output in console", self.options.output_in_console)
-    _, self.options.run_while_game_paused = imgui.Checkbox("Run while game paused", self.options.run_while_game_paused)
 
     _, self.period = imgui.InputInt("Period", self.period)
 
@@ -221,7 +218,6 @@ function repeat_scripts.show_script_menu(script)
     local _
     _, script.options.paused = imgui.MenuItem("Pause", "", script.options.paused)
     _, script.options.output_in_console = imgui.MenuItem("Output in console", "", script.options.output_in_console)
-    _, script.options.run_while_game_paused = imgui.MenuItem("Run while game paused", "", script.options.run_while_game_paused)
     imgui.PushStyleColor(imgui.Col.Text, unpack(style.colour_danger))
     if imgui.MenuItem("Remove") then
         for nr, s in ipairs(repeat_scripts.scripts) do
@@ -367,17 +363,13 @@ function repeat_scripts.update(console, is_paused)
         end
     end
 
-    if repeat_scripts.all_pause then
+    if is_paused or repeat_scripts.all_pause then
         return
     end
 
     local current_frame = GameGetFrameNum()
 
     for _, script in ipairs(repeat_scripts.scripts) do
-        if is_paused and not script.options.run_while_game_paused then
-            goto continue
-        end
-
         if not script.options.paused and current_frame % script.period == script.offset then
             local run_options = {
                 capture_output = script.options.output_in_console,
@@ -386,8 +378,6 @@ function repeat_scripts.update(console, is_paused)
             script.last_run_success, script.last_run_result =
                 console:run_function(script.func, nil, run_options)
         end
-
-        ::continue::
     end
 end
 
@@ -453,7 +443,6 @@ function repeat_scripts.add_script(name, script_text, period, offset, options)
     options = copy.shallow_copy(options or {})
     if options.paused == nil then options.paused = false end
     if options.output_in_console == nil then options.output_in_console = false end
-    if options.run_while_game_paused == nil then options.run_while_game_paused = false end
 
     repeat_scripts.scripts[#repeat_scripts.scripts+1] = {
         name = name,
