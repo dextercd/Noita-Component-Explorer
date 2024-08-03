@@ -4,9 +4,9 @@ Your custom perks, spells, and materials should show up automatically. In the
 case of materials, the origin is only deduced correctly when
 `ModMaterialFilesGet()` is available.
 
-Creatures and items use a hardcoded list. See the items.lua and
-creatures.lua file for the kind of data it contains. You can append to
-this list in your mod if you want your things to show up in Component Explorer.
+Creatures, items, and props use a hardcoded list. See the respective .lua files
+for the kind of data they contain. You can append to this list in your mod if
+you want your things to show up in Component Explorer.
 
 This is what that would look like:
 
