@@ -245,7 +245,7 @@ function show_about_window()
     if should_show then
         imgui.Text("Component explorer version " .. version.version)
         imgui.Text("Made by dextercd")
-        link.button("Homepage", version.homepage)
+        link.text_link("Homepage", version.homepage)
 
         local wx, wy = imgui.GetWindowSize()
         if imgui.LoadImage and wy > 300 then

@@ -34,7 +34,8 @@ function herd_relation.show()
         return
     end
 
-    link.button("See the wiki for more info", "https://noita.wiki.gg/wiki/Factions")
+    local label = "See the wiki for more info"
+    link.text_link(label, "https://noita.wiki.gg/wiki/Factions", label)
 
     local _
     imgui.SetNextItemWidth(200)
