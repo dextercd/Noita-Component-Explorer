@@ -309,7 +309,7 @@ local function show_entity(entity_id, data)
         scale_changed, scale_x, scale_y = imgui.InputFloat2("Scale", scale_x, scale_y)
 
         if pos_changed or rot_changed or scale_changed then
-            EntitySetTransform(entity_id, x, y, rotation, scale_x, scale_y)
+            EntityApplyTransform(entity_id, x, y, rotation, scale_x, scale_y)
         end
 
         local parent = EntityGetParent(entity_id)
