@@ -8,9 +8,9 @@ local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 
 local debug = {}
 
-local debug_base = 0x01205da0
-local petri_base = 0x01205720
-local olli_base = 0x01205794
+local debug_base = 0x01205e00
+local petri_base = 0x01205780
+local olli_base = 0x012057f4
 
 local debug_categories = {
     {
