@@ -62,7 +62,8 @@ local repeat_scripts = dofile_once("mods/component-explorer/repeat_scripts.lua")
 ---@module 'component-explorer.utils.file_util'
 dofile_once("mods/component-explorer/utils/file_util.lua")
 
-local HAS_KAE_WAYPOINT = ModIsEnabled("kae_waypoint")
+---@module 'component-explorer.load_menu_extensions'
+local loaded_extensions = dofile_once("mods/component-explorer/load_menu_extensions.lua")
 
 local last_frame_run = -1
 
@@ -149,19 +150,35 @@ function show_view_menu_items()
     _, run_flags.open = imgui.MenuItem("Run Flags", "", run_flags.open)
     _, mod_settings.open = imgui.MenuItem("Mod Settings", "", mod_settings.open)
 
-    if HAS_KAE_WAYPOINT then
-        imgui.Separator()
-        local enabled = ModSettingGet("kae_waypoint.enable") --[[@as boolean]]
-        local changed
-        changed, enabled = imgui.MenuItem("Kaedenn Teleport", sct("CTRL+SHIFT+T"), enabled)
-        if changed then
-            ModSettingSetNextValue("kae_waypoint.enable", enabled, false)
-        end
-    end
-
     imgui.Separator()
     _, windows_hidden_entity = imgui.MenuItem("Hide entity windows", "", windows_hidden_entity)
     _, windows_hidden_component = imgui.MenuItem("Hide component windows", "", windows_hidden_component)
+
+    local current_category = ""
+    for _, extension in ipairs(loaded_extensions) do
+        if extension.category ~= current_category then
+            current_category = extension.category
+            if imgui.SeparatorText then
+                imgui.SeparatorText(current_category)
+            else
+                imgui.Separator()
+            end
+        end
+
+        local name = extension.name
+        if not imgui.SeparatorText then
+            name = extension.category .. ": " .. extension.name
+        end
+
+        local shortcut = extension.shortcut and sct(extension.shortcut) or ""
+
+        local is_open = extension.is_enabled()
+        local changed
+        changed, is_open = imgui.MenuItem(name, shortcut, is_open)
+        if changed then
+            extension.set_enabled(is_open)
+        end
+    end
 end
 
 -- Can't know the width before creating the window.. Just an initial value, it's updated
@@ -396,15 +413,16 @@ function keyboard_shortcut_items()
         spawn_stuff.open = not spawn_stuff.open
     end
 
-    if HAS_KAE_WAYPOINT and imgui.IsKeyPressed(imgui.Key.T) then
-        local toggle = not ModSettingGet("kae_waypoint.enable")
-        ModSettingSetNextValue("kae_waypoint.enable", toggle, false)
-    end
-
     if imgui.IsKeyPressed(imgui.Key.W) then
         local world_entity = GameGetWorldStateEntity()
         local world_component = EntityGetFirstComponent(world_entity, "WorldStateComponent")
         toggle_watch_component(world_entity, world_component)
+    end
+
+    for _, extension in ipairs(loaded_extensions) do
+        if extension.check_shortcut and extension.check_shortcut() then
+            extension.set_enabled(not extension.is_enabled())
+        end
     end
 
     -- Mouse shortcuts
