@@ -19,14 +19,14 @@ typedef struct std_map {
     size_t size;
 } std_map;
 
-typedef struct std_string {
+typedef struct ce_std_string {
     union {
         char* ptr;
         char buf[16];
     };
     size_t size;
     size_t capacity;
-} std_string;
+} ce_std_string;
 ]])
 
 local string_meta = {}
@@ -38,14 +38,14 @@ function string_meta:__tostring()
     return ffi.string(ffi.cast("char*", self), self.size)
 end
 
-stl.String = ffi.metatype("std_string", string_meta)
+stl.String = ffi.metatype("ce_std_string", string_meta)
 
 local function get_nodes_string_keys(node, nil_node, result)
     if node == nil_node then
         return
     end
 
-    local keyvalue = ffi.cast("std_string*", node.payload)
+    local keyvalue = ffi.cast("ce_std_string*", node.payload)
     result[#result + 1] = tostring(keyvalue)
 
     get_nodes_string_keys(node.left, nil_node, result)
