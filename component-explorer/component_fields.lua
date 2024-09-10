@@ -305,6 +305,23 @@ function show_field_types_aabb(name, description, component_id)
     end
 end
 
+function show_field_types_iaabb(name, description, component_id)
+    local min_x, min_y, max_x, max_y = ComponentGetValue2(component_id, name)
+
+    local c1, c2
+    c1, min_x, min_y = imgui.InputInt2(name .. " min", min_x, min_y)
+    if description then
+        imgui.SameLine()
+        help.marker(description)
+    end
+
+    c2, max_x, max_y = imgui.InputInt2(name .. " max", max_x, max_y)
+
+    if c1 or c2 then
+        ComponentSetValue2(component_id, name, min_x, min_y, max_x, max_y)
+    end
+end
+
 function show_field_spread_aabb(prefix, description, component_id)
     local min_x = ComponentGetValue2(component_id, prefix .. "_min_x")
     local min_y = ComponentGetValue2(component_id, prefix .. "_min_y")
