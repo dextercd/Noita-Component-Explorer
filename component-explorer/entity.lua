@@ -208,6 +208,42 @@ local function show_entity_children(parent_id, children)
     imgui.EndTable()
 end
 
+local function component_row(entity_id, component_id)
+    local type = ComponentGetTypeName(component_id)
+    local is_borked = type == ""
+
+    imgui.TableNextColumn()
+    imgui.Text(tostring(component_id))
+
+    imgui.TableNextColumn()
+    if is_borked then
+        imgui.PushStyleColor(imgui.Col.Text, unpack(style.colour_fail))
+        imgui.Text("*BORKED*")
+        imgui.PopStyleColor()
+    else
+        imgui.Text(type)
+    end
+
+    if is_borked then
+        imgui.TableNextRow()
+    else
+        imgui.TableNextColumn()
+        local enabled = ComponentGetIsEnabled(component_id)
+        local enabled_changed, new_enabled = imgui.Checkbox("", enabled)
+        if enabled_changed then
+            EntitySetComponentIsEnabled(entity_id, component_id, new_enabled)
+        end
+
+        imgui.TableNextColumn()
+        open_component_small_button(entity_id, component_id)
+
+        imgui.SameLine()
+        if style.danger_small_button("Remove") then
+            EntityRemoveComponent(entity_id, component_id)
+        end
+    end
+end
+
 local function show_entity(entity_id, data)
     if not EntityGetIsAlive(entity_id) then
         unwatch_entity(entity_id)
@@ -396,28 +432,7 @@ local function show_entity(entity_id, data)
 
                 if string_util.ifind(type, data.component_search, 1, true) then
                     imgui.PushID(component_id)
-
-                    imgui.TableNextColumn()
-                    imgui.Text(tostring(component_id))
-
-                    imgui.TableNextColumn()
-                    imgui.Text(type)
-
-                    imgui.TableNextColumn()
-                    local enabled = ComponentGetIsEnabled(component_id)
-                    local enabled_changed, new_enabled = imgui.Checkbox("", enabled)
-                    if enabled_changed then
-                        EntitySetComponentIsEnabled(entity_id, component_id, new_enabled)
-                    end
-
-                    imgui.TableNextColumn()
-                    open_component_small_button(entity_id, component_id)
-
-                    imgui.SameLine()
-                    if style.danger_small_button("Remove") then
-                        EntityRemoveComponent(entity_id, component_id)
-                    end
-
+                    component_row(entity_id, component_id)
                     imgui.PopID()
                 end
             end
