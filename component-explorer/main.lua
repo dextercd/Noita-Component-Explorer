@@ -65,6 +65,9 @@ dofile_once("mods/component-explorer/utils/file_util.lua")
 ---@module 'component-explorer.load_menu_extensions'
 local loaded_extensions = dofile_once("mods/component-explorer/load_menu_extensions.lua")
 
+---@module 'component-explorer.utils.strings'
+local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
+
 local last_frame_run = -1
 
 local is_escape_paused = false
@@ -284,8 +287,21 @@ local function keyboard_shortcuts()
     keyboard_shortcut_items()
 end
 
+local function global_comms()
+    local to_watch = GlobalsGetValue("CE_WATCH_ENTITY", "")
+    GlobalsSetValue("CE_WATCH_ENTITY", "")
+
+    for _, id in ipairs(string_util.split(to_watch, ",", true)) do
+        id = tonumber(id)
+        if id and EntityGetIsAlive(id) then
+            watch_entity(id)
+        end
+    end
+end
+
 function update_ui(paused, current_frame_run)
     keyboard_shortcuts()
+    global_comms()
 
     main_window()
     cursor.update()
