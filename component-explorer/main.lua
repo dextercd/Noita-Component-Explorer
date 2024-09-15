@@ -394,6 +394,19 @@ function keyboard_shortcut_items()
         file_viewer.open = not file_viewer.open
     end
 
+    if imgui.IsKeyPressed(imgui.Key.I) then
+        local players = EntityGetWithTag("player_unit")
+        for _, player in ipairs(players) do
+            local inv = EntityGetFirstComponentIncludingDisabled(player, "Inventory2Component")
+            if inv then
+                local item = ComponentGetValue2(inv, "mActiveItem")
+                if EntityGetIsAlive(item) then
+                    toggle_watch_entity(item)
+                end
+            end
+        end
+    end
+
     if imgui.IsKeyPressed(imgui.Key.K) then
         entity_list.open = not entity_list.open
     end
