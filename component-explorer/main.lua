@@ -57,6 +57,9 @@ local spawn_stuff = dofile_once("mods/component-explorer/spawn_stuff.lua")
 ---@module 'component-explorer.repeat_scripts'
 local repeat_scripts = dofile_once("mods/component-explorer/repeat_scripts.lua")
 
+---@module 'component-explorer.animation_viewer.anim_viewer'
+local anim_viewer = dofile_once("mods/component-explorer/animation_viewer/anim_viewer.lua")
+
 -- Not used here right now, but depends on grabbing a function that's only
 -- supposed to be accessible during mod init.
 ---@module 'component-explorer.utils.file_util'
@@ -146,6 +149,10 @@ function show_view_menu_items()
     _, wiki_wands.open = imgui.MenuItem("Wiki Wands", "", wiki_wands.open)
     _, file_viewer.open = imgui.MenuItem("File Viewer", sct("CTRL+SHIFT+F"), file_viewer.open)
     _, translations.open = imgui.MenuItem("Translations", "", translations.open)
+
+    if imgui.LoadImage then
+        _, anim_viewer.open = imgui.MenuItem("Animations", "", anim_viewer.open)
+    end
 
     _, cursor.config_open = imgui.MenuItem("Cursor Config", sct("CTRL+SHIFT+C"), cursor.config_open)
 
@@ -349,6 +356,10 @@ function update_ui(paused, current_frame_run)
 
     if translations.open then
         translations.show()
+    end
+
+    if imgui.LoadImage and anim_viewer.open then
+        anim_viewer.show()
     end
 
     if cursor.config_open then

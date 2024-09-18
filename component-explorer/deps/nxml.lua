@@ -486,10 +486,11 @@ function XML_ELEMENT_FUNCS:each_child()
     end
 end
 
-function nxml.parse(data)
+function nxml.parse(data, options)
+    options = options or {}
     local data_len = #data
     local tok = new_tokenizer(str_normalize(data), data_len)
-    local parser = new_parser(tok)
+    local parser = new_parser(tok, options.error_reporter)
 
     local elem = parser:parse_element(false)
 
@@ -501,9 +502,10 @@ function nxml.parse(data)
 end
 
 function nxml.parse_many(data)
+    options = options or {}
     local data_len = #data
     local tok = new_tokenizer(str_normalize(data), data_len)
-    local parser = new_parser(tok)
+    local parser = new_parser(tok, options.error_reporter)
 
     local elems = parser:parse_elements(false)
 
