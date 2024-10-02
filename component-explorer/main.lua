@@ -409,19 +409,19 @@ function keyboard_shortcut_items()
 
     -- Keyboard shortcuts
 
-    if imgui.IsKeyPressed(imgui.Key.C) then
+    if imgui.IsKeyPressed(imgui.Key.C, false) then
         cursor.config_open = not cursor.config_open
     end
 
-    if imgui.IsKeyPressed(imgui.Key.E) then
+    if imgui.IsKeyPressed(imgui.Key.E, false) then
         entity_picker.open = not entity_picker.open
     end
 
-    if imgui.IsKeyPressed(imgui.Key.F) then
+    if imgui.IsKeyPressed(imgui.Key.F, false) then
         file_viewer.open = not file_viewer.open
     end
 
-    if imgui.IsKeyPressed(imgui.Key.I) then
+    if imgui.IsKeyPressed(imgui.Key.I, false) then
         local players = EntityGetWithTag("player_unit")
         for _, player in ipairs(players) do
             local inv = EntityGetFirstComponentIncludingDisabled(player, "Inventory2Component")
@@ -434,26 +434,26 @@ function keyboard_shortcut_items()
         end
     end
 
-    if imgui.IsKeyPressed(imgui.Key.K) then
+    if imgui.IsKeyPressed(imgui.Key.K, false) then
         entity_list.open = not entity_list.open
     end
 
-    if imgui.IsKeyPressed(imgui.Key.L) then
+    if imgui.IsKeyPressed(imgui.Key.L, false) then
         console.open = not console.open
     end
 
-    if imgui.IsKeyPressed(imgui.Key.P) then
+    if imgui.IsKeyPressed(imgui.Key.P, false) then
         local players = EntityGetWithTag("player_unit")
         for _, player in ipairs(players) do
             toggle_watch_entity(player)
         end
     end
 
-    if imgui.IsKeyPressed(imgui.Key.S) then
+    if imgui.IsKeyPressed(imgui.Key.S, false) then
         spawn_stuff.open = not spawn_stuff.open
     end
 
-    if imgui.IsKeyPressed(imgui.Key.W) then
+    if imgui.IsKeyPressed(imgui.Key.W, false) then
         local world_entity = GameGetWorldStateEntity()
         local world_component = EntityGetFirstComponent(world_entity, "WorldStateComponent")
         toggle_watch_component(world_entity, world_component)

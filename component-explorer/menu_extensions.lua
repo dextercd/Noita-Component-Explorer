@@ -42,7 +42,7 @@ menu_extensions.list[#menu_extensions.list+1] = {
     -- it's easy to step on someone else's toes with this.
     shortcut = "CTRL+SHIFT+N",
     check_shortcut = function()
-        return imgui.IsKeyPressed(imgui.Key.N)
+        return imgui.IsKeyPressed(imgui.Key.N, false)
     end
 }
 
@@ -87,7 +87,7 @@ if ModIsEnabled("kae_waypoint") then
         end,
         shortcut = "CTRL+SHIFT+T",
         check_shortcut = function()
-            return imgui.IsKeyPressed(imgui.Key.T)
+            return imgui.IsKeyPressed(imgui.Key.T, false)
         end
     }
 end

@@ -52,18 +52,18 @@ local _keyboard_shortcut_items = keyboard_shortcut_items
 function keyboard_shortcut_items()
     _keyboard_shortcut_items()
 
-    if imgui.IsKeyPressed(imgui.Key.O) then
+    if imgui.IsKeyPressed(imgui.Key.O, false) then
         logger.overlay_open = not logger.overlay_open
     end
 
     if magic_numbers then
-        if imgui.IsKeyPressed(imgui.Key.M) then
+        if imgui.IsKeyPressed(imgui.Key.M, false) then
             magic_numbers.open = not magic_numbers.open
         end
     end
 
     if debug then
-        if imgui.IsKeyPressed(imgui.Key.D) then
+        if imgui.IsKeyPressed(imgui.Key.D, false) then
             debug.open = not debug.open
         end
     end
