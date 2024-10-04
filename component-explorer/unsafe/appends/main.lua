@@ -32,7 +32,7 @@ function show_view_menu_items()
     imgui.Separator()
 
     local _
-    _, logger.window_open  = imgui.MenuItem("Logs Window", "", logger.window_open)
+    _, logger.window_open  = imgui.MenuItem("Logs Window", sct("CTRL+SHIFT+U"), logger.window_open)
     _, logger.overlay_open = imgui.MenuItem("Logs Overlay", sct("CTRL+SHIFT+O"), logger.overlay_open)
 
     if is_steam_version() then
@@ -51,6 +51,10 @@ end
 local _keyboard_shortcut_items = keyboard_shortcut_items
 function keyboard_shortcut_items()
     _keyboard_shortcut_items()
+
+    if imgui.IsKeyPressed(imgui.Key.U, false) then
+        logger.window_open = not logger.window_open
+    end
 
     if imgui.IsKeyPressed(imgui.Key.O, false) then
         logger.overlay_open = not logger.overlay_open
