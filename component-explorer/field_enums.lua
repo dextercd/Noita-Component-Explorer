@@ -76,6 +76,7 @@ damage_types = {
     "DAMAGE_MATERIAL_WITH_FLASH",
     "DAMAGE_OVEREATING",
     "DAMAGE_CURSE",
+    "DAMAGE_HOLY",
 }
 
 edge_style = {
@@ -180,6 +181,12 @@ game_effect = {
     "CUSTOM",
     "ALLERGY_RADIOACTIVE",
     "RAINBOW_FARTS",
+    "WEAKNESS",
+    "PROTECTION_FOOD_POISONING",
+    "NO_HEAL",
+    "PROTECTION_EDGES",
+    "PROTECTION_PROJECTILE",
+    "POLYMORPH_CESSATION",
 }
 
 general_noise = {
