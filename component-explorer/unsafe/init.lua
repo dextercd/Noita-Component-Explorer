@@ -13,6 +13,7 @@ dofile("mods/component-explorer/init.lua")
 if ce_settings.get("logger_txt") then
     ModTextFileSetContent("mods/component-explorer/um.xml", [[
         <MagicNumbers
+            _DEBUG_DONT_SAVE_MAGIC_NUMBERS="1"
             DEBUG_LOG_INSTANT_FLUSH="1"
             />
         ]]
