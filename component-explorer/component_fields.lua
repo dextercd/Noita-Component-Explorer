@@ -161,7 +161,7 @@ function show_field_std_string(name, description, component_id, get, set)
     if settings.multi then
         changed, value = imgui.InputTextMultiline(name, value)
     else
-        imgui.SetNextItemWidth(300)
+        imgui.SetNextItemWidth(350)
         changed, value = imgui.InputText(name, value)
     end
 
@@ -191,7 +191,7 @@ show_field_USTRING = show_field_std_string
 function show_field_file_single(name, description, component_id, get, set)
     local value = (get or ComponentGetValue2)(component_id, name)
 
-    imgui.SetNextItemWidth(300)
+    imgui.SetNextItemWidth(350)
     local changed, value = imgui.InputText(name, value)
     if changed then
         (set or ComponentSetValue2)(component_id, name, value)
@@ -212,7 +212,7 @@ show_field_file_multi = show_field_std_string
 function show_field_vec2(name, description, component_id, get, set)
     local x, y = (get or ComponentGetValue2)(component_id, name)
 
-    imgui.SetNextItemWidth(300)
+    imgui.SetNextItemWidth(350)
     local changed, nx, ny = imgui.InputFloat2(name, x, y)
     if changed then
         (set or ComponentSetValue2)(component_id, name, nx, ny)
@@ -227,7 +227,7 @@ end
 function show_field_ivec2(name, description, component_id, get, set)
     local x, y = (get or ComponentGetValue2)(component_id, name)
 
-    imgui.SetNextItemWidth(300)
+    imgui.SetNextItemWidth(350)
     local changed, nx, ny = imgui.InputInt2(name, x, y)
     if changed then
         (set or ComponentSetValue2)(component_id, name, nx, ny)
