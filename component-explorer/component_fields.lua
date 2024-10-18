@@ -135,11 +135,45 @@ function show_field_bool(name, description, component_id, get, set)
     end
 end
 
+local string_field_settings = {}
+
 function show_field_std_string(name, description, component_id, get, set)
+    imgui.PushID(name .. "##fss")
+
     local value = (get or ComponentGetValue2)(component_id, name)
 
-    imgui.SetNextItemWidth(300)
-    local changed, value = imgui.InputText(name, value)
+    local config_id = imgui.GetID("settings")
+    local settings = string_field_settings[config_id]
+    if not settings then
+        settings = {
+            multi = false,
+        }
+        string_field_settings[config_id] = settings
+    end
+
+    local contains_newline = value:find("\n", 1, true)
+    if contains_newline then
+        settings.multi = true
+    end
+
+    local changed
+
+    if settings.multi then
+        changed, value = imgui.InputTextMultiline(name, value)
+    else
+        imgui.SetNextItemWidth(300)
+        changed, value = imgui.InputText(name, value)
+    end
+
+    if imgui.BeginPopupContextItem("context") then
+        if contains_newline then imgui.BeginDisabled() end
+        local _
+        _, settings.multi = imgui.Checkbox("Multiline", settings.multi)
+        if contains_newline then imgui.EndDisabled() end
+
+        imgui.EndPopup()
+    end
+
     if changed then
         (set or ComponentSetValue2)(component_id, name, value)
     end
@@ -148,6 +182,8 @@ function show_field_std_string(name, description, component_id, get, set)
         imgui.SameLine()
         help.marker(description)
     end
+
+    imgui.PopID()
 end
 
 show_field_USTRING = show_field_std_string
