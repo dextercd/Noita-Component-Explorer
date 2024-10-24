@@ -46,12 +46,15 @@ function run_flags.show()
 
         local flags = ComponentGetValue2(world_state, "flags")
         local filtered_flags = {}
-        for _, flag in ipairs(flags) do
-            if string_util.ifind(flag, search, 1, false) then
-                table.insert(filtered_flags, flag)
+        if search == "" then
+            filtered_flags = flags
+        else
+            for _, flag in ipairs(flags) do
+                if string_util.ifind(flag, search, 1, false) then
+                    table.insert(filtered_flags, flag)
+                end
             end
         end
-        table.sort(filtered_flags)
 
         local table_flags = imgui.TableFlags.Resizable
         if imgui.TableGetSortSpecs then
@@ -72,20 +75,23 @@ function run_flags.show()
                             and function(a, b) return a < b end
                             or function(a, b) return  a > b end)
                 end
-            else
-                table.sort(filtered_flags)
             end
 
-            for _, flag in ipairs(filtered_flags) do
-                imgui.PushID(flag)
-                imgui.TableNextColumn()
-                imgui.Text(flag)
+            local clipper = imgui.ListClipper.new()
+            clipper:Begin(#filtered_flags)
+            while clipper:Step() do
+                for i=clipper.DisplayStart,clipper.DisplayEnd-1 do
+                    local flag = filtered_flags[i + 1]
+                    imgui.PushID(flag)
+                    imgui.TableNextColumn()
+                    imgui.Text(flag)
 
-                imgui.TableNextColumn()
-                if imgui.SmallButton("Remove") then
-                    GameRemoveFlagRun(flag)
+                    imgui.TableNextColumn()
+                    if imgui.SmallButton("Remove") then
+                        GameRemoveFlagRun(flag)
+                    end
+                    imgui.PopID()
                 end
-                imgui.PopID()
             end
 
             imgui.EndTable()
