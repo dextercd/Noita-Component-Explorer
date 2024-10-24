@@ -40,8 +40,12 @@ local function csv_report_table(csv, state)
     end
 
     state.search = state.search or ""
-    local _
-    _, state.search = imgui.InputText("Search", state.search)
+    local search_changed
+    search_changed, state.search = imgui.InputText("Search", state.search)
+
+    if search_changed then
+        state.refresh_filter = true
+    end
 
     local flags = bit.bor(
         imgui.TableFlags.Resizable,
@@ -52,7 +56,6 @@ local function csv_report_table(csv, state)
     )
 
     if imgui.BeginTable("##direct_input_csv", #csv.langs + 1, flags) then
-
         -- Header row
         imgui.TableSetupColumn("Key", imgui.TableColumnFlags.NoHide)
         for _, lang in ipairs(csv.langs) do
@@ -62,36 +65,50 @@ local function csv_report_table(csv, state)
 
         -- Search
         local enabled_columns = {1}
+        local enabled_columns_str_arr = {}
         for lang_idx=1,#csv.langs do
             local column_flags = imgui.TableGetColumnFlags(lang_idx)
             if bit.band(column_flags, imgui.TableColumnFlags.IsEnabled) ~= 0 then
-                table.insert(enabled_columns, lang_idx + 1)
+                enabled_columns[#enabled_columns+1] = lang_idx + 1
+                enabled_columns_str_arr[#enabled_columns_str_arr+1] = "" .. lang_idx
             end
         end
 
-        local filtered_rows
-        if state.search == "" then
-            filtered_rows = csv.rows
-        else
-            filtered_rows = {}
-            for _, row in ipairs(csv.rows) do
-                for _, col in ipairs(enabled_columns) do
-                    if string_util.ifind(row[col], state.search, 1, true) then
-                        table.insert(filtered_rows, row)
-                        goto next_row
-                    end
-                end
+        local enabled_columns_cache_key = table.concat(enabled_columns_str_arr, "|")
+        if state.enabled_columns_cache_key ~= enabled_columns_cache_key then
+            state.enabled_columns_cache_key = enabled_columns_cache_key
+            state.refresh_filter = true
+        end
 
-                ::next_row::
+        if state.refresh_filter == true or state.refresh_filter == nil then
+            state.refresh_filter = false
+
+            local filtered_rows
+            if state.search == "" then
+                filtered_rows = csv.rows
+            else
+                filtered_rows = {}
+                for _, row in ipairs(csv.rows) do
+                    for _, col in ipairs(enabled_columns) do
+                        if string_util.ifind(row[col], state.search, 1, true) then
+                            table.insert(filtered_rows, row)
+                            goto next_row
+                        end
+                    end
+
+                    ::next_row::
+                end
             end
+
+            state.filtered_rows = filtered_rows
         end
 
         -- Table body
         local clipper = imgui.ListClipper.new()
-        clipper:Begin(#filtered_rows)
+        clipper:Begin(#state.filtered_rows)
         while clipper:Step() do
             for i=clipper.DisplayStart,clipper.DisplayEnd - 1 do
-                row = filtered_rows[i + 1]
+                row = state.filtered_rows[i + 1]
                 for _, val in ipairs(row) do
                     imgui.TableNextColumn()
 
@@ -141,6 +158,10 @@ local function show_direct_input()
     local trans_mod_changed
     trans_mod_changed, di_trans_mod = imgui.Checkbox("Parse as translation mod", di_trans_mod)
 
+    if input_changed or trans_mod_changed then
+        di_state.refresh_filter = true
+    end
+
     if di_csv == nil or input_changed or trans_mod_changed then
         di_csv = tcsv.parse(di_text, "direct_input.xml", di_trans_mod)
     end
@@ -172,6 +193,7 @@ local function show_file_input()
 
     if valid_path and (path_changed or trans_mod_changed or refresh) then
         fi_csv = nil
+        fi_state.refresh_filter = true
 
         local content = ModTextFileGetContent(fi_path)
         if content then
