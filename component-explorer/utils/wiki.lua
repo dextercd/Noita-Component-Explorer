@@ -20,7 +20,7 @@ local function spaces(state)
     local i = state.index
     while i <= #state.text do
         local chr = state.text:sub(i, i)
-        if chr ~= ' ' and chr ~= '\t' and chr ~= '\r' and chr ~= '\n' then
+        if chr ~= " " and chr ~= "\t" and chr ~= "\r" and chr ~= "\n" then
             break
         end
         i = i + 1
