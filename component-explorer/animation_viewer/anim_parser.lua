@@ -91,7 +91,7 @@ local function read_int(xml, attr, errors)
     local value = tonumber(xml.attr[attr]) or 0
     local as_int = math.floor(value)
     if value ~= as_int then
-        errors[#errors+1] = "Expected '" .. attr .. "' to be an integer but got a decimal number"
+        errors[#errors+1] = "Expected '" .. attr .. "' to be an integer but it has a fractional part"
     end
     return as_int
 end
