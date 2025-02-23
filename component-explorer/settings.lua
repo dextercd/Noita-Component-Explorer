@@ -154,6 +154,19 @@ mod_settings = {
         },
     },
     {
+        category_id = "file_viewer",
+        ui_name = "File viewer settings",
+        ui_description = "Settings that affects the file viewer window.",
+        settings = {
+            {
+                id = "line_numbers",
+                ui_name = "Show line numbers in file viewer",
+                value_default = true,
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            }
+        }
+    },
+    {
         category_id = "unsafe",
         ui_name = "Unsafe Explorer",
         ui_description = "These settings require unsafe explorer to take effect",
@@ -181,19 +194,6 @@ mod_settings = {
             }
         },
     },
-    {
-        category_id = "file_viewer",
-        ui_name = "File viewer settings",
-        ui_description = "Default settings for the cursor at launch.",
-        settings = {
-            {
-                id = "line_numbers",
-                ui_name = "Show line numbers in file viewer",
-                value_default = true,
-                scope = MOD_SETTING_SCOPE_RUNTIME,
-            }
-        }
-    }
 }
 
 function ModSettingsUpdate(init_scope)
