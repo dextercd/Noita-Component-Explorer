@@ -176,23 +176,35 @@ function file_viewer.render_lined_content(content)
     local table_flags = imgui.TableFlags.SizingFixedFit
     if imgui.BeginTable("lined content", 2, table_flags) then
         local line_flags = bit.bor(imgui.TableColumnFlags.WidthFixed, imgui.TableColumnFlags.NoResize)
-        -- you can use imgui.TableColumnFlags.NoHeaderLabel and not call imgui.TableHeadersRow to get rid of these headers, but imo it looks better with them.
+
         imgui.TableSetupColumn("Lines", line_flags)
         imgui.TableSetupColumn("Content")
         imgui.TableHeadersRow()
-        local line_number = 1
+
+        local lines = {}
         for line in content:gmatch("[^\n]+") do
-            imgui.PushID(line)
-
-            imgui.TableNextColumn()
-            imgui.Text(tostring(line_number))
-
-            imgui.TableNextColumn()
-            imgui.Text(line)
-
-            imgui.PopID()
-            line_number = line_number + 1
+            lines[#lines+1] = line
         end
+
+        local clipper = imgui.ListClipper.new()
+        clipper:Begin(#lines)
+        while clipper:Step() do
+            for i=clipper.DisplayStart,clipper.DisplayEnd - 1 do
+                local line_nr = i + 1
+                local line = lines[line_nr]
+
+                imgui.PushID(line_nr)
+
+                imgui.TableNextColumn()
+                imgui.Text(tostring(line_nr))
+
+                imgui.TableNextColumn()
+                imgui.Text(line)
+
+                imgui.PopID()
+            end
+        end
+
         imgui.EndTable()
     end
 end
