@@ -4,10 +4,14 @@ local lua_appends = dofile_once("mods/component-explorer/utils/lua_appends.lua")
 ---@module 'component-explorer.style'
 local style = dofile_once("mods/component-explorer/style.lua")
 
+---@module 'component-explorer.utils.ce_settings'
+local ce_settings = dofile_once("mods/component-explorer/utils/ce_settings.lua")
+
 local ModTextFileGetContent = ModTextFileGetContent
 local ModTextFileWhoSetContent = ModTextFileWhoSetContent
 
 local file_viewer = {}
+file_viewer.line_numbers = ce_settings.get("line_numbers") --[[@as boolean]]
 
 local cached_content = {}
 local function get_content(path)
@@ -136,7 +140,11 @@ function file_viewer.show_text_file(path)
                 clear_content_cache(path)
             end
         else
-            imgui.Text(content)
+            if file_viewer.line_numbers then
+                file_viewer.render_lined_content(content)
+            else
+                imgui.Text(content)
+            end
         end
         imgui.EndChild()
     end
@@ -161,6 +169,32 @@ function file_viewer.show_text_file(path)
 
             imgui.EndChild()
         end
+    end
+end
+
+---@param content string
+function file_viewer.render_lined_content(content)
+    local table_flags = imgui.TableFlags.SizingFixedFit
+    if imgui.BeginTable("lined content", 2, table_flags) then
+        local line_flags = bit.bor(imgui.TableColumnFlags.WidthFixed, imgui.TableColumnFlags.NoResize)
+        -- you can use imgui.TableColumnFlags.NoHeaderLabel and not call imgui.TableHeadersRow to get rid of these headers, but imo it looks better with them.
+        imgui.TableSetupColumn("Lines", line_flags)
+        imgui.TableSetupColumn("Content")
+        imgui.TableHeadersRow()
+        local line_number = 1
+        for line in content:gmatch("[^\n]+") do
+            imgui.PushID(line)
+
+            imgui.TableNextColumn()
+            imgui.Text(tostring(line_number))
+
+            imgui.TableNextColumn()
+            imgui.Text(line)
+
+            imgui.PopID()
+            line_number = line_number + 1
+        end
+        imgui.EndTable()
     end
 end
 

@@ -180,6 +180,19 @@ mod_settings = {
                 scope = MOD_SETTING_SCOPE_RUNTIME,
             }
         },
+    },
+    {
+        category_id = "file_viewer",
+        ui_name = "File viewer settings",
+        ui_description = "Default settings for the cursor at launch.",
+        settings = {
+            {
+                id = "line_numbers",
+                ui_name = "Show line numbers in file viewer",
+                value_default = true,
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            }
+        }
     }
 }
 
