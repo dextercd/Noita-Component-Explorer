@@ -11,7 +11,6 @@ local ModTextFileGetContent = ModTextFileGetContent
 local ModTextFileWhoSetContent = ModTextFileWhoSetContent
 
 local file_viewer = {}
-file_viewer.line_numbers = ce_settings.get("line_numbers") --[[@as boolean]]
 
 local cached_content = {}
 local function get_content(path)
@@ -140,7 +139,7 @@ function file_viewer.show_text_file(path)
                 clear_content_cache(path)
             end
         else
-            if file_viewer.line_numbers then
+            if ce_settings.get("line_numbers") then
                 file_viewer.render_lined_content(content)
             else
                 imgui.Text(content)
