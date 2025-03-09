@@ -48,12 +48,7 @@ function serialise_component(component_id, include_privates)
 
     add_component_fields(component_id, type_name, component, include_privates)
 
-    local tags
-    if ComponentGetTags then
-        tags = ComponentGetTags(component_id)
-    else
-        tags = comp_tag_util.special_tags_xml_value(component_id)
-    end
+    local tags = ComponentGetTags(component_id)
     if tags and tags ~= "" then
         component.attr._tags = tags
     end

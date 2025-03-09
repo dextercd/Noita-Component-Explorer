@@ -92,7 +92,7 @@ function component_attributes(entity_id, component_id)
     ce_entity.open_entity_small_button(entity_id)
 end
 
-local function new_component_tags(component_id, data)
+local function component_tags(component_id, data)
     local tag_string = ComponentGetTags(component_id)
     local tags = {}
     for tag in string.gmatch(tag_string, "[^,]+") do
@@ -105,32 +105,6 @@ local function new_component_tags(component_id, data)
 
     if imgui.Button("Copy tag string") then
         imgui.SetClipboardText(tag_string)
-    end
-end
-
-local function limited_component_tags(component_id)
-    imgui.Text("Note: Only showing some tags.")
-    imgui.SameLine()
-    help.marker("In this version of Noita there's no way to get all tags on a component, so only some special tags are listed.")
-
-    for _, tag in ipairs(comp_tag_util.special_tags) do
-        local has_tag = ComponentHasTag(component_id, tag)
-        local changed, new_val = imgui.Checkbox(tag, has_tag)
-        if changed then
-            if new_val then
-                ComponentAddTag(component_id, tag)
-            else
-                ComponentRemoveTag(component_id, tag)
-            end
-        end
-    end
-end
-
-local function component_tags(component_id, data)
-    if ComponentGetTags then
-        new_component_tags(component_id, data)
-    else
-        limited_component_tags(component_id)
     end
 end
 

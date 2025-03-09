@@ -9,16 +9,4 @@ comp_tag_util.special_tags = {
     "fire",
 }
 
-function comp_tag_util.special_tags_xml_value(component_id)
-    local str = ""
-    for _, tag in ipairs(comp_tag_util.special_tags) do
-        if ComponentHasTag(component_id, tag) then
-            if str ~= "" then str = str .. "," end
-            str = str .. tag
-        end
-    end
-
-    return str
-end
-
 return comp_tag_util

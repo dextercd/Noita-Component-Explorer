@@ -21,7 +21,7 @@ local function get_enhanced_items()
     for _, c_ in ipairs(items_) do
         local c = copy.shallow_copy(c_)
 
-        if not file_util.text_file_exists(c.file) then
+        if not file_util.file_exists(c.file) then
             goto continue
         end
 
