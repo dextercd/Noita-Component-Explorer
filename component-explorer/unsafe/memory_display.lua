@@ -1,5 +1,10 @@
 local ffi = require("ffi")
 
+---@module 'component-explorer.unsafe.win32'
+local win32 = dofile_once("mods/component-explorer/unsafe/win32.lua")
+
+local base = win32.get_base_address()
+
 local memory_display = {}
 
 function memory_display.show_item(item)
@@ -8,22 +13,24 @@ function memory_display.show_item(item)
         return
     end
 
+    local address = base + item.addr
+
     local location = nil
 
     if item.type == CE_MemoryType.bool_ then
-        location = ffi.cast("bool*", item.addr)
+        location = ffi.cast("bool*", address)
     elseif item.type == CE_MemoryType.uint32_t then
-        location = ffi.cast("uint32_t*", item.addr)
+        location = ffi.cast("uint32_t*", address)
     elseif item.type == CE_MemoryType.uint8_t then
-        location = ffi.cast("uint8_t*", item.addr)
+        location = ffi.cast("uint8_t*", address)
     elseif item.type == CE_MemoryType.int8_t then
-        location = ffi.cast("int8_t*", item.addr)
+        location = ffi.cast("int8_t*", address)
     elseif item.type == CE_MemoryType.int_ then
-        location = ffi.cast("int*", item.addr)
+        location = ffi.cast("int*", address)
     elseif item.type == CE_MemoryType.float_ then
-        location = ffi.cast("float*", item.addr)
+        location = ffi.cast("float*", address)
     elseif item.type == CE_MemoryType.double_ then
-        location = ffi.cast("double*", item.addr)
+        location = ffi.cast("double*", address)
     end
 
     if location == nil then

@@ -4,6 +4,7 @@ local C = ffi.C
 local win32 = {}
 
 ffi.cdef([[
+void* GetModuleHandleA(const char*);
 
 typedef int BOOL;
 typedef int WINBOOL;
@@ -405,6 +406,10 @@ end
 
 function win32.explore(path)
     shell32.ShellExecuteA(nil, "explore", path, nil, nil, win32.SW.SHOWNORMAL)
+end
+
+function win32.get_base_address()
+    return ffi.cast("char*", ffi.C.GetModuleHandleA(nil))
 end
 
 return win32
