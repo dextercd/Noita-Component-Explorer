@@ -40,7 +40,7 @@ menu_extensions.list[#menu_extensions.list+1] = {
     end,
     -- These are optional. Please be careful with adding new shortcuts since
     -- it's easy to step on someone else's toes with this.
-    shortcut = "CTRL+SHIFT+N",
+    shortcut = "N",
     check_shortcut = function()
         return imgui.IsKeyPressed(imgui.Key.N, false)
     end
@@ -85,7 +85,7 @@ if ModIsEnabled("kae_waypoint") then
         set_enabled = function(enabled)
             ModSettingSetNextValue("kae_waypoint.enable", enabled, false)
         end,
-        shortcut = "CTRL+SHIFT+T",
+        shortcut = "T",
         check_shortcut = function()
             return imgui.IsKeyPressed(imgui.Key.T, false)
         end

@@ -32,18 +32,18 @@ function show_view_menu_items()
     imgui.Separator()
 
     local _
-    _, logger.window_open  = imgui.MenuItem("Logs Window", sct("CTRL+SHIFT+U"), logger.window_open)
-    _, logger.overlay_open = imgui.MenuItem("Logs Overlay", sct("CTRL+SHIFT+O"), logger.overlay_open)
+    _, logger.window_open  = imgui.MenuItem("Logs Window", sct("U"), logger.window_open)
+    _, logger.overlay_open = imgui.MenuItem("Logs Overlay", sct("O"), logger.overlay_open)
 
     if is_steam_version() then
         imgui.Separator()
 
         if magic_numbers then
-            _, magic_numbers.open = imgui.MenuItem("Magic Numbers", sct("CTRL+SHIFT+M"), magic_numbers.open)
+            _, magic_numbers.open = imgui.MenuItem("Magic Numbers", sct("M"), magic_numbers.open)
         end
 
         if debug then
-            _, debug.open = imgui.MenuItem("Debug", sct("CTRL+SHIFT+D"), debug.open)
+            _, debug.open = imgui.MenuItem("Debug", sct("D"), debug.open)
         end
     end
 end

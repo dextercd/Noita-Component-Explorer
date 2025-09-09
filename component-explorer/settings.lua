@@ -105,7 +105,20 @@ mod_settings = {
                 ui_description = "Enable/disable all keyboard shortcuts",
                 value_default = true,
                 scope = MOD_SETTING_SCOPE_RUNTIME,
-            }
+            },
+            {
+                id = "magic_key",
+                ui_name = "Magic Key",
+                ui_description = "Keys that must be held to use keyboard shortcuts",
+                value_default = "ctrl+shift",
+                values = {
+                    {"ctrl+shift", "CTRL+SHIFT"},
+                    {"ctrl", "CTRL"},
+                    {"super", "SUPER"},
+                    {"alt", "ALT"},
+                },
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            },
         }
     },
     {

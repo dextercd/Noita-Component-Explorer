@@ -125,36 +125,40 @@ function OnMagicNumbersAndWorldSeedInitialized()
 end
 
 function sct(shortcut_text)
-    return ce_settings.get("keyboard_shortcuts") and shortcut_text or ""
+    if ce_settings.get("keyboard_shortcuts") then
+        return ce_settings.magic_key_label() .. "+" .. shortcut_text
+    else
+        return ""
+    end
 end
 
 function show_view_menu_items()
     local _
-    _, console.open = imgui.MenuItem("Lua Console", sct("CTRL+SHIFT+L"), console.open)
+    _, console.open = imgui.MenuItem("Lua Console", sct("L"), console.open)
     _, repeat_scripts.open = imgui.MenuItem("Repeat Scripts", "", repeat_scripts.open)
-    _, entity_list.open = imgui.MenuItem("Entity List", sct("CTRL+SHIFT+K"), entity_list.open)
+    _, entity_list.open = imgui.MenuItem("Entity List", sct("K"), entity_list.open)
     _, herd_relation.open = imgui.MenuItem("Herd Relation", "", herd_relation.open)
 
     local clicked
-    clicked, entity_picker.open = imgui.MenuItem("Entity Picker...", sct("CTRL+SHIFT+E"), entity_picker.open)
+    clicked, entity_picker.open = imgui.MenuItem("Entity Picker...", sct("E"), entity_picker.open)
     if clicked then imgui.SetWindowFocus(nil) end
     help.tooltip(table.concat({
         "Allows you to move your mouse over an entity to open a window for it. ",
         "Press the entry number to select the entity. ESC to cancel the action.\n\n",
-        "When keyboard shortcuts are enabled, you can hit CTRL+SHIFT+E to open or close the picker.",
+        "When keyboard shortcuts are enabled, you can hit " .. ce_settings.magic_key_label() .. "+E to open or close the picker.",
     }))
 
-    _, spawn_stuff.open = imgui.MenuItem("Spawn Stuff", sct("CTRL+SHIFT+S"), spawn_stuff.open)
+    _, spawn_stuff.open = imgui.MenuItem("Spawn Stuff", sct("S"), spawn_stuff.open)
 
     _, wiki_wands.open = imgui.MenuItem("Wiki Wands", "", wiki_wands.open)
-    _, file_viewer.open = imgui.MenuItem("File Viewer", sct("CTRL+SHIFT+F"), file_viewer.open)
+    _, file_viewer.open = imgui.MenuItem("File Viewer", sct("F"), file_viewer.open)
     _, translations.open = imgui.MenuItem("Translations", "", translations.open)
 
     if imgui.LoadImage then
         _, anim_viewer.open = imgui.MenuItem("Animations", "", anim_viewer.open)
     end
 
-    _, cursor.config_open = imgui.MenuItem("Cursor Config", sct("CTRL+SHIFT+C"), cursor.config_open)
+    _, cursor.config_open = imgui.MenuItem("Cursor Config", sct("C"), cursor.config_open)
 
     _, globals.open = imgui.MenuItem("Globals", "", globals.open)
     _, run_flags.open = imgui.MenuItem("Run Flags", "", run_flags.open)
@@ -287,9 +291,9 @@ function show_about_window()
 end
 
 local function keyboard_shortcuts()
-    if not ce_settings.get("keyboard_shortcuts") then return end
-    if not imgui.IsKeyDown(imgui.Key.LeftCtrl) then return end
-    if not imgui.IsKeyDown(imgui.Key.LeftShift) then return end
+    if not ce_settings.magic_keys_down() then
+        return
+    end
 
     keyboard_shortcut_items()
 end
@@ -401,7 +405,7 @@ end
 
 local good_mouse_handling = is_imgui_version(1, 15, 1)
 
----Called when CTRL and SHIFT are held
+---Called when magic keys are held
 function keyboard_shortcut_items()
     if good_mouse_handling then
         imgui.SetNextFrameWantCaptureMouse(true)

@@ -218,7 +218,7 @@ local function about_content()
     imgui.TextWrapped(table.concat({
         "You can use this window to configure the cursor. ",
         "To change the default values, go into the mod settings.\n\n",
-        "Use CTRL+SHIFT+Click to position the cursor, this works best when using ImGui version 1.15.1 or above."
+        "Use " .. ce_settings.magic_key_label() .. "+Click to position the cursor, this works best when using ImGui version 1.15.1 or above."
     }))
 end
 

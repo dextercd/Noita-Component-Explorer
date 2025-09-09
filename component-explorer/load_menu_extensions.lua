@@ -48,4 +48,13 @@ table.sort(loaded_extensions, function(a, b)
     return a.original_order < b.original_order
 end)
 
+for _, ext in ipairs(loaded_extensions) do
+    if ext.shortcut then
+        -- You used to have to include 'CTRL+SHIFT+' in the shortcut text. Now
+        -- that part of the keybind is configurable so you shouldn't include it
+        -- in the menu extensions shortcut text
+        ext.shortcut = ext.shortcut:gsub("^ *[cC][tT][rR][lL] *%+ *[sS][hH][iI][fF][tT] *%+ *", "")
+    end
+end
+
 return loaded_extensions
