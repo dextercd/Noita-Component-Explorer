@@ -139,8 +139,6 @@ function entity_list.show()
 
         handle_sort_spec()
 
-        local clipper = imgui.ListClipper.new()
-
         local filtered_entities = {}
         for _, entity_data in ipairs(entities_data) do
             local entity_id = entity_data[1]
@@ -176,6 +174,7 @@ function entity_list.show()
 
         table.sort(filtered_entities, sort_fn)
 
+        local clipper = imgui.ListClipper.new()
         clipper:Begin(#filtered_entities)
 
         while clipper:Step() do for i=clipper.DisplayStart,clipper.DisplayEnd-1 do
