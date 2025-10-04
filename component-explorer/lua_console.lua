@@ -117,7 +117,7 @@ end
 ---@param command_text string?
 ---@param run_options table?
 ---@return boolean success
----@return any result
+---@return any ...
 function Console:run_function(func, command_text, run_options)
     run_options = make_run_options(run_options)
 
@@ -150,39 +150,61 @@ function Console:run_function(func, command_text, run_options)
         _G[k] = v
     end
 
-    local success, result = pcall(func)
+    local results = {pcall(func)}
+    local success = results[1]
+    table.remove(results, 1)
 
     if run_options.capture_output then
         print = real_print
 
-        if printed == "" or result ~= nil then
-            printed = printed .. stringify(result, "")
+        if printed == "" and #results == 0 then
+            printed = printed .. "nil"
+        elseif not success and type(results[1]) == "string" then
+            printed = printed .. results[1]
+        elseif #results > 0 then
+            local result_table_string = stringify(results, "")
+
+            -- We capture return value(s) as table. Remove table syntax in output string
+            local result_str_start = 3 -- Skip '{ ', or '{\n'
+            local result_str_end = #result_table_string - 2 -- Strip ' }'
+
+            if result_table_string:sub(-3) == " \n}" then
+                result_str_end = #result_table_string - 3 -- Strip ' \n}'
+            end
+
+            local result_string = result_table_string:sub(result_str_start, result_str_end)
+
+            printed = printed .. result_string
         end
 
         table.insert(self.history, {command_text, printed, success})
     end
 
-    return success, result
+    return success, unpack(results)
 end
 
 ---@param command_text string
 ---@param run_options table?
 ---@return boolean success
----@return any result
+---@return any ...
 function Console:run_command_text(command_text, run_options)
     run_options = make_run_options(run_options)
 
-    local success, result, func
+    local success, result, results, func
 
     func, result = eval.loadstring_ish(command_text)
+    results = {result}
+
     if func then
-        success, result = self:run_function(func, command_text, run_options)
+        results = {self:run_function(func, command_text, run_options)}
+        success = results[1]
+        table.remove(results, 1)
         self.last_command = command_text
     elseif run_options.capture_output then
         table.insert(self.history, {command_text, result, false})
     end
 
-    return success or false, result
+    return success or false, unpack(results)
 end
 
 ---Create new repeat script, if there's an error report it in the console.
