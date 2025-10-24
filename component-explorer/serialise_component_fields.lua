@@ -15,7 +15,7 @@ local simple_field_types = as_set({
 })
 
 local skip_field_types = as_set({
-    "EntityID", "LuaManager*", "b2Body*", "b2ObjectID", "types::iaabb",
+    "EntityID", "LuaManager*", "b2Body*", "b2ObjectID",
 })
 
 local int_material_field_names = as_set({
@@ -62,7 +62,7 @@ function add_field(component_id, component, field_type, field_name)
         local min, max = ComponentGetValue2(component_id, field_name)
         component.attr[field_name .. ".min"] = min
         component.attr[field_name .. ".max"] = max
-    elseif field_type == "types::aabb" then
+    elseif field_type == "types::aabb" or field_type == "types::iaabb" then
         local min_x, min_y, max_x, max_y = ComponentGetValue2(component_id, field_name)
         component.attr[field_name .. ".min_x"] = min_x
         component.attr[field_name .. ".min_y"] = min_y
