@@ -67,8 +67,6 @@ function show_{{ component.name }}_fields(entity_id, component_id, data)
             show_{{ field.type }}_fields("{{ field.name }}", {{ description }}, component_id)
             imgui.TreePop()
         end
-        {% elif field.type == "uint32" and "color" in field.name %}
-        show_field_abgr("{{ field.name }}", {{ description }}, component_id)
         {% elif field_infos.get(component.name, {}).get(field.name, {}).handler %}
             {% set field_info = field_infos[component.name][field.name] %}
             {% set handler = field_info.handler %}
@@ -84,6 +82,17 @@ function show_{{ component.name }}_fields(entity_id, component_id, data)
             {% else %}
         {{ handler }}("{{ field.name }}", {{ description }}, component_id)
             {% endif %}
+        {% elif field.raw_type == "int" and (
+            (section_name == "Custom data types" and "material" in field.name)
+            or field.name is regex("[mM]aterial_?[iI]d$")
+            or field.name is regex("[lL]ast_?[mM]aterial")
+            or field.name is regex("_material$")
+            or field.name == "mLiquidMaterialWeAreIn"
+            or field.name == "mPrevMaterial"
+        ) %}
+        show_field_material_id("{{ field.name }}", {{ description }}, component_id)
+        {% elif field.type == "uint32" and "color" in field.name %}
+        show_field_abgr("{{ field.name }}", {{ description }}, component_id)
         {% elif field.type in supported_fields %}
         show_field_{{ field.type }}("{{ field.name }}", {{ description }}, component_id)
         {% elif field.type is regex('^(LensValue_)?u?int[0-9]*$') %}

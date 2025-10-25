@@ -1,4 +1,9 @@
+---@module 'component-explorer.deps.datadumper'
 local stringify = dofile_once("mods/component-explorer/deps/datadumper.lua")
+
+---@module 'component-explorer.utils.strings'
+local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
+
 dofile_once("mods/component-explorer/field_enums.lua")
 dofile_once("mods/component-explorer/entity.lua")
 local file_viewer = dofile_once("mods/component-explorer/file_viewer.lua")
@@ -135,7 +140,7 @@ function show_field_string(name, description, component_id, get, set)
 
     local value = (get or ComponentGetValue2)(component_id, name)
 
-    local config_id = imgui.GetID("settings")
+    local config_id = component_id .. "." .. name
     local settings = string_field_settings[config_id]
     if not settings then
         settings = {
@@ -425,6 +430,80 @@ function show_field_EntityID(name, description, component_id, get, set)
         help.marker(description)
     end
 end
+
+local material_id_search = {}
+
+function show_field_material_id(name, description, component_id)
+    local config_id = component_id .. "." .. name
+    local search = material_id_search[config_id] or ""
+
+    local value = ComponentGetValue2(component_id, name)
+    imgui.SetNextItemWidth(250)
+    if imgui.BeginCombo(name, matutil.material_name(value) or "??? (" .. value .. ")") then
+        local materials_list = matutil.get_all_material_names()
+
+        local enter = false
+        enter, search = imgui.InputTextWithHint("##search", "Search", search, imgui.InputTextFlags.EnterReturnsTrue)
+
+        imgui.SameLine()
+        if imgui.Button("X") then
+            search = ""
+        end
+
+        if enter then
+            if tonumber(search) then
+                ComponentSetValue2(component_id, name, tonumber(search))
+                search = ""
+            else
+                for idx, mat_name in ipairs(materials_list) do
+                    if mat_name == search then
+                        ComponentSetValue2(component_id, name, idx - 1)
+                        search = ""
+                        break
+                    end
+                end
+            end
+        end
+
+        material_id_search[config_id] = search
+
+        local filtered_materials
+        local idx_to_mat_id_tbl = {}
+        local idx_to_mat_id
+
+        if search == "" then
+            filtered_materials = materials_list
+            idx_to_mat_id = function(idx)
+                return idx - 1
+            end
+        else
+            filtered_materials = {}
+            for mat_idx, mat in ipairs(materials_list) do
+                if string_util.ifind(mat, search, 1, true) then
+                    local filtered_idx = #filtered_materials + 1
+                    filtered_materials[filtered_idx] = mat
+                    idx_to_mat_id_tbl[filtered_idx] = mat_idx - 1
+                end
+            end
+
+            idx_to_mat_id = function(idx)
+                return idx_to_mat_id_tbl[idx]
+            end
+        end
+
+        for idx, mat_name in ipairs(filtered_materials) do
+            if imgui.Selectable(mat_name, value == idx_to_mat_id(idx)) then
+                ComponentSetValue2(component_id, name, idx_to_mat_id(idx))
+            end
+        end
+        imgui.EndCombo()
+    end
+    if description then
+        imgui.SameLine()
+        help.marker(description)
+    end
+end
+
 
 local function display_default(idx, value)
     imgui.Text(tostring(idx) .. ": " .. tostring(value))
