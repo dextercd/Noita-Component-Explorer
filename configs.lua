@@ -6,7 +6,7 @@ dofile_once("mods/component-explorer/component_fields.lua")
     "int", "unsignedint", "int32", "uint32",
     "types_vector2",
     "ValueRange", "ValueRangeInt",
-    "std_string",
+    "string",
     "EntityID",
 ] -%}
 
@@ -46,10 +46,12 @@ function show_{{ config.name }}_fields(field_name, description, component_id)
 
         {% for field in fields -%}
 
-        {%- set field_type = field.type|replace("::", "_")|replace("<", "_")|replace(">", "") -%}
+        {%- set field_type = field.type|replace("::", "_")|replace("std_","")|replace("<", "_")|replace(">", "") -%}
         {%- set description = '"' ~ field.description ~ '"' if field.description else "nil" -%}
 
-        {% if field_type in supported_fields %}
+        {% if field.type is regex('^u?(nsigned)?int[0-9]*$') %}
+        show_field_int("{{ field.name }}", {{ description }}, component_id, get, set)
+        {% elif field_type in supported_fields %}
         show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id, get, set)
         {% else %}
         -- show_field_{{ field_type }}("{{ field.name }}", {{ description }}, component_id)

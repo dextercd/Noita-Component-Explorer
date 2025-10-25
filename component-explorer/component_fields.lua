@@ -31,15 +31,8 @@ function show_field_int(name, description, component_id, get, set)
     end
 end
 
-show_field_unsignedint = show_field_int
-show_field_int16 = show_field_int
-show_field_uint16 = show_field_int
-show_field_int32 = show_field_int
-show_field_uint32 = show_field_int
-show_field_uint32_t = show_field_int
 show_field_AudioSourceHandle = show_field_int
 show_field_EntityTypeID = show_field_int
-show_field_LensValue_int = show_field_int
 
 function show_field_int64(name, description, component_id, get, set)
     local value = (get or ComponentGetValue)(component_id, name)
@@ -137,7 +130,7 @@ end
 
 local string_field_settings = {}
 
-function show_field_std_string(name, description, component_id, get, set)
+function show_field_string(name, description, component_id, get, set)
     imgui.PushID(name .. "##fss")
 
     local value = (get or ComponentGetValue2)(component_id, name)
@@ -186,7 +179,7 @@ function show_field_std_string(name, description, component_id, get, set)
     imgui.PopID()
 end
 
-show_field_USTRING = show_field_std_string
+show_field_USTRING = show_field_string
 
 function show_field_file_single(name, description, component_id, get, set)
     local value = (get or ComponentGetValue2)(component_id, name)
@@ -207,7 +200,7 @@ function show_field_file_single(name, description, component_id, get, set)
 end
 
 -- Not supporting this right now
-show_field_file_multi = show_field_std_string
+show_field_file_multi = show_field_string
 
 function show_field_vec2(name, description, component_id, get, set)
     local x, y = (get or ComponentGetValue2)(component_id, name)
@@ -458,7 +451,7 @@ function show_field_ro_list(name, description, component_id, display)
     imgui.TreePop()
 end
 
-function show_field_VECTOR_ENTITYID(name, description, component_id)
+function show_field_vector_entityid(name, description, component_id)
     local function show_entity_id(idx, entity_id)
         imgui.Text(tostring(entity_id))
         imgui.SameLine()
@@ -470,8 +463,6 @@ function show_field_VECTOR_ENTITYID(name, description, component_id)
     end
     return show_field_ro_list(name, description, component_id, show_entity_id)
 end
-show_field_VEC_ENTITY = show_field_VECTOR_ENTITYID
-show_field_ENTITY_VEC = show_field_VECTOR_ENTITYID
 
 function show_field_VISITED_VEC(name, description, component_id)
     local function show_visited(idx, place)

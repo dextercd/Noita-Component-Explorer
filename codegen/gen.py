@@ -1,9 +1,10 @@
 import argparse
-import pathlib
-import json
-import sys
 import itertools
+import json
 import os
+import pathlib
+import re
+import sys
 
 from jinja2 import Environment, Template
 
@@ -18,7 +19,6 @@ output = open(args.output, "w") if args.output else sys.stdout
 
 
 def load_json_file(path: str):
-
     alias = None
     if "@" in path:
         path, _, alias = path.partition("@")
@@ -42,6 +42,12 @@ env = Environment(
     trim_blocks=True,
     lstrip_blocks=True,
 )
+
+def regex_test(value, regex):
+    return bool(re.search(regex, value))
+
+env.tests["regex"] = regex_test
+
 with open(args.file) as f:
     template = env.from_string(f.read())
 

@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import json
 import argparse
 import pathlib
+import re
 
 
 MEMBERS_INTRO_LINE = " - Members -----------------------------\n"
@@ -16,6 +17,45 @@ CATEGORY_INTROS = [
     OBJECTS_INTRO,
     CUSTOM_DATA_TYPES_INTRO,
 ]
+
+
+int_re = re.compile(r"(\b|_)int\b")
+str_re = re.compile(r"(\b|_)str\b")
+uint_re = re.compile(r"\bunsigned int\b")
+int_t_re = re.compile(r"(u?int)(\d*)_t")
+
+
+def clean_up_type(type: str):
+    if type.startswith("VECTOR_"):
+        type = type.lower()
+
+    type = uint_re.sub("uint32", type)
+    type = int_re.sub(r"\1int32", type)
+    type = str_re.sub(r"\1string", type)
+
+    # std::vector<bool> -> vector_bool
+    type = (
+        type
+        .replace("std::", "")
+        .replace("std_", "")
+        .replace("::", "_")
+        .replace("<", "_")
+        .replace(">", "")
+    )
+
+    # std::vector< int > -> std::vector<int>
+    type = type.replace(" ", "")
+
+    # uint32_t -> uint32
+    type = int_t_re.sub(r"\1\2", type)
+
+    if int_t := int_t_re.search(type):
+        type = int_t[1] + int_t[2]
+
+    if type == "VEC_ENTITY" or type == "ENTITY_VEC":
+        type = "vector_entityid"
+
+    return type
 
 
 def intro_cat_name(intro):
@@ -59,13 +99,14 @@ class Component:
 
 @dataclass
 class Field:
+    raw_type: str
     type: str
     name: str
     example: str
     description: str
 
     def to_json(self):
-        obj = {"type": self.type, "name": self.name}
+        obj = {"raw_type": self.raw_type, "type": self.type, "name": self.name}
 
         if self.example != "-":
             obj["example"] = self.example
@@ -117,9 +158,8 @@ def read_entry(file):
             data_type = long_types[0]
             rest = item[4 + len(data_type):]
         else:
-            data_type_portion = item[4:28]
+            data_type = item[4:28].strip()
             rest = item[28:]
-            data_type = data_type_portion.replace(" ", "")
 
         name, _, rest = rest.lstrip().partition(" ")
         example, _, rest = rest.lstrip().partition('"')
@@ -127,7 +167,8 @@ def read_entry(file):
         description = rest.removesuffix('"\n')
 
         field = Field(
-            type=data_type,
+            raw_type=data_type,
+            type=clean_up_type(data_type),
             name=name,
             example=example,
             description=description,
