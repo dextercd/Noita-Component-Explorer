@@ -39,7 +39,6 @@ component_types = {
     "Vec2ArrayInline",
 ]%}
 {# ArrayInline can be written to #}
-{# changed_materials on WorldStateComponent can use a better handler #}
 
 {% for component in component_documentation %}
 function show_{{ component.name }}_fields(entity_id, component_id, data)
