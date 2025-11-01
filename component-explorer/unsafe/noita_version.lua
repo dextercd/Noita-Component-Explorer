@@ -3,8 +3,8 @@ local win32 = dofile_once("mods/component-explorer/unsafe/win32.lua")
 -- These are offsets in the exe, not the addresses as they are loaded in memory.
 local steam_identifiers = {
     {
-        location = 0x00be7498,
-        string = "Noita-Build-Jan 25 2025-12:40:28",
+        location = 0x00c08f70,
+        string = "Noita - Build Jan 25 2025 - 15:55:41",
     },
     {
         location = 0x00d50d2a,
