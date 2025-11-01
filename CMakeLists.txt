@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 
 project(ComponentExplorer
-    VERSION 1.60.3
+    VERSION 1.60.4
     HOMEPAGE_URL "https://github.com/dextercd/Noita-Component-Explorer"
     LANGUAGES
 )
