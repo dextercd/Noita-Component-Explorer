@@ -73,38 +73,59 @@ local string_util = dofile_once("mods/component-explorer/utils/strings.lua")
 
 local last_frame_run = -1
 
-local is_escape_paused = false
-local is_inventory_paused = false
+local in_escape_menu = false
+local in_inventory_menu = false
+local paused = false
+local pause_patched_out = false
 
-function OnPausedChanged(paused, inventory_pause)
+local pause_skip_update_ui = false
+
+function OnPausedChanged(in_menu, inventory_pause)
     ce_settings.load()  -- Settings might've changed, reload
 
-    is_escape_paused = paused and not inventory_pause
-    is_inventory_paused = inventory_pause
+    in_escape_menu = in_menu and not inventory_pause
+    in_inventory_menu = inventory_pause
 
-    if not paused then update_ui(true, GameGetFrameNum()) end
+    if in_menu then
+        update_ui()
+    end
+
+    pause_skip_update_ui = true
+    paused = in_menu  -- Changed back to false in OnWorldPreUpdate if applicable
 end
 
 function OnWorldPreUpdate()
-    local current_frame_run = GameGetFrameNum()
+    local current_frame_run = GameGetFrameNum() + 1
     if last_frame_run >= current_frame_run then
         return
     end
     last_frame_run = current_frame_run
 
-    update_ui(false, current_frame_run)
+    paused = false
+    pause_patched_out = in_escape_menu or in_inventory_menu
+
+    update_ui()
 end
 
 function OnPausePreUpdate()
-    if is_escape_paused and not ce_settings.get("pause_escape") or
-       is_inventory_paused and not ce_settings.get("pause_wands")
+    if in_escape_menu and not ce_settings.get("pause_escape") or
+       in_inventory_menu and not ce_settings.get("pause_wands")
     then
+        return
+    end
+
+    if pause_skip_update_ui then
+        pause_skip_update_ui = false
+        return
+    end
+
+    if pause_patched_out then
         return
     end
 
     local current_frame_run = GameGetFrameNum()
     last_frame_run = current_frame_run
-    update_ui(true, current_frame_run)
+    update_ui()
 end
 
 console = lua_console.Console.new()
@@ -316,7 +337,7 @@ local function global_comms()
     end
 end
 
-function update_ui(paused, current_frame_run)
+function update_ui()
     keyboard_shortcuts()
     global_comms()
 
